@@ -10,49 +10,95 @@ import userdata.User;
 
 public class Processing {
 
-    private ArrayList<User> array;
+    private ArrayList<User> allUsers;
 
     /**
      * constructor of the class
      */
     public Processing() {
-        array = new ArrayList<>();
+        allUsers = new ArrayList<>();
+    }
+
+    /**
+     * To get the list of users
+     * @return an ArrayList
+     */
+    public ArrayList<User> getAllUsers() {
+        return allUsers;
     }
 
     /**
      * Create a user account
-     * @param personnalInforations informations given by the user
+     * @param personalInforations informations given by the user
      * @param type the type of account to create
      */
-    public void createAccount(ArrayList<String> personnalInforations, TypeAccount type) {
+    public void createAccount(ArrayList<String> personalInforations, TypeAccount type) {
         User u;
         if (type == TypeAccount.ADMINISTRATOR){
-            u = new Admin(personnalInforations.get(0), personnalInforations.get(1), personnalInforations.get(2), personnalInforations.get(3), personnalInforations.get(4));
+            u = new Admin(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
         }else if (type == TypeAccount.OWNER){
-            u = new Owner(personnalInforations.get(0), personnalInforations.get(1), personnalInforations.get(2), personnalInforations.get(3), personnalInforations.get(4));
+            u = new Owner(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
         }else{
-            u = new Tenant(personnalInforations.get(0), personnalInforations.get(1), personnalInforations.get(2), personnalInforations.get(3), personnalInforations.get(4));
+            u = new Tenant(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
         }
-        array.add(u);
+        allUsers.add(u);
     }
 
     /**
      * Connect a user to the application
-     * @param personnalInforations informations given by the user
+     * @param personalInforations informations given by the user
      * @param type the type of account of the user
      */
-    public void connect(ArrayList<String> personnalInforations, TypeAccount type) {
-        for(User u : array){
+    public void connect(ArrayList<String> personalInforations, TypeAccount type) {
+        for(User u : allUsers){
         }
     }
 
     /**
      * Tests if an account with the same personnal informations has already been created
-     * @param personnalInformations informations of the user 
+     * @param personalInformations informations of the user
      * @param type the type of account of the user
      * @return a boolean
      */
-    public boolean testValidityAccount(ArrayList<String> informations, TypeAccount type) {
-        return true;
+    public boolean testValidityAccount(ArrayList<String> personalInformations, TypeAccount type) {
+        boolean nonValid = false;
+        int i = 0;
+        while (i < allUsers.size() && !nonValid){
+            User u = allUsers.get(i);
+            nonValid = testNickname(u, personalInformations) || testMail(u, personalInformations);
+            i++;
+        }
+        return nonValid;
     }
+
+    /**
+     *
+     * To test if the nickname given during the account creation already exists
+     * @param u the user to compare
+     * @param personalInformations informations given by the user wanted to create an account
+     * @return a boolean
+     */
+    private boolean testNickname(User u, ArrayList<String> personalInformations){
+        boolean test = u.getNickname().equals(personalInformations.get(3));
+        if (test){
+            System.out.println("This nickname already exists, choose another one");
+        }
+        return test;
+    }
+
+    /**
+     *
+     * To test if the mail address given during the account creation already exists
+     * @param u the user to compare
+     * @param personalInformations informations given by the user wanted to create an account
+     * @return a boolean
+     */
+    private boolean testMail(User u, ArrayList<String> personalInformations){
+        boolean test = u.getNickname().equals(personalInformations.get(4));
+        if (test){
+            System.out.println("This mail already exists, choose another one");
+        }
+        return test;
+    }
+
 }

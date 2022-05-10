@@ -55,7 +55,7 @@ public class Tests {
         account2.add("name");
         account2.add("nickname");
         account2.add("email");
-        process.testValidityAccount(account2, TypeAccount.TENANT);
+        assertFalse(process.testValidityAccount(account2, TypeAccount.TENANT));
         assertTrue(1 == users.size());
     }
 }

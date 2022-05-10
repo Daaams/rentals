@@ -10,11 +10,24 @@ package userdata;
  */
 public class Admin extends User{
     private final TypeAccount typeAccount = TypeAccount.ADMINISTRATOR;
-    
+
+    /**
+     * constructor of the class Administrator
+     * @param login the login of the administrator
+     * @param surname the family name of the administrator
+     * @param name the name of the administrator
+     * @param nick the nickname of the administrator
+     * @param email the email of the administrator
+     */
     public Admin(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email);
     }
 
+    /**
+     * To get the type of account of the status owner
+     * @return TypeAccount.OWNER
+     */
+    @Override
     public TypeAccount getTypeAccount(){
         return typeAccount;
     }

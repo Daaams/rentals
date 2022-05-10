@@ -16,7 +16,17 @@ class Property {
     private String description;
     private int nominalPrice;
     private int maxOccupiers;
-    
+
+    /**
+     * Contructor of the class Property
+     * @param type the type of this property
+     * @param name the name of this property
+     * @param address the address of this property
+     * @param city the city of this property
+     * @param desc the description of this property
+     * @param minPrice the price for one person
+     * @param maxOccupiers the max quantity of people that can sleep per night
+     */
     public Property(TypeProperty type, String name, String address, 
             String city, String desc, int minPrice, int maxOccupiers){
         this.type = type;

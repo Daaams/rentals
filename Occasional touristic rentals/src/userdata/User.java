@@ -8,13 +8,21 @@ package userdata;
  *
  * @author mgenetet
  */
-public class User {
+public abstract class User {
     private final String LOGIN;
     private String surname;
     private String name;
     private String nickname;
     private String mail;
 
+    /**
+     * constructor of the class User
+     * @param login the login of the User
+     * @param surname the family name of the user
+     * @param name the name of the user
+     * @param nick the nickname of the user
+     * @param email the email of the user
+     */
     public User(String login, String surname, String name, String nick, String email) {
         LOGIN = login;
         this.surname = surname;
@@ -22,4 +30,51 @@ public class User {
         nickname = nick;
         mail = email;
     }
+
+    /**
+     * To get the type of account of the user
+     * @return the type of account
+     */
+    public abstract TypeAccount getTypeAccount();
+
+    /**
+     * To get the login of the user
+     * @return a String
+     */
+    public String getLogin(){
+        return LOGIN;
+    }
+
+    /**
+     * To get the name of the user
+     * @return a String
+     */
+    public String getName(){
+        return name;
+    }
+
+    /**
+     * To get the surname of the user
+     * @return a String
+     */
+    public String getSurname(){
+        return surname;
+    }
+
+    /**
+     * To get the nickname of the user
+     * @return a String
+     */
+    public String getNickname(){
+        return nickname;
+    }
+
+    /**
+     * To get the mail of the user
+     * @return a String
+     */
+    public String getMail(){
+        return mail;
+    }
+
 }
