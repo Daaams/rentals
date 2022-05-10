@@ -13,6 +13,7 @@ import java.util.HashSet;
 public class Owner extends User{
     private HashSet<Property> allProperties;
     private final TypeAccount typeAccount = TypeAccount.OWNER;
+    private int virtualWallet;
 
     /**
      * constructor of the class Owner
@@ -25,6 +26,7 @@ public class Owner extends User{
     public Owner(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email);
         allProperties = new HashSet<Property>();
+        virtualWallet = 0;
     }
 
     /**

@@ -131,16 +131,25 @@ public class OccasionalTouristicRentals {
         }
     }
 
-    private void ARR_connectedFeatures(TypeAccount type) {
-        System.out.println("je suis connecté");
-    }
-
     /**
-     * Quit event 
+     * Ask some questions to the user and take his informations
+     * @param questions an arraay containing questions to ask
+     * @return the informations answered by the user
      */
-    private void ARR_Quit() {
-        quit = true;
-    } 
+    private ArrayList<String> takeinformations(String[] questions) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        String stringRead;
+        for (int i = 0; i < questions.length; i++){
+            System.out.println(questions[i]);
+            stringRead = scan.nextLine();
+            while(!stringRead(stringRead)){
+                System.out.println("Please, enter a non-null string nor an empty string please.");
+                stringRead = scan.nextLine();
+            }
+            arrayList.add(stringRead);
+        }
+        return arrayList;
+    }
 
     /**
      * Ask the user for his status for the connection or the account creation
@@ -174,27 +183,58 @@ public class OccasionalTouristicRentals {
         }
         return type;
     }
-    
+
     /**
-     * Ask some questions to the user and take his informations
-     * @param questions an arraay containing questions to ask
-     * @return the informations answered by the user
+     * Asks the connected user his next action according to his status
+     * @param type the status of the user
      */
-    private ArrayList<String> takeinformations(String[] questions) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        String stringRead;
-        for (int i = 0; i < questions.length; i++){
-            System.out.println(questions[i]);
-            stringRead = scan.nextLine();
-            while(!stringRead(stringRead)){
-                System.out.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            arrayList.add(stringRead);
+    private void ARR_connectedFeatures(TypeAccount type) {
+        System.out.println("You are connected");
+        System.out.println("What do you want to do ?");
+        if (type == TypeAccount.TENANT){
+            ARR_EventsTenant();
+        }else if (type == TypeAccount.OWNER){
+            ARR_EventsOwner();
+        }else if (type == TypeAccount.ADMINISTRATOR) {
+            ARR_EventsAdministrator();
         }
-        return arrayList;
     }
-    
+
+    /**
+     * display the actions that a tenant can do
+     */
+    private void ARR_EventsTenant() {
+        //consult data of a property
+        //bid a property
+        //rent a property
+        //see the highest price for a property
+        //see the list of his current bids
+        //add money on their virtual wallet
+        //see all properties
+    }
+
+    /**
+     * display the actions that an owner can do
+     */
+    private void ARR_EventsOwner() {
+        //add a property
+        //delete a property
+        //change data of a property
+        //list all the bids on the properties they own
+    }
+
+    /**
+     * display the actions that an administrator can do
+     */
+    private void ARR_EventsAdministrator() {
+        //view all user
+        //delete an account
+        //delete a property
+        //change the description of a property
+        //see all the list of bids
+        //access the history of the closed bids
+    }
+
     /**
      * Test if the answer given by the user is not null or empty
      * @param s the answer of the user
@@ -203,5 +243,11 @@ public class OccasionalTouristicRentals {
     private boolean stringRead(String s){
         return (!s.equals("") && !s.equals(null));
     }
- 
+
+    /**
+     * Quit event
+     */
+    private void ARR_Quit() {
+        quit = true;
+    }
 }
