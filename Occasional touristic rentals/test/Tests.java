@@ -58,4 +58,20 @@ public class Tests {
         assertFalse(process.testValidityAccount(account2, TypeAccount.TENANT));
         assertTrue(1 == users.size());
     }
+
+    @Test
+    public void connectionTest(){
+        Processing process = new Processing();
+        ArrayList<User> users = process.getAllUsers();
+        users.add(new Tenant("login", "surname", "name", "nick","email"));
+        ArrayList<String> connectionInformations = new ArrayList<>();
+        connectionInformations.add("login");
+        connectionInformations.add("nick");
+        ArrayList<String> connectionInformations2 = new ArrayList<>();
+        connectionInformations2.add("logins");
+        connectionInformations2.add("nick");
+        assertTrue(process.connect(connectionInformations, TypeAccount.TENANT));
+        assertFalse(process.connect(connectionInformations2, TypeAccount.TENANT));
+        assertFalse(process.connect(connectionInformations, TypeAccount.ADMINISTRATOR));
+    }
 }

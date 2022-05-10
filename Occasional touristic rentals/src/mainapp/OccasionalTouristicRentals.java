@@ -84,7 +84,7 @@ public class OccasionalTouristicRentals {
                 ARR_CreateAccount();
                 break;
             case 2:
-                ARR_Connexion();
+                ARR_Connection();
                 break;
             default:
                 System.err.println("Error: no such menu item.");
@@ -112,10 +112,10 @@ public class OccasionalTouristicRentals {
     /**
      * Event for the user connection
      */
-    private void ARR_Connexion() {
+    private void ARR_Connection() {
         TypeAccount type = askType();
-        String questions [] = {"What's your nickname ? ", "What's your login ?"};        
-        process.connect(takeinformations(questions), type);
+        String questions [] = {"What's your nickname ? ", "What's your login ?"};
+        boolean connected = process.connect(takeinformations(questions), type);
     }
 
     /**
@@ -140,7 +140,7 @@ public class OccasionalTouristicRentals {
             numberRead = Integer.parseInt(stringRead);
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
-            ARR_Connexion();
+            ARR_Connection();
         }
         switch (numberRead) {
             case 0:

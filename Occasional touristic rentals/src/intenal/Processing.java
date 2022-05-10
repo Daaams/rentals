@@ -48,10 +48,21 @@ public class Processing {
      * Connect a user to the application
      * @param personalInforations informations given by the user
      * @param type the type of account of the user
+     * @return a boolean
      */
-    public void connect(ArrayList<String> personalInforations, TypeAccount type) {
-        for(User u : allUsers){
+    public boolean connect(ArrayList<String> personalInforations, TypeAccount type) {
+        int i = 0;
+        boolean connected = false;
+        while (i < allUsers.size() && !connected){
+            User u = allUsers.get(i);
+            if (u.getNickname().equals(personalInforations.get(1))
+            && u.getLogin().equals(personalInforations.get(0))
+            && type == u.getTypeAccount()){
+                connected = true;
+            }
+            i++;
         }
+        return connected;
     }
 
     /**
