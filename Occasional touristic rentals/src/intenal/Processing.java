@@ -55,8 +55,8 @@ public class Processing {
         boolean connected = false;
         while (i < allUsers.size() && !connected){
             User u = allUsers.get(i);
-            if (u.getNickname().equals(personalInforations.get(1))
-            && u.getLogin().equals(personalInforations.get(0))
+            if (u.getNickname().equals(personalInforations.get(0))
+            && u.getLogin().equals(personalInforations.get(1))
             && type == u.getTypeAccount()){
                 connected = true;
             }
@@ -76,7 +76,9 @@ public class Processing {
         int i = 0;
         while (i < allUsers.size() && !nonValid){
             User u = allUsers.get(i);
-            nonValid = testNickname(u, personalInformations) || testMail(u, personalInformations);
+            if (type == u.getTypeAccount()){
+                nonValid = testNickname(u, personalInformations) || testMail(u, personalInformations);
+            }
             i++;
         }
         return nonValid;

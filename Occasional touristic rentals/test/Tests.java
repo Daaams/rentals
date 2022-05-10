@@ -22,7 +22,10 @@ public class Tests {
     
     public Tests() {
     }
-    
+
+    /**
+     * Tests if an account is well created
+     */
     @Test
     public void createAccountTest(){
         Processing process = new Processing();
@@ -31,6 +34,9 @@ public class Tests {
         assertEquals(1, users.size());
     }
 
+    /**
+     * Tests if an account is well created with personal data
+     */
     @Test
     public void createAccountMethodTest(){
         Processing process = new Processing();
@@ -44,6 +50,9 @@ public class Tests {
         assertEquals(1, process.getAllUsers().size());
     }
 
+    /**
+     * Tests the validity of an account during its creation
+     */
     @Test
     public void compareAccounts(){
         Processing process = new Processing();
@@ -59,17 +68,20 @@ public class Tests {
         assertTrue(1 == users.size());
     }
 
+    /**
+     * Tests if the connection is established
+     */
     @Test
     public void connectionTest(){
         Processing process = new Processing();
         ArrayList<User> users = process.getAllUsers();
         users.add(new Tenant("login", "surname", "name", "nick","email"));
         ArrayList<String> connectionInformations = new ArrayList<>();
-        connectionInformations.add("login");
         connectionInformations.add("nick");
+        connectionInformations.add("login");
         ArrayList<String> connectionInformations2 = new ArrayList<>();
-        connectionInformations2.add("logins");
         connectionInformations2.add("nick");
+        connectionInformations2.add("logins");
         assertTrue(process.connect(connectionInformations, TypeAccount.TENANT));
         assertFalse(process.connect(connectionInformations2, TypeAccount.TENANT));
         assertFalse(process.connect(connectionInformations, TypeAccount.ADMINISTRATOR));

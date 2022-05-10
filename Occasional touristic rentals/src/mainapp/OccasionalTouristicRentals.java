@@ -58,7 +58,7 @@ public class OccasionalTouristicRentals {
     private void firstPrompt() {
         System.out.println("What do you want to do?");
         System.out.println("0. Quit.");
-        System.out.println("1. Create an account");
+        System.out.println("1. Create owner and tenant accounts");
         System.out.println("2. Connection");
     }
 
@@ -81,7 +81,7 @@ public class OccasionalTouristicRentals {
                 ARR_Quit();
                 break;
             case 1:
-                ARR_CreateAccount();
+                ARR_CreateAccounts(0);
                 break;
             case 2:
                 ARR_Connection();
@@ -94,19 +94,28 @@ public class OccasionalTouristicRentals {
     /**
      * Event for the account creation
      */
-    private void ARR_CreateAccount() {
-        TypeAccount type = askType();
-        String questions [] = {"What's your login ? ", "What's your surname ? ", "What's your name ? ", 
+    private void ARR_CreateAccounts(int i) {
+        TypeAccount type;
+        String questions [] = {"What's your login ? ", "What's your surname ? ", "What's your name ? ",
         "What's your nickname ? ", "What's your email ? "};
-        ArrayList<String> informations = takeinformations(questions);
-        boolean valid = process.testValidityAccount(informations, type);
-        if (valid){
-            process.createAccount(informations, type);
-            firstPromptAction();
-        }else{
-            System.out.println("This account already exists. Please, start again");
-            ARR_CreateAccount();
+        for (int j = i ; j < 2; j ++) {
+            if (j == 0) {
+                System.out.println("You will create your owner account.");
+                type = TypeAccount.OWNER;
+            } else {
+                System.out.println("You will create your tenant account");
+                type = TypeAccount.TENANT;
+            }
+            ArrayList<String> informations = takeinformations(questions);
+            boolean nonValid = process.testValidityAccount(informations, type);
+            if (!nonValid) {
+                process.createAccount(informations, type);
+            } else {
+                System.out.println("This account already exists. Please, start again");
+                ARR_CreateAccounts(j);
+            }
         }
+        firstPromptAction();
     }
 
     /**
@@ -115,7 +124,15 @@ public class OccasionalTouristicRentals {
     private void ARR_Connection() {
         TypeAccount type = askType();
         String questions [] = {"What's your nickname ? ", "What's your login ?"};
+        System.out.println(process.getAllUsers().size());
         boolean connected = process.connect(takeinformations(questions), type);
+        if (connected){
+            ARR_connectedFeatures(type);
+        }
+    }
+
+    private void ARR_connectedFeatures(TypeAccount type) {
+        System.out.println("je suis connecté");
     }
 
     /**
