@@ -2,11 +2,11 @@ package intenal;
 
 import java.util.ArrayList;
 
-import userData.Admin;
-import userData.Owner;
-import userData.Tenant;
-import userData.TypeAccount;
-import userData.User;
+import userdata.Admin;
+import userdata.Owner;
+import userdata.Tenant;
+import userdata.TypeAccount;
+import userdata.User;
 
 public class Processing {
 

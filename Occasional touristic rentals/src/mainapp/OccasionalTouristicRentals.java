@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import intenal.Processing;
-import userData.TypeAccount;
+import userdata.TypeAccount;
 
 /**
  *
