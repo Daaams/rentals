@@ -4,14 +4,17 @@
  */
 package userdata;
 
-import java.util.HashSet;
+import intenal.Price;
+import intenal.Property;
+
+import java.util.HashMap;
 
 /**
  *
  * @author mgenetet
  */
 public class Owner extends User{
-    private HashSet<Property> allProperties;
+    private HashMap<Property, Price> allProperties;
     private final TypeAccount typeAccount = TypeAccount.OWNER;
     private int virtualWallet;
 
@@ -25,32 +28,25 @@ public class Owner extends User{
      */
     public Owner(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email);
-        allProperties = new HashSet<Property>();
+        allProperties = new HashMap<>();
         virtualWallet = 0;
     }
 
     /**
      * To add a property to the list of this owner
-     * @param property
+     * @param property the property to add
+     * @param price the price of the property
      */
-    void addProperty(Property property){
-        allProperties.add(property);
+    void addProperty(Property property, Price price){
+        allProperties.put(property, price);
     }
 
     /**
      * To delete a property of the list of this owner
-     * @param property
+     * @param property the property to add
      */
     void deleteProperty(Property property){
         allProperties.remove(property);
     }
 
-    /**
-     * To get the type of account of the status owner
-     * @return TypeAccount.OWNER
-     */
-    @Override
-    public TypeAccount getTypeAccount(){
-        return typeAccount;
-    }
 }

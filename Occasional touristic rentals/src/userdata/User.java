@@ -8,7 +8,7 @@ package userdata;
  *
  * @author mgenetet
  */
-public abstract class User {
+public class User {
     private final String LOGIN;
     private String surname;
     private String name;
@@ -30,12 +30,6 @@ public abstract class User {
         nickname = nick;
         mail = email;
     }
-
-    /**
-     * To get the type of account of the user
-     * @return the type of account
-     */
-    public abstract TypeAccount getTypeAccount();
 
     /**
      * To get the login of the user
@@ -65,9 +59,7 @@ public abstract class User {
      * To get the nickname of the user
      * @return a String
      */
-    public String getNickname(){
-        return nickname;
-    }
+    public String getNickname(){return nickname;}
 
     /**
      * To get the mail of the user

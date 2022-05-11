@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package userdata;
+package intenal;
+
+import userdata.TypeProperty;
 
 /**
  *
  * @author mgenetet
  */
-class Property {
+public class Property {
     private TypeProperty type;
     private String name;
     private final String ADDRESS;
@@ -18,7 +20,7 @@ class Property {
     private int maxOccupiers;
 
     /**
-     * Contructor of the class Property
+     * Constructor of the class Property
      * @param type the type of this property
      * @param name the name of this property
      * @param address the address of this property

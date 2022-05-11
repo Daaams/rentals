@@ -4,9 +4,7 @@
  */
 
 import intenal.Processing;
-import userdata.Tenant;
-import userdata.TypeAccount;
-import userdata.User;
+import userdata.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author damie
+ * @author damien
  */
 public class Tests {
     
@@ -24,14 +22,20 @@ public class Tests {
     }
 
     /**
-     * Tests if an account is well created
+     * Tests if an accounts are well created
      */
     @Test
     public void createAccountTest(){
         Processing process = new Processing();
-        ArrayList<User> users = process.getAllUsers();
-        users.add(new Tenant("login", "surname", "name", "nick","email"));
-        assertEquals(1, users.size());
+        ArrayList<Tenant> tenants = process.getAllTenants();
+        ArrayList<Owner> owners = process.getAllOwners();
+        ArrayList<Admin> admins = process.getAllAdmins();
+        tenants.add(new Tenant("login", "surname", "name", "nick","email"));
+        owners.add(new Owner("login", "surname", "name", "nick","email"));
+        admins.add(new Admin("login", "surname", "name", "nick","email"));
+        assertEquals(1, tenants.size());
+        assertEquals(1, owners.size());
+        assertEquals(1, admins.size());
     }
 
     /**
@@ -47,7 +51,7 @@ public class Tests {
         account2.add("nickname");
         account2.add("email");
         process.createAccount(account2, TypeAccount.TENANT);
-        assertEquals(1, process.getAllUsers().size());
+        assertEquals(1, process.getAllTenants().size());
     }
 
     /**
@@ -56,8 +60,8 @@ public class Tests {
     @Test
     public void compareAccounts(){
         Processing process = new Processing();
-        ArrayList<User> users = process.getAllUsers();
-        users.add(new Tenant("login", "surname", "name", "nick","email"));
+        ArrayList<Tenant> tenants = process.getAllTenants();
+        tenants.add(new Tenant("login", "surname", "name", "nick","email"));
         ArrayList<String> account2 = new ArrayList<String>();
         account2.add("login");
         account2.add("surname");
@@ -65,7 +69,7 @@ public class Tests {
         account2.add("nickname");
         account2.add("email");
         assertFalse(process.testValidityAccount(account2, TypeAccount.TENANT));
-        assertTrue(1 == users.size());
+        assertTrue(1 == tenants.size());
     }
 
     /**
@@ -74,7 +78,7 @@ public class Tests {
     @Test
     public void connectionTest(){
         Processing process = new Processing();
-        ArrayList<User> users = process.getAllUsers();
+        ArrayList<Tenant> users = process.getAllTenants();
         users.add(new Tenant("login", "surname", "name", "nick","email"));
         ArrayList<String> connectionInformations = new ArrayList<>();
         connectionInformations.add("nick");
@@ -82,8 +86,20 @@ public class Tests {
         ArrayList<String> connectionInformations2 = new ArrayList<>();
         connectionInformations2.add("nick");
         connectionInformations2.add("logins");
-        assertTrue(process.connect(connectionInformations, TypeAccount.TENANT));
-        assertFalse(process.connect(connectionInformations2, TypeAccount.TENANT));
-        assertFalse(process.connect(connectionInformations, TypeAccount.ADMINISTRATOR));
+        assertTrue(process.connectTenant(connectionInformations) != null);
+        assertTrue(process.connectTenant(connectionInformations2) == null);
+    }
+
+    /**
+     * Tests if money added by a user is well added to his wallet
+     */
+    @Test
+    public void depositMoneyTenantAccountTest(){
+        Processing process = new Processing();
+        ArrayList<Tenant> tenants = process.getAllTenants();
+        Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
+        tenants.add(t);
+        process.addMoneyOnWallet(tenants.get(0), 5);
+        assertTrue(t.getVirtualWallet() == 5);
     }
 }

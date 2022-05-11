@@ -22,14 +22,4 @@ public class Admin extends User{
     public Admin(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email);
     }
-
-    /**
-     * To get the type of account of the status owner
-     * @return TypeAccount.OWNER
-     */
-    @Override
-    public TypeAccount getTypeAccount(){
-        return typeAccount;
-    }
-    
 }

@@ -26,19 +26,16 @@ public class Tenant extends User{
     }
 
     /**
-     * To get the type of account of the status owner
-     * @return TypeAccount.OWNER
+     * To add money on the tenant's wallet
+     * @param money the money to add into the wallet
      */
-    @Override
-    public TypeAccount getTypeAccount(){
-        return typeAccount;
+     public void depositMoney(int money){
+        virtualWallet += money;
     }
 
     /**
-     * To add money on the tenant's wallet
-     * @param money
+     * To get the content of the Tenant user
+     * @return an integer corresponding to the money of the Tenant
      */
-    void depositMoney(int money){
-        virtualWallet += money;
-    }
+    public int getVirtualWallet(){return virtualWallet;}
 }
