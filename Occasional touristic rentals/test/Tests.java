@@ -44,7 +44,7 @@ public class Tests {
     @Test
     public void createAccountMethodTest(){
         Processing process = new Processing();
-        ArrayList<String> account2 = new ArrayList<String>();
+        ArrayList<String> account2 = new ArrayList<>();
         account2.add("login");
         account2.add("surname");
         account2.add("name");
@@ -132,5 +132,25 @@ public class Tests {
         assertTrue(t.getSurname().equals("SURNAME"));
         assertTrue(t.getNickname().equals("NICKNAME"));
         assertTrue(t.getMail().equals("EMAIL"));
+    }
+
+    /**
+     * Tests if an account is well deleted
+     */
+    @Test
+    public void deleteAccountTest(){
+        Processing process = new Processing();
+        ArrayList<String> account2 = new ArrayList<>();
+        account2.add("login");
+        account2.add("surname");
+        account2.add("name");
+        account2.add("nick");
+        account2.add("email");
+        process.createAccount(account2, TypeAccount.TENANT);
+        process.createAccount(account2, TypeAccount.ADMINISTRATOR);
+        assertEquals(1, process.getAllTenants().size());
+        String [] tab = {"name", "surname", "nick"};
+        process.deleteAccount(tab, TypeAccount.TENANT, process.getAllAdmins().get(0));
+        assertTrue(process.getAllTenants().size() == 0);
     }
 }

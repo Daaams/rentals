@@ -224,7 +224,7 @@ public class OccasionalTouristicRentals {
             numberRead = Integer.parseInt(stringRead);
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
-            ARR_Connection();
+            askType();
         }
         switch (numberRead) {
             case 0:
@@ -442,10 +442,10 @@ public class OccasionalTouristicRentals {
                 ARR_AskDataToChange(adminConnected);
                 break;
             case 3:
-                System.out.println("nothing for the moment");
+                process.seeAllUsers();
                 break;
             case 4:
-                System.out.println("nothing for the moment");
+                ARR_DeleteAccount(adminConnected);
                 break;
             case 5:
                 System.out.println("nothing for the moment");
@@ -526,6 +526,26 @@ public class OccasionalTouristicRentals {
                 System.out.println("It has been changed.");
                 break;
         }
+    }
+
+    private void ARR_DeleteAccount(User userConnected) {
+        boolean deleted = process.deleteAccount(askForAccount(), askType(), userConnected);
+        if (!deleted){
+            System.err.println("You enter wrong data.");
+            ARR_DeleteAccount(userConnected);
+        };
+    }
+
+    private String[] askForAccount() {
+        String [] account = new String[3];
+        String [] questions = {"The name of the person :", "The surname of the person :",
+                "The nickname of the person :"};
+        for (int i = 0; i < questions.length; i ++){
+            System.out.println(questions[i]);
+            stringRead = scan.nextLine();
+            account[i] = stringRead;
+        }
+        return account;
     }
 
     /**

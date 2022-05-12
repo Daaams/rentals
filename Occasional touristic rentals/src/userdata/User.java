@@ -68,7 +68,6 @@ public class User {
     public String getMail(){
         return mail;
     }
-
     /**
      * Assigns the new name
      * @param newName the new name

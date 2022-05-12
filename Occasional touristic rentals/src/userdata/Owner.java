@@ -49,4 +49,8 @@ public class Owner extends User{
         allProperties.remove(property);
     }
 
+    @Override
+    public String toString(){
+        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+    }
 }

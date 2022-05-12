@@ -22,4 +22,9 @@ public class Admin extends User{
     public Admin(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email);
     }
+
+    @Override
+    public String toString(){
+        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+    }
 }

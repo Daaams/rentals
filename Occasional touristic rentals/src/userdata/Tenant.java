@@ -45,4 +45,8 @@ public class Tenant extends User{
      */
     public int getVirtualWallet(){return virtualWallet;}
 
+    @Override
+    public String toString(){
+        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+    }
 }

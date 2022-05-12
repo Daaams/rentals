@@ -13,6 +13,7 @@ public class Processing {
     private ArrayList<Tenant> allTenants;
     private ArrayList<Admin> allAdmins;
     private ArrayList<Owner> allOwners;
+    private ArrayList<User> allUsers;
 
 
     /**
@@ -22,6 +23,7 @@ public class Processing {
         allAdmins = new ArrayList<>();
         allOwners = new ArrayList<>();
         allTenants = new ArrayList<>();
+        allUsers = new ArrayList<>();
     }
 
     /**
@@ -47,12 +49,15 @@ public class Processing {
         if (type == TypeAccount.ADMINISTRATOR){
             Admin u = new Admin(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allAdmins.add(u);
+            allUsers.add(u);
         }else if (type == TypeAccount.OWNER){
             Owner u = new Owner(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allOwners.add(u);
+            allUsers.add(u);
         }else{
             Tenant u = new Tenant(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allTenants.add(u);
+            allUsers.add(u);
         }
     }
 
@@ -259,5 +264,95 @@ public class Processing {
      */
     public void changeMail(User userConnected, String stringRead) {
         userConnected.changeMail(stringRead);
+    }
+
+    public void seeAllUsers() {
+        for (Admin a: allAdmins) {System.out.println(a.toString() + "\n");}
+        for (Owner o: allOwners) {System.out.println(o.toString() + "\n");}
+        for (Tenant t: allTenants) {System.out.println(t.toString() + "\n");}
+    }
+
+    public boolean deleteAccount(String[] accountInformations, TypeAccount type, User userConnected) {
+        switch (type){
+            case TENANT:
+                Tenant t = searchAccountTenant(allTenants, accountInformations);
+                if (t != null) {
+                    allTenants.remove(t);
+                    System.out.println("Deleted");
+                    return true;
+                }
+                break;
+            case OWNER:
+                Owner o = searchAccountOwner(allOwners, accountInformations);
+                if (o != null){
+                    allOwners.remove(o);
+                    System.out.println("Deleted");
+                    return true;
+                }
+                break;
+            case ADMINISTRATOR:
+                Admin a = searchAccountAdmin(allAdmins, accountInformations);
+                if (a == userConnected){
+                    System.err.println("You can't delete your account, you are connected");
+                    return false;
+                }else if (a != null && a != userConnected){
+                    allAdmins.remove(a);
+                    System.out.println("Deleted");
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    private Tenant searchAccountTenant(ArrayList<Tenant> tenants, String[] accountInformations) {
+        boolean found = false;
+        int i = 0;
+        Tenant tenant = null;
+        while (i < tenants.size() && !found){
+            Tenant t = tenants.get(i);
+            if (t.getName().equals(accountInformations[0])
+            && t.getSurname().equals(accountInformations[1])
+            && t.getNickname().equals(accountInformations[2])){
+                tenant = t;
+                found = true;
+            }
+            i ++;
+        }
+        return tenant;
+    }
+
+    private Owner searchAccountOwner(ArrayList<Owner> owners, String[] accountInformations) {
+        boolean found = false;
+        int i = 0;
+        Owner owner = null;
+        while (i < owners.size() && !found){
+            Owner o = owners.get(i);
+            if (o.getName().equals(accountInformations[0])
+                    && o.getSurname().equals(accountInformations[1])
+                    && o.getNickname().equals(accountInformations[2])){
+                owner = o;
+                found = true;
+            }
+            i ++;
+        }
+        return owner;
+    }
+
+    private Admin searchAccountAdmin(ArrayList<Admin> admins, String[] accountInformations) {
+        boolean found = false;
+        int i = 0;
+        Admin admin = null;
+        while (i < admins.size() && !found){
+            Admin a = admins.get(i);
+            if (a.getName().equals(accountInformations[0])
+                    && a.getSurname().equals(accountInformations[1])
+                    && a.getNickname().equals(accountInformations[2])){
+                admin = a;
+                found = true;
+            }
+            i ++;
+        }
+        return admin;
     }
 }
