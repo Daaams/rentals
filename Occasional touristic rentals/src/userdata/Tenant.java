@@ -29,13 +29,20 @@ public class Tenant extends User{
      * To add money on the tenant's wallet
      * @param money the money to add into the wallet
      */
-     public void depositMoney(int money){
+    public void depositMoney(int money){
         virtualWallet += money;
     }
+
+    /**
+     * To withdraw money of the tenant's wallet
+     * @param money the money to withraw of the wallet
+     */
+    public void withdrawMoney(int money) { virtualWallet -= money;}
 
     /**
      * To get the content of the Tenant user
      * @return an integer corresponding to the money of the Tenant
      */
     public int getVirtualWallet(){return virtualWallet;}
+
 }

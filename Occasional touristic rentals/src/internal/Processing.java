@@ -1,8 +1,6 @@
-package intenal;
+package internal;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
 
 import userdata.Admin;
 import userdata.Owner;
@@ -188,12 +186,19 @@ public class Processing {
 
     /**
      * To add money into the Tenant's wallet
-     * @param userConnected the tenant
-     * @param money the money to add
+     * @param tenantConnected the tenant
+     * @param money money to add
      */
-    public void addMoneyOnWallet(Tenant userConnected, int money) {
-        userConnected.depositMoney(money);
+    public void addMoneyOnWallet(Tenant tenantConnected, int money) {
+        tenantConnected.depositMoney(money);
     }
+
+    /**
+     * To withdraw money of tenant's wallet
+     * @param tenantConnected the tenant
+     * @param money money to withdraw
+     */
+    public void withdrawMoneyOfWallet(Tenant tenantConnected, int money) {tenantConnected.withdrawMoney(money);}
 
     public void seeAllProperties() {
     }
@@ -207,5 +212,52 @@ public class Processing {
      */
     public void seeMyWallet(Tenant userConnected) {
         System.out.println(userConnected.getVirtualWallet());
+    }
+
+    /**
+     * Shows data of the user
+     * @param userConnected the connected user
+     */
+    public void seeData(User userConnected) {
+        System.out.println("Name : "+ userConnected.getName());
+        System.out.println("Surname : "+ userConnected.getSurname());
+        System.out.println("Nickname : "+ userConnected.getNickname());
+        System.out.println("Mail : "+ userConnected.getMail());
+    }
+
+    /**
+     * Changes the name of the user
+     * @param userConnected the connected user
+     * @param stringRead the new name
+     */
+    public void changeName(User userConnected, String stringRead) {
+        userConnected.changeName(stringRead);
+    }
+
+    /**
+     * Changes the surname of the user
+     * @param userConnected the connected user
+     * @param stringRead the new surname
+     */
+    public void changeSurname(User userConnected, String stringRead) {
+        userConnected.changeSurname(stringRead);
+    }
+
+    /**
+     * Changes the nickname of the user
+     * @param userConnected the connected user
+     * @param stringRead the new nickname
+     */
+    public void changeNickname(User userConnected, String stringRead) {
+        userConnected.changeNickname(stringRead);
+    }
+
+    /**
+     * Changes the email address of the user
+     * @param userConnected the connected user
+     * @param stringRead the new email address
+     */
+    public void changeMail(User userConnected, String stringRead) {
+        userConnected.changeMail(stringRead);
     }
 }

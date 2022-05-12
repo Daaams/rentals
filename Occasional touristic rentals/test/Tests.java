@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
 
-import intenal.Processing;
+import internal.Processing;
 import userdata.*;
 
 import org.junit.Test;
@@ -91,7 +91,7 @@ public class Tests {
     }
 
     /**
-     * Tests if money added by a user is well added to his wallet
+     * Tests if money added by a tenant is well added to his wallet
      */
     @Test
     public void depositMoneyTenantAccountTest(){
@@ -101,5 +101,36 @@ public class Tests {
         tenants.add(t);
         process.addMoneyOnWallet(tenants.get(0), 5);
         assertTrue(t.getVirtualWallet() == 5);
+    }
+
+    /**
+     * Tests if money withdraw by a tenant is well withdraw to his wallet
+     */
+    @Test
+    public void withdrawMoneyTenantAccountTest(){
+        Processing process = new Processing();
+        ArrayList<Tenant> tenants = process.getAllTenants();
+        Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
+        tenants.add(t);
+        process.addMoneyOnWallet(tenants.get(0), 10);
+        process.withdrawMoneyOfWallet(tenants.get(0), 5);
+        assertTrue(t.getVirtualWallet() == 5);
+    }
+
+    /**
+     * Tests if data is well changed
+     */
+    @Test
+    public void changeDataTest(){
+        Processing process = new Processing();
+        Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
+        process.changeName(t,"NAME");
+        process.changeSurname(t, "SURNAME");
+        process.changeMail(t, "EMAIL");
+        process.changeNickname(t, "NICKNAME");
+        assertTrue(t.getName().equals("NAME"));
+        assertTrue(t.getSurname().equals("SURNAME"));
+        assertTrue(t.getNickname().equals("NICKNAME"));
+        assertTrue(t.getMail().equals("EMAIL"));
     }
 }

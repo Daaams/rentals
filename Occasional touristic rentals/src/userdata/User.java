@@ -69,4 +69,27 @@ public class User {
         return mail;
     }
 
+    /**
+     * Assigns the new name
+     * @param newName the new name
+     */
+    public void changeName(String newName){ name = newName;}
+
+    /**
+     * Assigns the new surname
+     * @param newSurname the new surname
+     */
+    public void changeSurname(String newSurname){ surname = newSurname;}
+
+    /**
+     * Assigns the new nickname
+     * @param newNickname the new nickname
+     */
+    public void changeNickname(String newNickname){ nickname = newNickname;}
+
+    /**
+     * Assigns the new email address
+     * @param newMail the new email address
+     */
+    public void changeMail(String newMail){ mail = newMail;}
 }

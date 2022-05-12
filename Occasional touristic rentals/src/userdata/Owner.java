@@ -4,8 +4,8 @@
  */
 package userdata;
 
-import intenal.Price;
-import intenal.Property;
+import internal.Price;
+import internal.Property;
 
 import java.util.HashMap;
 
