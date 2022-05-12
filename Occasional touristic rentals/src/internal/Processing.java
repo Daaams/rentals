@@ -1,12 +1,9 @@
 package internal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import userdata.Admin;
-import userdata.Owner;
-import userdata.Tenant;
-import userdata.TypeAccount;
-import userdata.User;
+import userdata.*;
 
 public class Processing {
 
@@ -63,16 +60,16 @@ public class Processing {
 
     /**
      * Connect a tenant to the application
-     * @param personalInforations informations given by the tenant
+     * @param personalData data given by the tenant
      * @return the connected tenant
      */
-    public Tenant connectTenant(ArrayList<String> personalInforations) {
+    public Tenant connectTenant(ArrayList<String> personalData) {
         int i = 0;
         Tenant connected = null;
         while (i < allTenants.size() && connected == null){
             Tenant t = allTenants.get(i);
-            if (t.getNickname().equals(personalInforations.get(0))
-            && t.getLogin().equals(personalInforations.get(1)))
+            if (t.getNickname().equals(personalData.get(0))
+            && t.getLogin().equals(personalData.get(1)))
             {
                 connected = t;
             }
@@ -83,16 +80,16 @@ public class Processing {
 
     /**
      * Connect an owner to the application
-     * @param personalInforations informations given by the owner
+     * @param personalData datd given by the owner
      * @return the connected owner
      */
-    public Owner connectOwner(ArrayList<String> personalInforations) {
+    public Owner connectOwner(ArrayList<String> personalData) {
         int i = 0;
         Owner connected = null;
         while (i < allOwners.size() && connected == null){
             Owner t = allOwners.get(i);
-            if (t.getNickname().equals(personalInforations.get(0))
-                    && t.getLogin().equals(personalInforations.get(1)))
+            if (t.getNickname().equals(personalData.get(0))
+                    && t.getLogin().equals(personalData.get(1)))
             {
                 connected = t;
             }
@@ -103,16 +100,16 @@ public class Processing {
 
     /**
      * Connect an administrator to the application
-     * @param personalInforations informations given by the administrator
+     * @param personalData data given by the administrator
      * @return the connected administrator
      */
-    public Admin connectAdmin(ArrayList<String> personalInforations) {
+    public Admin connectAdmin(ArrayList<String> personalData) {
         int i = 0;
         Admin connected = null;
         while (i < allAdmins.size() && connected == null){
             Admin t = allAdmins.get(i);
-            if (t.getNickname().equals(personalInforations.get(0))
-                    && t.getLogin().equals(personalInforations.get(1)))
+            if (t.getNickname().equals(personalData.get(0))
+                    && t.getLogin().equals(personalData.get(1)))
             {
                 connected = t;
             }
@@ -123,11 +120,11 @@ public class Processing {
 
     /**
      * Tests if an account with the same personnal informations has already been created
-     * @param personalInformations informations of the user
+     * @param personalData data of the user
      * @param type the type of account of the user
      * @return a boolean
      */
-    public boolean testValidityAccount(ArrayList<String> personalInformations, TypeAccount type) {
+    public boolean testValidityAccount(ArrayList<String> personalData, TypeAccount type) {
         boolean nonValid = false;
         int i = 0;
         switch (type){
@@ -135,7 +132,7 @@ public class Processing {
                 ArrayList<Owner> listO = new ArrayList<>(allOwners);
                 while (i < listO.size() && !nonValid){
                     Owner o = listO.get(i);
-                    nonValid = testNickname(o, personalInformations) && testMail(o, personalInformations);
+                    nonValid = testNickname(o, personalData) && testMail(o, personalData);
                     i++;
                 }
                 break;
@@ -143,7 +140,7 @@ public class Processing {
                 ArrayList<Admin> listA = new ArrayList<>(allAdmins);
                 while (i < listA.size() && !nonValid){
                     Admin a = listA.get(i);
-                    nonValid = testNickname(a, personalInformations) && testMail(a, personalInformations);
+                    nonValid = testNickname(a, personalData) && testMail(a, personalData);
                     i++;
                 }
                 break;
@@ -151,7 +148,7 @@ public class Processing {
                 ArrayList<Tenant> listT = new ArrayList<>(allTenants);
                 while (i < listT.size() && !nonValid){
                     Tenant t = listT.get(i);
-                    nonValid = testNickname(t, personalInformations) && testMail(t, personalInformations);
+                    nonValid = testNickname(t, personalData) && testMail(t, personalData);
                     i++;
                 }
                 break;
@@ -163,11 +160,11 @@ public class Processing {
      *
      * Tests if the nickname given during the account creation already exists
      * @param u the user to compare
-     * @param personalInformations informations given by the user wanted to create an account
+     * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testNickname(User u, ArrayList<String> personalInformations){
-        boolean test = u.getNickname().equals(personalInformations.get(3));
+    private boolean testNickname(User u, ArrayList<String> personalData){
+        boolean test = u.getNickname().equals(personalData.get(3));
         if (test){
             System.out.println("This nickname already exists, choose another one");
         }
@@ -178,11 +175,11 @@ public class Processing {
      *
      * Tests if the mail address given during the account creation already exists
      * @param u the user to compare
-     * @param personalInformations informations given by the user wanted to create an account
+     * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testMail(User u, ArrayList<String> personalInformations){
-        boolean test = u.getNickname().equals(personalInformations.get(4));
+    private boolean testMail(User u, ArrayList<String> personalData){
+        boolean test = u.getNickname().equals(personalData.get(4));
         if (test){
             System.err.println("This mail already exists, choose another one");
         }
@@ -205,10 +202,35 @@ public class Processing {
      */
     public void withdrawMoneyOfWallet(Tenant tenantConnected, int money) {tenantConnected.withdrawMoney(money);}
 
+    /**
+     * Shows all properties registered on the application
+     */
     public void seeAllProperties() {
+        for (Owner o: allOwners) {
+            HashMap<Property, Price> p = o.getProperties();
+            for (Property property: p.keySet()) {
+                consultDataOfAProperty(property.getNameProperty());
+            }
+        }
     }
 
+    /**
+     * Shows the data of the property
+     * @param property the wanted property
+     */
     public void consultDataOfAProperty(String property) {
+        for (Owner o: allOwners) {
+            HashMap<Property, Price> p = o.getProperties();
+            for (Property pro: p.keySet()) {
+                if(pro.getNameProperty().equals(property)){
+                    System.out.println(pro.toString());
+                    System.out.println("The type of the property is : "+pro.getTypeProperty());
+                    System.out.println("The max quantity of occupiers of the property : "+ pro.getMaxOccupiers());
+                    System.out.println("The nominal price : "+ p.get(pro).getThePrice());
+                    System.out.println("");
+                }
+            }
+        }
     }
 
     /**
@@ -266,16 +288,26 @@ public class Processing {
         userConnected.changeMail(stringRead);
     }
 
+    /**
+     * Shows all users of the application
+     */
     public void seeAllUsers() {
         for (Admin a: allAdmins) {System.out.println(a.toString() + "\n");}
         for (Owner o: allOwners) {System.out.println(o.toString() + "\n");}
         for (Tenant t: allTenants) {System.out.println(t.toString() + "\n");}
     }
 
-    public boolean deleteAccount(String[] accountInformations, TypeAccount type, User userConnected) {
+    /**
+     * Deletes an account according to given data
+     * @param accountData an array containing data of the account to delete
+     * @param type the type of the account
+     * @param userConnected the administrator connected
+     * @return true if the account is well deleted
+     */
+    public boolean deleteAccount(String[] accountData, TypeAccount type, User userConnected) {
         switch (type){
             case TENANT:
-                Tenant t = searchAccountTenant(allTenants, accountInformations);
+                Tenant t = searchAccountTenant(allTenants, accountData);
                 if (t != null) {
                     allTenants.remove(t);
                     System.out.println("Deleted");
@@ -283,7 +315,7 @@ public class Processing {
                 }
                 break;
             case OWNER:
-                Owner o = searchAccountOwner(allOwners, accountInformations);
+                Owner o = searchAccountOwner(allOwners, accountData);
                 if (o != null){
                     allOwners.remove(o);
                     System.out.println("Deleted");
@@ -291,7 +323,7 @@ public class Processing {
                 }
                 break;
             case ADMINISTRATOR:
-                Admin a = searchAccountAdmin(allAdmins, accountInformations);
+                Admin a = searchAccountAdmin(allAdmins, accountData);
                 if (a == userConnected){
                     System.err.println("You can't delete your account, you are connected");
                     return false;
@@ -305,15 +337,21 @@ public class Processing {
         return false;
     }
 
-    private Tenant searchAccountTenant(ArrayList<Tenant> tenants, String[] accountInformations) {
+    /**
+     * Searches the account of the tenant among tenants of the application
+     * @param tenants an arraylist of Tenant
+     * @param accountData the data of the account
+     * @return the corresponding tenant or null
+     */
+    private Tenant searchAccountTenant(ArrayList<Tenant> tenants, String[] accountData) {
         boolean found = false;
         int i = 0;
         Tenant tenant = null;
         while (i < tenants.size() && !found){
             Tenant t = tenants.get(i);
-            if (t.getName().equals(accountInformations[0])
-            && t.getSurname().equals(accountInformations[1])
-            && t.getNickname().equals(accountInformations[2])){
+            if (t.getName().equals(accountData[0])
+            && t.getSurname().equals(accountData[1])
+            && t.getNickname().equals(accountData[2])){
                 tenant = t;
                 found = true;
             }
@@ -322,15 +360,21 @@ public class Processing {
         return tenant;
     }
 
-    private Owner searchAccountOwner(ArrayList<Owner> owners, String[] accountInformations) {
+    /**
+     * Searches the account of the owner among owners of the application
+     * @param owners an arraylist of Owner
+     * @param accountData the data of the account
+     * @return the corresponding owner or null
+     */
+    private Owner searchAccountOwner(ArrayList<Owner> owners, String[] accountData) {
         boolean found = false;
         int i = 0;
         Owner owner = null;
         while (i < owners.size() && !found){
             Owner o = owners.get(i);
-            if (o.getName().equals(accountInformations[0])
-                    && o.getSurname().equals(accountInformations[1])
-                    && o.getNickname().equals(accountInformations[2])){
+            if (o.getName().equals(accountData[0])
+                    && o.getSurname().equals(accountData[1])
+                    && o.getNickname().equals(accountData[2])){
                 owner = o;
                 found = true;
             }
@@ -339,20 +383,73 @@ public class Processing {
         return owner;
     }
 
-    private Admin searchAccountAdmin(ArrayList<Admin> admins, String[] accountInformations) {
+    /**
+     * Searches the account of the administrator among administrators of the application
+     * @param admins an arraylist of Admin
+     * @param accountData the data of the account
+     * @return the corresponding administrator or null
+     */
+    private Admin searchAccountAdmin(ArrayList<Admin> admins, String[] accountData) {
         boolean found = false;
         int i = 0;
         Admin admin = null;
         while (i < admins.size() && !found){
             Admin a = admins.get(i);
-            if (a.getName().equals(accountInformations[0])
-                    && a.getSurname().equals(accountInformations[1])
-                    && a.getNickname().equals(accountInformations[2])){
+            if (a.getName().equals(accountData[0])
+                    && a.getSurname().equals(accountData[1])
+                    && a.getNickname().equals(accountData[2])){
                 admin = a;
                 found = true;
             }
             i ++;
         }
         return admin;
+    }
+
+    /**
+     * Shows all the property of the connected owner
+     * @param ownerConnected the connected owner
+     */
+    public void seeMyProperties(Owner ownerConnected) {
+        System.out.println("My properties : ");
+        for (Property p: ownerConnected.getProperties().keySet()) {
+            System.out.println(p.toString());
+        }
+    }
+
+    /**
+     * Creates and Adds a property in the portfolio of the owner
+     * @param ownerConnected the owner connected
+     * @param propertyData data of the property
+     * @param type the type of the property
+     * @param maxOccupiers the number maximum of occupiers
+     * @param nominalPrice the nominal price
+     *
+     *
+     *                     il faut tester s'il n'y a pas une autre propriété avec les memes infos
+     */
+    public void addPropertyToThePortfolio(Owner ownerConnected, ArrayList<String> propertyData, TypeProperty type,
+                                          int maxOccupiers, int nominalPrice) {
+        ownerConnected.addProperty(new Property(type, propertyData.get(0), propertyData.get(1), propertyData.get(2),
+        propertyData.get(3), maxOccupiers), new Price(nominalPrice));
+    }
+
+    /**
+     * Deletes a property of the portfolio of the owner
+     * @param ownerConnected the connected owner
+     * @param dataOfTheProperty data of the property to delete
+     */
+    public void deleteProperty(Owner ownerConnected, ArrayList<String> dataOfTheProperty) {
+        for (Property p: ownerConnected.getProperties().keySet()) {
+            if (p.getNameProperty().equals(dataOfTheProperty.get(0)) &&
+                    p.getAddressOfTheProperty().equals(dataOfTheProperty.get(1)) &&
+                    p.getTheCity().equals(dataOfTheProperty.get(2))){
+                ownerConnected.deleteProperty(p);
+            }
+        }
+    }
+
+    public void seeMyWalletOwner(Owner ownerConnected) {
+        System.out.println(ownerConnected.getVirtualWallet());
     }
 }

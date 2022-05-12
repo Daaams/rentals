@@ -16,7 +16,6 @@ public class Property {
     private final String ADDRESS;
     private final String CITY;
     private String description;
-    private int nominalPrice;
     private int maxOccupiers;
 
     /**
@@ -26,17 +25,54 @@ public class Property {
      * @param address the address of this property
      * @param city the city of this property
      * @param desc the description of this property
-     * @param minPrice the price for one person
      * @param maxOccupiers the max quantity of people that can sleep per night
      */
     public Property(TypeProperty type, String name, String address, 
-            String city, String desc, int minPrice, int maxOccupiers){
+            String city, String desc, int maxOccupiers){
         this.type = type;
         this.name = name;
         ADDRESS = address;
         CITY = city;
         description = desc;
-        nominalPrice = minPrice;
         this.maxOccupiers = maxOccupiers;
+    }
+
+    /**
+     * To get the name of the property
+     * @return the name
+     */
+    public String getNameProperty(){
+        return name;
+    }
+    /**
+     * To get the address of the property
+     * @return the address
+     */
+    public String getAddressOfTheProperty(){
+        return ADDRESS;
+    }
+    /**
+     * To get the city of the property
+     * @return the city
+     */
+    public String getTheCity(){
+        return CITY;
+    }
+    /**
+     * To get the number max of occupiers of the property
+     * @return the number max of occupiers
+     */
+    public int getMaxOccupiers(){
+        return maxOccupiers;
+    }
+    /**
+     * To get the type of the property
+     * @return the type of the property
+     */
+    public TypeProperty getTypeProperty(){return type;}
+
+    @Override
+    public String toString(){
+        return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+".";
     }
 }

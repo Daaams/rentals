@@ -37,15 +37,16 @@ public class Owner extends User{
      * @param property the property to add
      * @param price the price of the property
      */
-    void addProperty(Property property, Price price){
+    public void addProperty(Property property, Price price){
         allProperties.put(property, price);
     }
 
+    public HashMap<Property, Price> getProperties(){return new HashMap<>(allProperties);}
     /**
      * To delete a property of the list of this owner
      * @param property the property to add
      */
-    void deleteProperty(Property property){
+    public void deleteProperty(Property property){
         allProperties.remove(property);
     }
 
@@ -53,4 +54,6 @@ public class Owner extends User{
     public String toString(){
         return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
     }
+
+    public int getVirtualWallet(){return virtualWallet;}
 }

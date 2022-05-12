@@ -9,5 +9,26 @@ package internal;
  * @author damie
  */
 public class Price {
+    private int thePrice;
+
+    /**
+     * Constructor of the price
+     * @param price the nominal price
+     */
+    public Price(int price){
+        thePrice = price;
+    }
+
+    /**
+     * To get the nominal price
+     * @return the nominal price
+     */
+    public int getThePrice(){return thePrice;}
+
+    /**
+     * To change the nominal price
+     * @param newPrice the new nominal price
+     */
+    public void changeThePrice(int newPrice){thePrice = newPrice;}
     
 }

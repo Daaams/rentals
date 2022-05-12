@@ -6,8 +6,11 @@ package mainapp;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.SplittableRandom;
 
+import internal.Price;
 import internal.Processing;
+import internal.Property;
 import userdata.*;
 
 /**
@@ -48,6 +51,8 @@ public class OccasionalTouristicRentals {
         process.createAccount(data, TypeAccount.TENANT);
         process.createAccount(data, TypeAccount.OWNER);
         process.createAccount(data, TypeAccount.ADMINISTRATOR);
+        process.getAllOwners().get(0).addProperty(new Property(TypeProperty.HOUSE, "name", "address",
+                "city", "little description", 2), new Price(20));
     }
 
     /**
@@ -99,7 +104,7 @@ public class OccasionalTouristicRentals {
                 ARR_Quit();
                 break;
             case 1:
-                ARR_CreateAccounts(0);
+                ARR_CreateAccounts();
                 break;
             case 2:
                 ARR_Connection();
@@ -112,9 +117,9 @@ public class OccasionalTouristicRentals {
     /**
      * Event for the account creation
      */
-    private void ARR_CreateAccounts(int i) {
+    private void ARR_CreateAccounts() {
         TypeAccount type = askType();
-        String questions[] = {"What's your login ? ", "What's your surname ? ", "What's your name ? ",
+        String[] questions = {"What's your login ? ", "What's your surname ? ", "What's your name ? ",
                 "What's your nickname ? ", "What's your email ? "};
         ArrayList<String> data = takeData(questions);
         boolean nonValid = process.testValidityAccount(data, type);
@@ -131,7 +136,7 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_Connection() {
         TypeAccount type = askType();
-        String questions[] = {"What's your nickname ? ", "What's your login ?"};
+        String[] questions = {"What's your nickname ? ", "What's your login ?"};
         switch (type) {
             case TENANT:
                 Tenant tenantConnected = process.connectTenant(takeData(questions));
@@ -186,8 +191,8 @@ public class OccasionalTouristicRentals {
     private ArrayList<String> takeData(String[] questions) {
         ArrayList<String> arrayList = new ArrayList<>();
         String stringRead;
-        for (int i = 0; i < questions.length; i++) {
-            System.out.println(questions[i]);
+        for (String question : questions) {
+            System.out.println(question);
             stringRead = scan.nextLine();
             while (!stringRead(stringRead)) {
                 System.err.println("Please, enter a non-null string nor an empty string please.");
@@ -215,17 +220,10 @@ public class OccasionalTouristicRentals {
      */
     private TypeAccount askType() {
         TypeAccount type = null;
-        System.out.println("Which type of account ?");
         System.out.println("0. Administrator.");
         System.out.println("1. Owner.");
         System.out.println("2. Tenant.");
-        stringRead = scan.nextLine();
-        try {
-            numberRead = Integer.parseInt(stringRead);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askType();
-        }
+        askForInt("Which type of account ?");
         switch (numberRead) {
             case 0:
                 type = TypeAccount.ADMINISTRATOR;
@@ -270,12 +268,12 @@ public class OccasionalTouristicRentals {
         System.out.println("");
         System.out.println("1. See my data");
         System.out.println("2. Change my data");
-        System.out.println("2. See all my properties.");
-        System.out.println("3. Add a property to my portfolio.");
-        System.out.println("4. Delete a property of my portfolio.");
-        System.out.println("5. Change data of a property.");
-        System.out.println("6. See my wallet.");
-        System.out.println("7. Log out.");
+        System.out.println("3. See all my properties.");
+        System.out.println("4. Add a property to my portfolio.");
+        System.out.println("5. Delete a property of my portfolio.");
+        System.out.println("6. Change data of a property.");
+        System.out.println("7. See my wallet.");
+        System.out.println("8. Log out.");
         System.out.println("");
         askForEventOwners(ownerConnected);
     }
@@ -373,13 +371,27 @@ public class OccasionalTouristicRentals {
         stringRead = scan.nextLine();
         if (stringRead.equals("yes")){
             process.seeAllProperties();
+            System.out.println("");
+            askForAproperty();
         } else if (stringRead.equals("no")) {
-            System.out.println("Which property do you want to consult ?");
-            stringRead = scan.nextLine();
-            process.consultDataOfAProperty(stringRead);
+            askForAproperty();
         } else {
             System.err.println("I did not understand your answer.");
+            ARR_ConsultDataOfAProperty();
         }
+    }
+
+    /**
+     * Asks the user for a property to see
+     */
+    private void askForAproperty(){
+        System.out.println("Which property do you want to consult ?");
+        stringRead = scan.nextLine();
+        while (!stringRead(stringRead)) {
+            System.err.println("Please, enter a non-null string nor an empty string please.");
+            stringRead = scan.nextLine();
+        }
+        process.consultDataOfAProperty(stringRead);
     }
 
     /**
@@ -402,24 +414,114 @@ public class OccasionalTouristicRentals {
                 ARR_AskDataToChange(ownerConnected);
                 break;
             case 3:
-                System.out.println("nothing for the moment");
+                process.seeMyProperties(ownerConnected);
                 break;
             case 4:
-                System.out.println("nothing for the moment");
+                ArrayList<String> questions = new ArrayList<>();
+                questions.add("The name of the property :");
+                questions.add("The address of the property :");
+                questions.add("The city :");
+                questions.add("Description :");
+                process.addPropertyToThePortfolio(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions),
+                        askTypeOfTheProperty(), askForInt("What is the number max of occupiers ?"),
+                        askForInt("What is the number nominal price ?"));
                 break;
             case 5:
-                System.out.println("nothing for the moment");
+                ArrayList<String> questions2 = new ArrayList<>();
+                questions2.add("The name of the property :");
+                questions2.add("The address of the property :");
+                questions2.add("The city :");
+                process.deleteProperty(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions2));
                 break;
             case 6:
                 System.out.println("nothing for the moment");
                 break;
             case 7:
+                process.seeMyWalletOwner(ownerConnected);
+                break;
+            case 8:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private String whichProperty() {
+        System.out.println("What is the name of the property");
+        stringRead = scan.nextLine();
+        while (!stringRead(stringRead)) {
+            System.err.println("Please, enter a non-null string nor an empty string please.");
+            stringRead = scan.nextLine();
+        }
+        return stringRead;
+    }
+
+    private int askForInt(String question) {
+        System.out.println(question);
+        System.out.println("");
+        stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            askForInt(question);
+        }
+        return numberRead;
+    }
+
+    private TypeProperty askTypeOfTheProperty() {
+        System.out.println("What is your property ?");
+        System.out.println("");
+        System.out.println("1. House");
+        System.out.println("2. Estate");
+        System.out.println("3. Apartment");
+        System.out.println("4. Room");
+        System.out.println("5. Estate");
+        System.out.println("");
+        TypeProperty type = null;
+        stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            askTypeOfTheProperty();
+        }
+        switch (numberRead) {
+            case 1:
+                type = TypeProperty.HOUSE;
+                break;
+            case 2:
+                type = TypeProperty.ESTATE;
+                break;
+            case 3:
+                type = TypeProperty.APARTMENT;
+                break;
+            case 4:
+                type = TypeProperty.ROOM;
+                break;
+            case 5:
+                type = TypeProperty.HOMESTEAD;
+                break;
+            default:
+                System.err.println("Error: no such menu item.");
+        }
+        return type;
+    }
+
+    private ArrayList<String> ARR_AskDataForProperty(Owner ownerConnected, ArrayList<String> questions) {
+        ArrayList<String> propertyData = new ArrayList<>();
+        for (int i = 0; i < questions.size(); i ++){
+            System.out.println(questions.get(i));
+            stringRead = scan.nextLine();
+            while (!stringRead(stringRead)) {
+                System.err.println("Please, enter a non-null string nor an empty string please.");
+                stringRead = scan.nextLine();
+            }
+            propertyData.add(stringRead);
+        }
+        return propertyData;
     }
 
     /**
@@ -488,10 +590,10 @@ public class OccasionalTouristicRentals {
         System.out.println("");
         System.out.println("Which data do you want to change ?");
         System.out.println("");
-        System.out.println("1. Your name.");
-        System.out.println("2. Your surname.");
-        System.out.println("3. Your nickname.");
-        System.out.println("4. Your mail.");
+        System.out.println("1. My name.");
+        System.out.println("2. My surname.");
+        System.out.println("3. My nickname.");
+        System.out.println("4. My mail.");
         System.out.println("");
         stringRead = scan.nextLine();
         try {
@@ -504,30 +606,50 @@ public class OccasionalTouristicRentals {
             case 1:
                 System.out.println("What is your name ?");
                 stringRead = scan.nextLine();
+                while (stringRead(stringRead) == false){
+                    System.err.println("Your is null or empty, please, enter something");
+                    stringRead = scan.nextLine();
+                }
                 process.changeName(userConnected, stringRead);
                 System.out.println("It has been changed.");
                 break;
             case 2:
                 System.out.println("What is your surname ?");
                 stringRead = scan.nextLine();
+                while (stringRead(stringRead) == false){
+                    System.err.println("Your is null or empty, please, enter something");
+                    stringRead = scan.nextLine();
+                }
                 process.changeSurname(userConnected, stringRead);
                 System.out.println("It has been changed.");
                 break;
             case 3:
                 System.out.println("What is your nickname ?");
                 stringRead = scan.nextLine();
+                while (stringRead(stringRead) == false){
+                    System.err.println("Your is null or empty, please, enter something");
+                    stringRead = scan.nextLine();
+                }
                 process.changeNickname(userConnected, stringRead);
                 System.out.println("It has been changed.");
                 break;
             case 4:
                 System.out.println("What is your email address ?");
                 stringRead = scan.nextLine();
+                while (stringRead(stringRead) == false){
+                    System.err.println("Your is null or empty, please, enter something");
+                    stringRead = scan.nextLine();
+                }
                 process.changeMail(userConnected, stringRead);
                 System.out.println("It has been changed.");
                 break;
         }
     }
 
+    /**
+     * Event fot deleting an account
+     * @param userConnected the connected user
+     */
     private void ARR_DeleteAccount(User userConnected) {
         boolean deleted = process.deleteAccount(askForAccount(), askType(), userConnected);
         if (!deleted){
@@ -536,6 +658,10 @@ public class OccasionalTouristicRentals {
         };
     }
 
+    /**
+     * Asks data about a person
+     * @return an array containing the data
+     */
     private String[] askForAccount() {
         String [] account = new String[3];
         String [] questions = {"The name of the person :", "The surname of the person :",
@@ -543,6 +669,10 @@ public class OccasionalTouristicRentals {
         for (int i = 0; i < questions.length; i ++){
             System.out.println(questions[i]);
             stringRead = scan.nextLine();
+            while (!stringRead(stringRead)) {
+                System.err.println("Please, enter a non-null string nor an empty string please.");
+                stringRead = scan.nextLine();
+            }
             account[i] = stringRead;
         }
         return account;
