@@ -431,7 +431,16 @@ public class OccasionalTouristicRentals {
                 questions2.add("The name of the property :");
                 questions2.add("The address of the property :");
                 questions2.add("The city :");
-                process.deleteProperty(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions2));
+                if (ownerConnected.getProperties().size() == 0){
+                    System.out.println("There is no properties in my portfolio.");
+                }else{
+                    boolean deleted = process.deletePropertyOwner(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions2));
+                    if (deleted){
+                        System.out.println("It has been deleted");
+                    }else{
+                        System.out.println("Wrong data, it has not been deleted");
+                    }
+                }
                 break;
             case 6:
                 System.out.println("nothing for the moment");
@@ -448,16 +457,11 @@ public class OccasionalTouristicRentals {
         }
     }
 
-    private String whichProperty() {
-        System.out.println("What is the name of the property");
-        stringRead = scan.nextLine();
-        while (!stringRead(stringRead)) {
-            System.err.println("Please, enter a non-null string nor an empty string please.");
-            stringRead = scan.nextLine();
-        }
-        return stringRead;
-    }
-
+    /**
+     * Asks the user for an integer
+     * @param question the question to ask depending on the context
+     * @return the integer enter by the user
+     */
     private int askForInt(String question) {
         System.out.println(question);
         System.out.println("");
@@ -471,6 +475,10 @@ public class OccasionalTouristicRentals {
         return numberRead;
     }
 
+    /**
+     * Asks the user to choose the type of property
+     * @return the type of property chosen
+     */
     private TypeProperty askTypeOfTheProperty() {
         System.out.println("What is your property ?");
         System.out.println("");
@@ -510,6 +518,12 @@ public class OccasionalTouristicRentals {
         return type;
     }
 
+    /**
+     * Event for craation of a property
+     * @param ownerConnected the connected owner
+     * @param questions questions to ask for collecting data
+     * @return an Arraylist containing data entered
+     */
     private ArrayList<String> ARR_AskDataForProperty(Owner ownerConnected, ArrayList<String> questions) {
         ArrayList<String> propertyData = new ArrayList<>();
         for (int i = 0; i < questions.size(); i ++){
@@ -550,10 +564,10 @@ public class OccasionalTouristicRentals {
                 ARR_DeleteAccount(adminConnected);
                 break;
             case 5:
-                System.out.println("nothing for the moment");
+                ARR_DeleteProperty();
                 break;
             case 6:
-                System.out.println("nothing for the moment");
+                ARR_ChangeDescriptionOfProperty();
                 break;
             case 7:
                 System.err.println(adminConnected.getNickname() + ", you have been disconnected");
@@ -565,11 +579,93 @@ public class OccasionalTouristicRentals {
     }
 
     /**
+     * Event for changing the description of a property
+     */
+    private void ARR_ChangeDescriptionOfProperty() {
+        System.out.println("Do you want to see data of all properties before ? (yes / no)");
+        stringRead = scan.nextLine();
+        if (stringRead.equals("yes")) {
+            process.seeAllProperties();
+            changeDescription();
+        } else if (stringRead.equals("no")) {
+            changeDescription();
+        }else{
+            System.err.println("I did not understand your answer");
+            ARR_ChangeDescriptionOfProperty();
+        }
+    }
+
+    /**
+     * Changes the description of a property corresponding to data asked
+     */
+    private void changeDescription() {
+        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
+                "In which city is located the property ?", "What is the nickname of the owner ?", "What is the new description ?"};
+        ArrayList<String> answers = new ArrayList<>();
+        for (int i = 0; i < questions.length; i ++) {
+            System.out.println(questions[i]);
+            stringRead = scan.nextLine();
+            while (!stringRead(stringRead)) {
+                System.err.println("Please, enter a non-null string nor an empty string please.");
+                stringRead = scan.nextLine();
+            }
+            answers.add(stringRead);
+        }
+        process.changeDescription(answers);
+    }
+
+    /**
+     * Event for deleting a property
+     */
+    private void ARR_DeleteProperty() {
+        int sumProperties = process.propertiesSum();
+        if (sumProperties == 0){
+            System.out.println("There is no properties in the application");
+        }else{
+            System.out.println("Do you want to see all properties before ? (yes / no)");
+            stringRead = scan.nextLine();
+            if (stringRead.equals("yes")) {
+                process.seeAllProperties();
+                deleteProperty();
+            } else if (stringRead.equals("no")) {
+                deleteProperty();
+            }else{
+                System.err.println("I did not understand your answer");
+                ARR_DeleteProperty();
+            }
+        }
+    }
+
+    /**
+     * Deletes a property corresponding to data entered by the user
+     */
+    private void deleteProperty() {
+        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
+        "In which city is located the property ?"};
+        ArrayList<String> answers = new ArrayList<>();
+        for (int i = 0; i < questions.length; i ++){
+            System.out.println(questions[i]);
+            stringRead = scan.nextLine();
+            while (!stringRead(stringRead)) {
+                System.err.println("Please, enter a non-null string nor an empty string please.");
+                stringRead = scan.nextLine();
+            }
+            answers.add(stringRead);
+        }
+        boolean deleted = process.deletePropertyAdmin(answers);
+        if (deleted){
+            System.out.println("It has been deleted");
+        }else{
+            System.out.println("It has not been deleted");
+        }
+    }
+
+    /**
      * Asks the connected user if he wants to see his data before changing them
      * @param userConnected the connected user
      */
     private void ARR_AskDataToChange(User userConnected) {
-        System.out.println("Do you want to your data before ? (yes / no)");
+        System.out.println("Do you want to see your data before ? (yes / no)");
         stringRead = scan.nextLine();
         if (stringRead.equals("yes")) {
             process.seeData(userConnected);

@@ -70,6 +70,16 @@ public class Property {
      * @return the type of the property
      */
     public TypeProperty getTypeProperty(){return type;}
+    /**
+     * To get the description of a property
+     * @return the description
+     */
+    public String getDescription(){return description;}
+    /**
+     * To change the description of the property
+     * @param newDescription
+     */
+    public void changeDescription(String newDescription){description = newDescription;}
 
     @Override
     public String toString(){

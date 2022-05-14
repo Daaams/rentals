@@ -203,18 +203,6 @@ public class Processing {
     public void withdrawMoneyOfWallet(Tenant tenantConnected, int money) {tenantConnected.withdrawMoney(money);}
 
     /**
-     * Shows all properties registered on the application
-     */
-    public void seeAllProperties() {
-        for (Owner o: allOwners) {
-            HashMap<Property, Price> p = o.getProperties();
-            for (Property property: p.keySet()) {
-                consultDataOfAProperty(property.getNameProperty());
-            }
-        }
-    }
-
-    /**
      * Shows the data of the property
      * @param property the wanted property
      */
@@ -227,6 +215,7 @@ public class Processing {
                     System.out.println("The type of the property is : "+pro.getTypeProperty());
                     System.out.println("The max quantity of occupiers of the property : "+ pro.getMaxOccupiers());
                     System.out.println("The nominal price : "+ p.get(pro).getThePrice());
+                    System.out.println("The description : "+pro.getDescription());
                     System.out.println("");
                 }
             }
@@ -307,30 +296,42 @@ public class Processing {
     public boolean deleteAccount(String[] accountData, TypeAccount type, User userConnected) {
         switch (type){
             case TENANT:
-                Tenant t = searchAccountTenant(allTenants, accountData);
-                if (t != null) {
-                    allTenants.remove(t);
-                    System.out.println("Deleted");
-                    return true;
+                if (allTenants.size() == 0){
+                    System.err.println("There are no tenants.");
+                }else{
+                    Tenant t = searchAccountTenant(allTenants, accountData);
+                    if (t != null) {
+                        allTenants.remove(t);
+                        System.out.println("Deleted");
+                        return true;
+                    }
                 }
                 break;
             case OWNER:
-                Owner o = searchAccountOwner(allOwners, accountData);
-                if (o != null){
-                    allOwners.remove(o);
-                    System.out.println("Deleted");
-                    return true;
+                if (allOwners.size() == 0){
+                    System.err.println("There are no owners");
+                }else{
+                    Owner o = searchAccountOwner(allOwners, accountData);
+                    if (o != null){
+                        allOwners.remove(o);
+                        System.out.println("Deleted");
+                        return true;
+                    }
                 }
                 break;
             case ADMINISTRATOR:
-                Admin a = searchAccountAdmin(allAdmins, accountData);
-                if (a == userConnected){
-                    System.err.println("You can't delete your account, you are connected");
-                    return false;
-                }else if (a != null && a != userConnected){
-                    allAdmins.remove(a);
-                    System.out.println("Deleted");
-                    return true;
+                if (allAdmins.size() == 0){
+                    System.err.println("There are no admins");
+                }else{
+                    Admin a = searchAccountAdmin(allAdmins, accountData);
+                    if (a == userConnected){
+                        System.err.println("You can't delete your account, you are connected");
+                        return false;
+                    }else if (a != null && a != userConnected){
+                        allAdmins.remove(a);
+                        System.out.println("Deleted");
+                        return true;
+                    }
                 }
                 break;
         }
@@ -411,9 +412,10 @@ public class Processing {
      * @param ownerConnected the connected owner
      */
     public void seeMyProperties(Owner ownerConnected) {
-        System.out.println("My properties : ");
+        System.out.println("Properties : ");
         for (Property p: ownerConnected.getProperties().keySet()) {
             System.out.println(p.toString());
+            System.out.println(p.getDescription());
         }
     }
 
@@ -424,32 +426,110 @@ public class Processing {
      * @param type the type of the property
      * @param maxOccupiers the number maximum of occupiers
      * @param nominalPrice the nominal price
-     *
-     *
-     *                     il faut tester s'il n'y a pas une autre propriété avec les memes infos
      */
     public void addPropertyToThePortfolio(Owner ownerConnected, ArrayList<String> propertyData, TypeProperty type,
                                           int maxOccupiers, int nominalPrice) {
-        ownerConnected.addProperty(new Property(type, propertyData.get(0), propertyData.get(1), propertyData.get(2),
-        propertyData.get(3), maxOccupiers), new Price(nominalPrice));
+        if (!testSameAddress(propertyData)){
+            ownerConnected.addProperty(new Property(type, propertyData.get(0), propertyData.get(1), propertyData.get(2),
+                    propertyData.get(3), maxOccupiers), new Price(nominalPrice));
+        }else{
+            System.err.println("A property with the same address already exists.");
+            System.err.println("The property has not been added.");
+        }
     }
 
+    /**
+     * Tests if one of the properties of the application correspond to data given by the user
+     * @param propertyData data of the property given by the user
+     * @return a boolean
+     */
+    private boolean testSameAddress(ArrayList<String> propertyData){
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.getTheCity().equals(propertyData.get(2)) && p.getAddressOfTheProperty().equals(propertyData.get(1))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Calculates the sum of properties
+     * @return the sum
+     */
+    public int propertiesSum(){
+        int sum = 0;
+        for (Owner o: allOwners) {
+            sum += o.getProperties().size();
+        }
+        return sum;
+    }
     /**
      * Deletes a property of the portfolio of the owner
      * @param ownerConnected the connected owner
      * @param dataOfTheProperty data of the property to delete
      */
-    public void deleteProperty(Owner ownerConnected, ArrayList<String> dataOfTheProperty) {
+    public boolean deletePropertyOwner(Owner ownerConnected, ArrayList<String> dataOfTheProperty) {
         for (Property p: ownerConnected.getProperties().keySet()) {
             if (p.getNameProperty().equals(dataOfTheProperty.get(0)) &&
                     p.getAddressOfTheProperty().equals(dataOfTheProperty.get(1)) &&
                     p.getTheCity().equals(dataOfTheProperty.get(2))){
                 ownerConnected.deleteProperty(p);
+                return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * Prints the content of the owner's wallet
+     * @param ownerConnected the connected owner
+     */
+    public void seeMyWalletOwner(Owner ownerConnected) {
+        System.out.println(ownerConnected.getVirtualWallet());
+    }
+
+    /**
+     * Deletes a property according to given data
+     * @param answers data corresponding to the property to delete
+     * @return a boolean
+     */
+    public boolean deletePropertyAdmin(ArrayList<String> answers) {
+        for (Owner o: allOwners) {
+            boolean deleted = deletePropertyOwner(o, answers);
+            if (deleted){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Prints all properties of the application
+     */
+    public void seeAllProperties() {
+        for (Owner o: allOwners) {
+            System.out.println("Owner : " + o.getNickname());
+            seeMyProperties(o);
         }
     }
 
-    public void seeMyWalletOwner(Owner ownerConnected) {
-        System.out.println(ownerConnected.getVirtualWallet());
+    /**
+     * Changes the description of a property
+     * @param answers data of the property given by the user
+     */
+    public void changeDescription(ArrayList<String> answers) {
+        for (Owner o: allOwners) {
+            if (o.getNickname().equals(answers.get(3))){
+                for (Property p: o.getProperties().keySet()) {
+                    if (p.getNameProperty().equals(answers.get(0))&&
+                    p.getAddressOfTheProperty().equals(answers.get(1))&&
+                    p.getTheCity().equals(answers.get(2))){
+                        p.changeDescription(answers.get(4));
+                    }
+                }
+            }
+        }
     }
 }
