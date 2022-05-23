@@ -14,6 +14,7 @@ public class User {
     private String name;
     private String nickname;
     private String mail;
+    private TypeAccount type;
 
     /**
      * constructor of the class User
@@ -23,12 +24,13 @@ public class User {
      * @param nick the nickname of the user
      * @param email the email of the user
      */
-    public User(String login, String surname, String name, String nick, String email) {
+    public User(String login, String surname, String name, String nick, String email, TypeAccount type) {
         LOGIN = login;
         this.surname = surname;
         this.name = name;
         nickname = nick;
         mail = email;
+        this.type = type;
     }
 
     /**
@@ -67,6 +69,14 @@ public class User {
      */
     public String getMail(){
         return mail;
+    }
+    
+    /**
+     * To get the mail of the user
+     * @return a String
+     */
+    public String getType(){
+        return type.toString();
     }
     /**
      * Assigns the new name

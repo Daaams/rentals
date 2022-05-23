@@ -9,7 +9,6 @@ package userdata;
  * @author mgenetet
  */
 public class Admin extends User{
-    private final TypeAccount typeAccount = TypeAccount.ADMINISTRATOR;
 
     /**
      * constructor of the class Administrator
@@ -20,11 +19,11 @@ public class Admin extends User{
      * @param email the email of the administrator
      */
     public Admin(String login, String surname, String name, String nick, String email){
-        super(login, surname, name, nick, email);
+        super(login, surname, name, nick, email, TypeAccount.ADMINISTRATOR);
     }
 
     @Override
     public String toString(){
-        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+        return getName() + " " + getSurname() + " : "+ getType() + ", registered as : " + getNickname();
     }
 }

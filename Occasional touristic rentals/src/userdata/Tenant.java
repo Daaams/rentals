@@ -9,7 +9,6 @@ package userdata;
  * @author mgenetet
  */
 public class Tenant extends User{
-    private final TypeAccount typeAccount = TypeAccount.TENANT;
     private int virtualWallet;
 
     /**
@@ -21,7 +20,7 @@ public class Tenant extends User{
      * @param email the email of the tenant
      */
     public Tenant(String login, String surname, String name, String nick, String email){
-        super(login, surname, name, nick, email);
+        super(login, surname, name, nick, email, TypeAccount.TENANT);
         virtualWallet = 0;
     }
 
@@ -47,6 +46,6 @@ public class Tenant extends User{
 
     @Override
     public String toString(){
-        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+        return getName() + " " + getSurname() + " : "+ getType() + ", registered as : " + getNickname();
     }
 }

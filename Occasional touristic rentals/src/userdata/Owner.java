@@ -15,7 +15,6 @@ import java.util.HashMap;
  */
 public class Owner extends User{
     private HashMap<Property, Price> allProperties;
-    private final TypeAccount typeAccount = TypeAccount.OWNER;
     private int virtualWallet;
 
     /**
@@ -27,7 +26,7 @@ public class Owner extends User{
      * @param email the email of the Owner
      */
     public Owner(String login, String surname, String name, String nick, String email){
-        super(login, surname, name, nick, email);
+        super(login, surname, name, nick, email, TypeAccount.OWNER);
         allProperties = new HashMap<>();
         virtualWallet = 0;
     }
@@ -52,7 +51,7 @@ public class Owner extends User{
 
     @Override
     public String toString(){
-        return getName() + " " + getSurname() + " : "+ typeAccount + ", registered as : " + getNickname();
+        return getName() + " " + getSurname() + " : "+ getType() + ", registered as : " + getNickname();
     }
 
     public int getVirtualWallet(){return virtualWallet;}
