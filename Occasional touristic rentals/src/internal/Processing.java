@@ -135,7 +135,7 @@ public class Processing {
                 ArrayList<Owner> listO = new ArrayList<>(allOwners);
                 while (i < listO.size() && !nonValid){
                     Owner o = listO.get(i);
-                    nonValid = testNickname(o, personalData) && testMail(o, personalData);
+                    nonValid = testLogin(o, personalData) && testMail(o, personalData);
                     i++;
                 }
                 break;
@@ -143,7 +143,7 @@ public class Processing {
                 ArrayList<Admin> listA = new ArrayList<>(allAdmins);
                 while (i < listA.size() && !nonValid){
                     Admin a = listA.get(i);
-                    nonValid = testNickname(a, personalData) && testMail(a, personalData);
+                    nonValid = testLogin(a, personalData) && testMail(a, personalData);
                     i++;
                 }
                 break;
@@ -151,7 +151,7 @@ public class Processing {
                 ArrayList<Tenant> listT = new ArrayList<>(allTenants);
                 while (i < listT.size() && !nonValid){
                     Tenant t = listT.get(i);
-                    nonValid = testNickname(t, personalData) && testMail(t, personalData);
+                    nonValid = testLogin(t, personalData) && testMail(t, personalData);
                     i++;
                 }
                 break;
@@ -161,15 +161,15 @@ public class Processing {
 
     /**
      *
-     * Tests if the nickname given during the account creation already exists
+     * Tests if the login given during the account creation already exists
      * @param u the user to compare
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testNickname(User u, ArrayList<String> personalData){
-        boolean test = u.getNickname().equals(personalData.get(3));
+    private boolean testLogin(User u, ArrayList<String> personalData){
+        boolean test = u.getLogin().equals(personalData.get(0));
         if (test){
-            System.out.println("This nickname already exists, choose another one");
+            System.out.println("This login already exists, choose another one");
         }
         return test;
     }
