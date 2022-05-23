@@ -1,3 +1,4 @@
+
 package internal;
 
 import java.util.ArrayList;
@@ -68,8 +69,7 @@ public class Processing {
         Tenant connected = null;
         while (i < allTenants.size() && connected == null){
             Tenant t = allTenants.get(i);
-            if (t.getNickname().equals(personalData.get(0))
-            && t.getLogin().equals(personalData.get(1)))
+            if (t.getLogin().equals(personalData.get(0)))
             {
                 connected = t;
             }
@@ -86,10 +86,12 @@ public class Processing {
     public Owner connectOwner(ArrayList<String> personalData) {
         int i = 0;
         Owner connected = null;
+        
         while (i < allOwners.size() && connected == null){
+            
             Owner t = allOwners.get(i);
-            if (t.getNickname().equals(personalData.get(0))
-                    && t.getLogin().equals(personalData.get(1)))
+            
+            if (t.getLogin().equals(personalData.get(0)))
             {
                 connected = t;
             }
@@ -97,6 +99,8 @@ public class Processing {
         }
         return connected;
     }
+    
+    
 
     /**
      * Connect an administrator to the application
@@ -108,8 +112,7 @@ public class Processing {
         Admin connected = null;
         while (i < allAdmins.size() && connected == null){
             Admin t = allAdmins.get(i);
-            if (t.getNickname().equals(personalData.get(0))
-                    && t.getLogin().equals(personalData.get(1)))
+            if (t.getLogin().equals(personalData.get(0)))
             {
                 connected = t;
             }

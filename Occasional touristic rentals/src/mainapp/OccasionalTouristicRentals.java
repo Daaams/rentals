@@ -136,7 +136,7 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_Connection() {
         TypeAccount type = askType();
-        String[] questions = {"What's your nickname ? ", "What's your login ?"};
+        String[] questions = {"What's your login ?"};
         switch (type) {
             case TENANT:
                 Tenant tenantConnected = process.connectTenant(takeData(questions));
@@ -191,9 +191,12 @@ public class OccasionalTouristicRentals {
     private ArrayList<String> takeData(String[] questions) {
         ArrayList<String> arrayList = new ArrayList<>();
         String stringRead;
+        
         for (String question : questions) {
+            
             System.out.println(question);
             stringRead = scan.nextLine();
+            
             while (!stringRead(stringRead)) {
                 System.err.println("Please, enter a non-null string nor an empty string please.");
                 stringRead = scan.nextLine();
