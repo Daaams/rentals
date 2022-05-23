@@ -458,8 +458,8 @@ public class Processing {
     }
 
     /**
-     * Calculates the sum of properties
-     * @return the sum
+     * Calculates the sum of all properties
+     * @return the sum of all properties
      */
     public int propertiesSum(){
         int sum = 0;

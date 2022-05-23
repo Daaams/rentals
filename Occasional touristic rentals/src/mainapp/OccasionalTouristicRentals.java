@@ -183,6 +183,19 @@ public class OccasionalTouristicRentals {
     }
 
     /**
+     * Reads a string entered by one user in the console
+     * @return the string entered
+     */
+    private String readString(){
+        stringRead = scan.nextLine();
+        while (stringReadInConsole(stringRead) == false){
+            System.err.println("Your is null or empty, please, enter something");
+            stringRead = scan.nextLine();
+        }
+        return stringRead;
+    }
+
+    /**
      * Ask some questions to the user and take his personal data
      *
      * @param questions an array containing questions to ask
@@ -190,18 +203,9 @@ public class OccasionalTouristicRentals {
      */
     private ArrayList<String> takeData(String[] questions) {
         ArrayList<String> arrayList = new ArrayList<>();
-        String stringRead;
-        
         for (String question : questions) {
-            
             System.out.println(question);
-            stringRead = scan.nextLine();
-            
-            while (!stringRead(stringRead)) {
-                System.err.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            arrayList.add(stringRead);
+            arrayList.add(readString());
         }
         return arrayList;
     }
@@ -212,7 +216,7 @@ public class OccasionalTouristicRentals {
      * @param s the answer of the user
      * @return a boolean
      */
-    private boolean stringRead(String s) {
+    private boolean stringReadInConsole(String s) {
         return (!s.equals("") && !s.equals(null));
     }
 
@@ -389,12 +393,7 @@ public class OccasionalTouristicRentals {
      */
     private void askForAproperty(){
         System.out.println("Which property do you want to consult ?");
-        stringRead = scan.nextLine();
-        while (!stringRead(stringRead)) {
-            System.err.println("Please, enter a non-null string nor an empty string please.");
-            stringRead = scan.nextLine();
-        }
-        process.consultDataOfAProperty(stringRead);
+        process.consultDataOfAProperty(readString());
     }
 
     /**
@@ -531,12 +530,7 @@ public class OccasionalTouristicRentals {
         ArrayList<String> propertyData = new ArrayList<>();
         for (int i = 0; i < questions.size(); i ++){
             System.out.println(questions.get(i));
-            stringRead = scan.nextLine();
-            while (!stringRead(stringRead)) {
-                System.err.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            propertyData.add(stringRead);
+            propertyData.add(readString());
         }
         return propertyData;
     }
@@ -607,12 +601,7 @@ public class OccasionalTouristicRentals {
         ArrayList<String> answers = new ArrayList<>();
         for (int i = 0; i < questions.length; i ++) {
             System.out.println(questions[i]);
-            stringRead = scan.nextLine();
-            while (!stringRead(stringRead)) {
-                System.err.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            answers.add(stringRead);
+            answers.add(readString());
         }
         process.changeDescription(answers);
     }
@@ -648,12 +637,7 @@ public class OccasionalTouristicRentals {
         ArrayList<String> answers = new ArrayList<>();
         for (int i = 0; i < questions.length; i ++){
             System.out.println(questions[i]);
-            stringRead = scan.nextLine();
-            while (!stringRead(stringRead)) {
-                System.err.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            answers.add(stringRead);
+            answers.add(readString());
         }
         boolean deleted = process.deletePropertyAdmin(answers);
         if (deleted){
@@ -704,42 +688,22 @@ public class OccasionalTouristicRentals {
         switch (numberRead){
             case 1:
                 System.out.println("What is your name ?");
-                stringRead = scan.nextLine();
-                while (stringRead(stringRead) == false){
-                    System.err.println("Your is null or empty, please, enter something");
-                    stringRead = scan.nextLine();
-                }
-                process.changeName(userConnected, stringRead);
+                process.changeName(userConnected, readString());
                 System.out.println("It has been changed.");
                 break;
             case 2:
                 System.out.println("What is your surname ?");
-                stringRead = scan.nextLine();
-                while (stringRead(stringRead) == false){
-                    System.err.println("Your is null or empty, please, enter something");
-                    stringRead = scan.nextLine();
-                }
-                process.changeSurname(userConnected, stringRead);
+                process.changeSurname(userConnected, readString());
                 System.out.println("It has been changed.");
                 break;
             case 3:
                 System.out.println("What is your nickname ?");
-                stringRead = scan.nextLine();
-                while (stringRead(stringRead) == false){
-                    System.err.println("Your is null or empty, please, enter something");
-                    stringRead = scan.nextLine();
-                }
-                process.changeNickname(userConnected, stringRead);
+                process.changeNickname(userConnected, readString());
                 System.out.println("It has been changed.");
                 break;
             case 4:
                 System.out.println("What is your email address ?");
-                stringRead = scan.nextLine();
-                while (stringRead(stringRead) == false){
-                    System.err.println("Your is null or empty, please, enter something");
-                    stringRead = scan.nextLine();
-                }
-                process.changeMail(userConnected, stringRead);
+                process.changeMail(userConnected, readString());
                 System.out.println("It has been changed.");
                 break;
         }
@@ -767,12 +731,7 @@ public class OccasionalTouristicRentals {
                 "The nickname of the person :"};
         for (int i = 0; i < questions.length; i ++){
             System.out.println(questions[i]);
-            stringRead = scan.nextLine();
-            while (!stringRead(stringRead)) {
-                System.err.println("Please, enter a non-null string nor an empty string please.");
-                stringRead = scan.nextLine();
-            }
-            account[i] = stringRead;
+            account[i] = readString();
         }
         return account;
     }
