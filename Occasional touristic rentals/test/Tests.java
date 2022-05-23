@@ -77,16 +77,20 @@ public class Tests {
      */
     @Test
     public void connectionTest(){
-        ArrayList<Tenant> users = process.getAllTenants();
-        users.add(new Tenant("login", "surname", "name", "nick","email"));
-        ArrayList<String> connectionInformations = new ArrayList<>();
-        connectionInformations.add("nick");
-        connectionInformations.add("login");
-        ArrayList<String> connectionInformations2 = new ArrayList<>();
-        connectionInformations2.add("nick");
-        connectionInformations2.add("logins");
-        assertTrue(process.connectUser(connectionInformations, TypeAccount.TENANT) != null);
-        assertTrue(process.connectUser(connectionInformations2, TypeAccount.TENANT) == null);
+        ArrayList<String> account2 = new ArrayList<>();
+        account2.add("login");
+        account2.add("surname");
+        account2.add("name");
+        account2.add("nickname");
+        account2.add("email");
+        
+        process.createAccount(account2, TypeAccount.TENANT);
+        ArrayList<String> connectionData = new ArrayList<>();
+        connectionData.add("login");
+        ArrayList<String> connectionData2 = new ArrayList<>();
+        connectionData2.add("logins");
+        assertTrue(process.connectUser(connectionData, TypeAccount.TENANT) != null);
+        assertTrue(process.connectUser(connectionData2, TypeAccount.TENANT) == null);
     }
 
     /**
