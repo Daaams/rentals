@@ -43,9 +43,10 @@ public class Tenant extends User{
      * @return an integer corresponding to the money of the Tenant
      */
     public int getVirtualWallet(){return virtualWallet;}
-
-    @Override
-    public String toString(){
-        return getName() + " " + getSurname() + " : "+ getType() + ", registered as : " + getNickname();
-    }
+    
+    /**
+     * To see the content of the tenant wallet
+     * @param userConnected the tenant
+     */
+    public void seeMyWallet() { System.out.println(virtualWallet); }
 }

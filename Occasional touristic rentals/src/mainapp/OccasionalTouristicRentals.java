@@ -137,41 +137,25 @@ public class OccasionalTouristicRentals {
     private void ARR_Connection() {
         TypeAccount type = askType();
         String[] questions = {"What's your login ?"};
-        switch (type) {
-            case TENANT:
-                Tenant tenantConnected = process.connectTenant(takeData(questions));
-                if (tenantConnected != null) {
-                    someoneConnected = true;
-                    while (someoneConnected) {
-                        ARR_EventsTenant(tenantConnected);
-                    }
-                } else {
-                    displayErrorMessageConnection();
-                }
-                break;
-            case OWNER:
-                Owner ownerConnected = process.connectOwner(takeData(questions));
-                if (ownerConnected != null) {
-                    someoneConnected = true;
-                    while (someoneConnected) {
-                        ARR_EventsOwner(ownerConnected);
-                    }
-                } else {
-                    displayErrorMessageConnection();
-                }
-                break;
-            case ADMINISTRATOR:
-                Admin adminConnected = process.connectAdmin(takeData(questions));
-                if (adminConnected != null) {
-                    someoneConnected = true;
-                    while (someoneConnected) {
-                        ARR_EventsAdministrator(adminConnected);
-                    }
-                } else {
-                    displayErrorMessageConnection();
-                }
-                break;
+        User userConnected = process.connectUser(takeData(questions),TypeAccount.TENANT);
+        
+        if (userConnected != null) { someoneConnected = true; }
+        else { displayErrorMessageConnection(); }
+        
+        while (someoneConnected) {
+            switch (type){
+                case TENANT :
+                    ARR_EventsTenant(userConnected);
+                    break;
+                case OWNER :
+                    ARR_EventsOwner(userConnected);
+                    break;
+                case ADMINISTRATOR : 
+                    ARR_EventsAdministrator(userConnected);
+                    break;
+            }
         }
+        firstPromptAction();
     }
 
     /**
@@ -250,7 +234,8 @@ public class OccasionalTouristicRentals {
     /**
      * displays the actions that a tenant can do
      */
-    private void ARR_EventsTenant(Tenant tenantConnected) {
+    private void ARR_EventsTenant(User userConnected) {
+        Tenant tenantConnected = process.searchAccountTenant(userConnected.getLogin());
         System.out.println("");
         System.out.println("What do you want to do ?");
         System.out.println("");
@@ -269,7 +254,8 @@ public class OccasionalTouristicRentals {
     /**
      * displays the actions that an owner can do
      */
-    private void ARR_EventsOwner(Owner ownerConnected) {
+    private void ARR_EventsOwner(User userConnected) {
+        Owner ownerConnected = process.searchAccountOwner(userConnected.getLogin());
         System.out.println("");
         System.out.println("What do you want to do ?");
         System.out.println("");
@@ -288,7 +274,8 @@ public class OccasionalTouristicRentals {
     /**
      * displays the actions that an administrator can do
      */
-    private void ARR_EventsAdministrator(Admin adminConnected) {
+    private void ARR_EventsAdministrator(User userConnected) {
+        Admin adminConnected = process.searchAccountAdmin(userConnected.getLogin());
         System.out.println("");
         System.out.println("What do you want to do ?");
         System.out.println("");
@@ -337,7 +324,7 @@ public class OccasionalTouristicRentals {
                 ARR_ConsultDataOfAProperty();
                 break;
             case 7:
-                process.seeMyWallet(tenantConnected);
+                tenantConnected.seeMyWallet();
                 break;
             case 8:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
@@ -448,7 +435,7 @@ public class OccasionalTouristicRentals {
                 System.out.println("nothing for the moment");
                 break;
             case 7:
-                process.seeMyWalletOwner(ownerConnected);
+                ownerConnected.seeMyWallet();
                 break;
             case 8:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
@@ -706,6 +693,10 @@ public class OccasionalTouristicRentals {
                 process.changeMail(userConnected, readString());
                 System.out.println("It has been changed.");
                 break;
+            default:
+                System.err.println("Choose a number between 1 and 4.");
+                changeData(userConnected);
+                break;
         }
     }
 
@@ -725,14 +716,10 @@ public class OccasionalTouristicRentals {
      * Asks data about a person
      * @return an array containing the data
      */
-    private String[] askForAccount() {
-        String [] account = new String[3];
-        String [] questions = {"The name of the person :", "The surname of the person :",
-                "The nickname of the person :"};
-        for (int i = 0; i < questions.length; i ++){
-            System.out.println(questions[i]);
-            account[i] = readString();
-        }
+    private String askForAccount() {
+        String question = "The login of the person :";
+        System.out.println(question);
+        String account = readString();
         return account;
     }
 

@@ -45,15 +45,18 @@ public class Processing {
      */
     public void createAccount(ArrayList<String> personalInforations, TypeAccount type) {
         if (type == TypeAccount.ADMINISTRATOR){
-            Admin u = new Admin(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
+            Admin u = new Admin(personalInforations.get(0), personalInforations.get(1), 
+                    personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allAdmins.add(u);
             allUsers.add(u);
         }else if (type == TypeAccount.OWNER){
-            Owner u = new Owner(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
+            Owner u = new Owner(personalInforations.get(0), personalInforations.get(1), 
+                    personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allOwners.add(u);
             allUsers.add(u);
         }else{
-            Tenant u = new Tenant(personalInforations.get(0), personalInforations.get(1), personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
+            Tenant u = new Tenant(personalInforations.get(0), personalInforations.get(1), 
+                    personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allTenants.add(u);
             allUsers.add(u);
         }
@@ -64,57 +67,14 @@ public class Processing {
      * @param personalData data given by the tenant
      * @return the connected tenant
      */
-    public Tenant connectTenant(ArrayList<String> personalData) {
+    public User connectUser(ArrayList<String> personalData, TypeAccount type) {
         int i = 0;
-        Tenant connected = null;
-        while (i < allTenants.size() && connected == null){
-            Tenant t = allTenants.get(i);
-            if (t.getLogin().equals(personalData.get(0)))
+        User connected = null;
+        while (i < allUsers.size() && connected == null){
+            User u = allUsers.get(i);
+            if (u.getLogin().equals(personalData.get(0)))
             {
-                connected = t;
-            }
-            i++;
-        }
-        return connected;
-    }
-
-    /**
-     * Connect an owner to the application
-     * @param personalData datd given by the owner
-     * @return the connected owner
-     */
-    public Owner connectOwner(ArrayList<String> personalData) {
-        int i = 0;
-        Owner connected = null;
-        
-        while (i < allOwners.size() && connected == null){
-            
-            Owner t = allOwners.get(i);
-            
-            if (t.getLogin().equals(personalData.get(0)))
-            {
-                connected = t;
-            }
-            i++;
-        }
-        return connected;
-    }
-    
-    
-
-    /**
-     * Connect an administrator to the application
-     * @param personalData data given by the administrator
-     * @return the connected administrator
-     */
-    public Admin connectAdmin(ArrayList<String> personalData) {
-        int i = 0;
-        Admin connected = null;
-        while (i < allAdmins.size() && connected == null){
-            Admin t = allAdmins.get(i);
-            if (t.getLogin().equals(personalData.get(0)))
-            {
-                connected = t;
+                connected = u;
             }
             i++;
         }
@@ -130,32 +90,12 @@ public class Processing {
     public boolean testValidityAccount(ArrayList<String> personalData, TypeAccount type) {
         boolean nonValid = false;
         int i = 0;
-        switch (type){
-            case OWNER :
-                ArrayList<Owner> listO = new ArrayList<>(allOwners);
-                while (i < listO.size() && !nonValid){
-                    Owner o = listO.get(i);
-                    nonValid = testLogin(o, personalData) && testMail(o, personalData);
-                    i++;
-                }
-                break;
-            case ADMINISTRATOR:
-                ArrayList<Admin> listA = new ArrayList<>(allAdmins);
-                while (i < listA.size() && !nonValid){
-                    Admin a = listA.get(i);
-                    nonValid = testLogin(a, personalData) && testMail(a, personalData);
-                    i++;
-                }
-                break;
-            case TENANT:
-                ArrayList<Tenant> listT = new ArrayList<>(allTenants);
-                while (i < listT.size() && !nonValid){
-                    Tenant t = listT.get(i);
-                    nonValid = testLogin(t, personalData) && testMail(t, personalData);
-                    i++;
-                }
-                break;
-        }
+        ArrayList<User> listO = new ArrayList<>(allUsers);
+            while (i < listO.size() && !nonValid){
+                User u = listO.get(i);
+                nonValid = testLogin(u, personalData, type) && testMail(u, personalData, type);
+                i++;
+            }
         return nonValid;
     }
 
@@ -166,8 +106,8 @@ public class Processing {
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testLogin(User u, ArrayList<String> personalData){
-        boolean test = u.getLogin().equals(personalData.get(0));
+    private boolean testLogin(User u, ArrayList<String> personalData, TypeAccount type){
+        boolean test = u.getLogin().equals(personalData.get(0)) && u.getType().equals(type);
         if (test){
             System.out.println("This login already exists, choose another one");
         }
@@ -181,8 +121,8 @@ public class Processing {
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testMail(User u, ArrayList<String> personalData){
-        boolean test = u.getNickname().equals(personalData.get(4));
+    private boolean testMail(User u, ArrayList<String> personalData, TypeAccount type){
+        boolean test = u.getNickname().equals(personalData.get(4)) && u.getType().equals(type);
         if (test){
             System.err.println("This mail already exists, choose another one");
         }
@@ -223,14 +163,6 @@ public class Processing {
                 }
             }
         }
-    }
-
-    /**
-     * To see the content of the tenant wallet
-     * @param userConnected the tenant
-     */
-    public void seeMyWallet(Tenant userConnected) {
-        System.out.println(userConnected.getVirtualWallet());
     }
 
     /**
@@ -284,9 +216,7 @@ public class Processing {
      * Shows all users of the application
      */
     public void seeAllUsers() {
-        for (Admin a: allAdmins) {System.out.println(a.toString() + "\n");}
-        for (Owner o: allOwners) {System.out.println(o.toString() + "\n");}
-        for (Tenant t: allTenants) {System.out.println(t.toString() + "\n");}
+        for (User u: allUsers) {System.out.println(u.toString() + "\n");}
     }
 
     /**
@@ -296,47 +226,38 @@ public class Processing {
      * @param userConnected the administrator connected
      * @return true if the account is well deleted
      */
-    public boolean deleteAccount(String[] accountData, TypeAccount type, User userConnected) {
+    public boolean deleteAccount(String accountData, TypeAccount type, User userConnected) {
         switch (type){
             case TENANT:
                 if (allTenants.size() == 0){
                     System.err.println("There are no tenants.");
                 }else{
-                    Tenant t = searchAccountTenant(allTenants, accountData);
-                    if (t != null) {
-                        allTenants.remove(t);
-                        System.out.println("Deleted");
-                        return true;
-                    }
+                    allTenants.remove(searchAccountTenant(accountData));
+                    allUsers.remove(searchAccountTenant(accountData));
+                    System.out.println("Deleted");
+                    return true;
                 }
                 break;
             case OWNER:
                 if (allOwners.size() == 0){
                     System.err.println("There are no owners");
                 }else{
-                    Owner o = searchAccountOwner(allOwners, accountData);
-                    if (o != null){
-                        allOwners.remove(o);
-                        System.out.println("Deleted");
-                        return true;
-                    }
+                    allOwners.remove(searchAccountOwner(accountData));
+                    allUsers.remove(searchAccountOwner(accountData));
+                    System.out.println("Deleted");
+                    return true;
                 }
                 break;
             case ADMINISTRATOR:
-                if (allAdmins.size() == 0){
-                    System.err.println("There are no admins");
+                if (searchAccountAdmin(accountData) == userConnected){
+                    System.err.println("You can't delete your account, you are connected");
+                    return false;
                 }else{
-                    Admin a = searchAccountAdmin(allAdmins, accountData);
-                    if (a == userConnected){
-                        System.err.println("You can't delete your account, you are connected");
-                        return false;
-                    }else if (a != null && a != userConnected){
-                        allAdmins.remove(a);
-                        System.out.println("Deleted");
-                        return true;
-                    }
+                    allAdmins.remove(searchAccountAdmin(accountData));
+                    allUsers.remove(searchAccountAdmin(accountData));
+                    System.out.println("Deleted");
+                    return true;
                 }
-                break;
         }
         return false;
     }
@@ -347,15 +268,13 @@ public class Processing {
      * @param accountData the data of the account
      * @return the corresponding tenant or null
      */
-    private Tenant searchAccountTenant(ArrayList<Tenant> tenants, String[] accountData) {
+    public Tenant searchAccountTenant(String login) {
         boolean found = false;
         int i = 0;
         Tenant tenant = null;
-        while (i < tenants.size() && !found){
-            Tenant t = tenants.get(i);
-            if (t.getName().equals(accountData[0])
-            && t.getSurname().equals(accountData[1])
-            && t.getNickname().equals(accountData[2])){
+        while (i < allTenants.size() && !found){
+            Tenant t = allTenants.get(i);
+            if (t.getLogin().equals(login)) {
                 tenant = t;
                 found = true;
             }
@@ -370,15 +289,13 @@ public class Processing {
      * @param accountData the data of the account
      * @return the corresponding owner or null
      */
-    private Owner searchAccountOwner(ArrayList<Owner> owners, String[] accountData) {
+    public Owner searchAccountOwner(String login) {
         boolean found = false;
         int i = 0;
         Owner owner = null;
-        while (i < owners.size() && !found){
-            Owner o = owners.get(i);
-            if (o.getName().equals(accountData[0])
-                    && o.getSurname().equals(accountData[1])
-                    && o.getNickname().equals(accountData[2])){
+        while (i < allOwners.size() && !found){
+            Owner o = allOwners.get(i);
+            if (o.getLogin().equals(login)) {
                 owner = o;
                 found = true;
             }
@@ -393,15 +310,13 @@ public class Processing {
      * @param accountData the data of the account
      * @return the corresponding administrator or null
      */
-    private Admin searchAccountAdmin(ArrayList<Admin> admins, String[] accountData) {
+    public Admin searchAccountAdmin(String login) {
         boolean found = false;
         int i = 0;
         Admin admin = null;
-        while (i < admins.size() && !found){
-            Admin a = admins.get(i);
-            if (a.getName().equals(accountData[0])
-                    && a.getSurname().equals(accountData[1])
-                    && a.getNickname().equals(accountData[2])){
+        while (i < allAdmins.size() && !found){
+            Admin a = allAdmins.get(i);
+            if (a.getLogin().equals(login)){
                 admin = a;
                 found = true;
             }
@@ -483,14 +398,6 @@ public class Processing {
             }
         }
         return false;
-    }
-
-    /**
-     * Prints the content of the owner's wallet
-     * @param ownerConnected the connected owner
-     */
-    public void seeMyWalletOwner(Owner ownerConnected) {
-        System.out.println(ownerConnected.getVirtualWallet());
     }
 
     /**

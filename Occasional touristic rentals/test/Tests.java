@@ -85,8 +85,8 @@ public class Tests {
         ArrayList<String> connectionInformations2 = new ArrayList<>();
         connectionInformations2.add("nick");
         connectionInformations2.add("logins");
-        assertTrue(process.connectTenant(connectionInformations) != null);
-        assertTrue(process.connectTenant(connectionInformations2) == null);
+        assertTrue(process.connectUser(connectionInformations, TypeAccount.TENANT) != null);
+        assertTrue(process.connectUser(connectionInformations2, TypeAccount.TENANT) == null);
     }
 
     /**
@@ -144,8 +144,8 @@ public class Tests {
         process.createAccount(account2, TypeAccount.TENANT);
         process.createAccount(account2, TypeAccount.ADMINISTRATOR);
         assertEquals(1, process.getAllTenants().size());
-        String [] tab = {"name", "surname", "nick"};
-        process.deleteAccount(tab, TypeAccount.TENANT, process.getAllAdmins().get(0));
+        String login = "login";
+        process.deleteAccount(login, TypeAccount.TENANT, process.getAllAdmins().get(0));
         assertTrue(process.getAllTenants().size() == 0);
     }
 
