@@ -83,7 +83,7 @@ public class Tests {
         account2.add("name");
         account2.add("nickname");
         account2.add("email");
-        
+
         process.createAccount(account2, TypeAccount.TENANT);
         ArrayList<String> connectionData = new ArrayList<>();
         connectionData.add("login");

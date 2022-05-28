@@ -411,7 +411,7 @@ public class OccasionalTouristicRentals {
                 questions.add("The address of the property :");
                 questions.add("The city :");
                 questions.add("Description :");
-                process.addPropertyToThePortfolio(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions),
+                process.addPropertyToThePortfolio(ownerConnected, ARR_AskDataForProperty(questions),
                         askTypeOfTheProperty(), askForInt("What is the number max of occupiers ?"),
                         askForInt("What is the number nominal price ?"));
                 break;
@@ -423,7 +423,7 @@ public class OccasionalTouristicRentals {
                 if (ownerConnected.getProperties().size() == 0){
                     System.out.println("There is no properties in my portfolio.");
                 }else{
-                    boolean deleted = process.deletePropertyOwner(ownerConnected, ARR_AskDataForProperty(ownerConnected, questions2));
+                    boolean deleted = process.deletePropertyOwner(ownerConnected, ARR_AskDataForProperty(questions2));
                     if (deleted){
                         System.out.println("It has been deleted");
                     }else{
@@ -432,7 +432,7 @@ public class OccasionalTouristicRentals {
                 }
                 break;
             case 6:
-                System.out.println("nothing for the moment");
+                ARR_ChangeDataOfAProperty(ownerConnected);
                 break;
             case 7:
                 ownerConnected.seeMyWallet();
@@ -443,6 +443,74 @@ public class OccasionalTouristicRentals {
                 break;
             default:
                 System.err.println("Error: no such menu item.");
+        }
+    }
+
+    private void ARR_ChangeDataOfAProperty(Owner ownerConnected) {
+        System.out.println("Do you want to see data of all your properties before ? (yes / no)");
+        stringRead = scan.nextLine();
+        if (stringRead.equals("yes")) {
+            process.seeMyProperties(ownerConnected);
+            changeDataOfAProperty(ownerConnected);
+        } else if (stringRead.equals("no")) {
+            changeDataOfAProperty(ownerConnected);
+        }else{
+            System.err.println("I did not understand your answer");
+            ARR_ChangeDataOfAProperty(ownerConnected);
+        }
+    }
+
+    private void changeDataOfAProperty(Owner ownerConnected) {
+        ArrayList<String> questions2 = new ArrayList<>();
+        questions2.add("The name of the property :");
+        questions2.add("The address of the property :");
+        questions2.add("The city :");
+        dataToChange(ownerConnected, ARR_AskDataForProperty(questions2));
+    }
+
+    private void dataToChange(Owner ownerConnected, ArrayList<String> data) {
+        Property p = process.findProperty(ownerConnected, data);
+        if (p == null){
+            System.err.println("No property matches");
+        }else{
+            System.out.println("What do you want to change ?");
+            System.out.println("");
+            System.out.println("1. The type of the property.");
+            System.out.println("2. The name of the property.");
+            System.out.println("3. The description of the property.");
+            System.out.println("4. The number max of occupiers.");
+            System.out.println("");
+            int intAnswer = askForInt("What is your choice ?");
+            switch (intAnswer) {
+                case 1:
+                    process.changeTypeOfTheProperty(ownerConnected, data, askTypeOfTheProperty());
+                    break;
+                case 2:
+                    process.changeNameOfTheProperty(ownerConnected, data, readString());
+                    break;
+                case 3:
+                    process.changeDescriptionOfTheProperty(ownerConnected, data, readString());
+                    break;
+                case 4:
+                    changeNumberoccupiers(ownerConnected, data, p);
+                    break;
+                default:
+                    System.err.println("Error: no such menu item.");
+            }
+        }
+    }
+
+    private void changeNumberoccupiers(Owner ownerConnected, ArrayList<String> data, Property p) {
+        System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
+        stringRead = scan.nextLine();
+        if (stringRead.equals("yes")) {
+            System.out.println("The number max of occupiers is " + p.getMaxOccupiers());
+            process.changeTheNumberMaxOfOccupiers(ownerConnected, data, askForInt("What is the new max of occupiers ?"));
+        } else if (stringRead.equals("no")) {
+            process.changeTheNumberMaxOfOccupiers(ownerConnected, data, askForInt("What is the new max of occupiers ?"));
+        }else{
+            System.err.println("I did not understand your answer");
+            changeNumberoccupiers(ownerConnected, data, p);
         }
     }
 
@@ -475,7 +543,7 @@ public class OccasionalTouristicRentals {
         System.out.println("2. Estate");
         System.out.println("3. Apartment");
         System.out.println("4. Room");
-        System.out.println("5. Estate");
+        System.out.println("5. Homestead");
         System.out.println("");
         TypeProperty type = null;
         stringRead = scan.nextLine();
@@ -509,11 +577,10 @@ public class OccasionalTouristicRentals {
 
     /**
      * Event for craation of a property
-     * @param ownerConnected the connected owner
      * @param questions questions to ask for collecting data
      * @return an Arraylist containing data entered
      */
-    private ArrayList<String> ARR_AskDataForProperty(Owner ownerConnected, ArrayList<String> questions) {
+    private ArrayList<String> ARR_AskDataForProperty(ArrayList<String> questions) {
         ArrayList<String> propertyData = new ArrayList<>();
         for (int i = 0; i < questions.size(); i ++){
             System.out.println(questions.get(i));

@@ -264,8 +264,7 @@ public class Processing {
 
     /**
      * Searches the account of the tenant among tenants of the application
-     * @param tenants an arraylist of Tenant
-     * @param accountData the data of the account
+     * @param login the login if the user
      * @return the corresponding tenant or null
      */
     public Tenant searchAccountTenant(String login) {
@@ -285,8 +284,7 @@ public class Processing {
 
     /**
      * Searches the account of the owner among owners of the application
-     * @param owners an arraylist of Owner
-     * @param accountData the data of the account
+     * @param login the login if the user
      * @return the corresponding owner or null
      */
     public Owner searchAccountOwner(String login) {
@@ -306,8 +304,7 @@ public class Processing {
 
     /**
      * Searches the account of the administrator among administrators of the application
-     * @param admins an arraylist of Admin
-     * @param accountData the data of the account
+     * @param login the login if the user
      * @return the corresponding administrator or null
      */
     public Admin searchAccountAdmin(String login) {
@@ -425,6 +422,18 @@ public class Processing {
         }
     }
 
+    public Property findProperty(Owner ownerConnected, ArrayList data){
+        Property property = null;
+        for (Property p : ownerConnected.getProperties().keySet()) {
+            if (p.getNameProperty().equals(data.get(0))&&
+                    p.getAddressOfTheProperty().equals(data.get(1))&&
+                    p.getTheCity().equals(data.get(2))){
+                property = p;
+            }
+        }
+        return property;
+    }
+
     /**
      * Changes the description of a property
      * @param answers data of the property given by the user
@@ -432,14 +441,29 @@ public class Processing {
     public void changeDescription(ArrayList<String> answers) {
         for (Owner o: allOwners) {
             if (o.getNickname().equals(answers.get(3))){
-                for (Property p: o.getProperties().keySet()) {
-                    if (p.getNameProperty().equals(answers.get(0))&&
-                    p.getAddressOfTheProperty().equals(answers.get(1))&&
-                    p.getTheCity().equals(answers.get(2))){
-                        p.changeDescription(answers.get(4));
-                    }
-                }
+                Property p = findProperty(o, answers);
+                p.changeDescription(answers.get(4));
             }
         }
+    }
+
+    public void changeTypeOfTheProperty(Owner ownerConnected, ArrayList<String> data, TypeProperty newType) {
+        Property p = findProperty(ownerConnected, data);
+        p.changeType(newType);
+    }
+
+    public void changeNameOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newName) {
+        Property p = findProperty(ownerConnected, data);
+        p.changeName(newName);
+    }
+
+    public void changeDescriptionOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newDescription) {
+        Property p = findProperty(ownerConnected, data);
+        p.changeDescription(newDescription);
+    }
+
+    public void changeTheNumberMaxOfOccupiers(Owner ownerConnected, ArrayList<String> data, int newMaxOccupiers) {
+        Property p = findProperty(ownerConnected, data);
+        p.changeMaxOccupiers(newMaxOccupiers);
     }
 }

@@ -80,9 +80,24 @@ public class Property {
      * @param newDescription
      */
     public void changeDescription(String newDescription){description = newDescription;}
+    /**
+     * To change the type of the property
+     * @param type the new type
+     */
+    public void changeType(TypeProperty type){this.type = type;}
+    /**
+     * To change the name of the property
+     * @param name the new name
+     */
+    public void changeName(String name){this.name = name;}
+    /**
+     * To change the maxOccupiers of the property
+     * @param maxOccupiers the new type
+     */
+    public void changeMaxOccupiers(int maxOccupiers){this.maxOccupiers = maxOccupiers;}
 
     @Override
     public String toString(){
-        return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+".";
+        return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+" is a "+ type+".";
     }
 }
