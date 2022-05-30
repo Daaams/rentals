@@ -354,6 +354,9 @@ public class OccasionalTouristicRentals {
                 System.err.println("You must enter an integer multiple of 5");
                 askForMoney();
             }
+            if (numberRead == 0){
+                System.err.println("You must enter an integer multiple of 5 greater than 0");
+            }
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askForMoney();
@@ -450,6 +453,10 @@ public class OccasionalTouristicRentals {
         }
     }
 
+    /**
+     * Event for changing data of a property
+     * @param ownerConnected the connected owner
+     */
     private void ARR_ChangeDataOfAProperty(Owner ownerConnected) {
         System.out.println("Do you want to see data of all your properties before ? (yes / no)");
         stringRead = scan.nextLine();
@@ -464,6 +471,10 @@ public class OccasionalTouristicRentals {
         }
     }
 
+    /**
+     * Retrieves data concerning the property
+     * @param ownerConnected the connected owner
+     */
     private void changeDataOfAProperty(Owner ownerConnected) {
         ArrayList<String> questions2 = new ArrayList<>();
         questions2.add("The name of the property :");
@@ -472,6 +483,11 @@ public class OccasionalTouristicRentals {
         dataToChange(ownerConnected, ARR_AskDataForProperty(questions2));
     }
 
+    /**
+     * Asks the user for the data he wants to change
+     * @param ownerConnected
+     * @param data
+     */
     private void dataToChange(Owner ownerConnected, ArrayList<String> data) {
         Property p = process.findProperty(ownerConnected, data);
         if (p == null){
@@ -504,6 +520,12 @@ public class OccasionalTouristicRentals {
         }
     }
 
+    /**
+     * Method for changing the number max of occupiers
+     * @param ownerConnected the connected owner
+     * @param data data concerning the property
+     * @param p the current property
+     */
     private void changeNumberoccupiers(Owner ownerConnected, ArrayList<String> data, Property p) {
         System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
         stringRead = scan.nextLine();

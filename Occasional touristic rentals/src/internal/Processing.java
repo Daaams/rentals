@@ -422,6 +422,12 @@ public class Processing {
         }
     }
 
+    /**
+     * find a property corresponding to the data given by the user
+     * @param ownerConnected the connected owner
+     * @param data data of the property
+     * @return the corresponding property
+     */
     public Property findProperty(Owner ownerConnected, ArrayList data){
         Property property = null;
         for (Property p : ownerConnected.getProperties().keySet()) {
@@ -447,21 +453,45 @@ public class Processing {
         }
     }
 
+    /**
+     * Changes the type of the property
+     * @param ownerConnected the connected owner
+     * @param data data of the property given by the user
+     * @param newType the new type of the property
+     */
     public void changeTypeOfTheProperty(Owner ownerConnected, ArrayList<String> data, TypeProperty newType) {
         Property p = findProperty(ownerConnected, data);
         p.changeType(newType);
     }
 
+    /**
+     * Changes the name of the property
+     * @param ownerConnected the connected owner
+     * @param data data of the property given by the user
+     * @param newName the new name of the property
+     */
     public void changeNameOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newName) {
         Property p = findProperty(ownerConnected, data);
         p.changeName(newName);
     }
 
+    /**
+     * Changes the description of the property
+     * @param ownerConnected the connected owner
+     * @param data data of the property given by the user
+     * @param newDescription the new description of the property
+     */
     public void changeDescriptionOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newDescription) {
         Property p = findProperty(ownerConnected, data);
         p.changeDescription(newDescription);
     }
 
+    /**
+     * Changes the maximum of occupiers of the property
+     * @param ownerConnected the connected owner
+     * @param data data of the property given by the user
+     * @param newMaxOccupiers the new max occupiers of the property
+     */
     public void changeTheNumberMaxOfOccupiers(Owner ownerConnected, ArrayList<String> data, int newMaxOccupiers) {
         Property p = findProperty(ownerConnected, data);
         p.changeMaxOccupiers(newMaxOccupiers);
