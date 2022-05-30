@@ -1,6 +1,7 @@
 
 package internal;
 
+import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -386,13 +387,10 @@ public class Processing {
      * @param dataOfTheProperty data of the property to delete
      */
     public boolean deletePropertyOwner(Owner ownerConnected, ArrayList<String> dataOfTheProperty) {
-        for (Property p: ownerConnected.getProperties().keySet()) {
-            if (p.getNameProperty().equals(dataOfTheProperty.get(0)) &&
-                    p.getAddressOfTheProperty().equals(dataOfTheProperty.get(1)) &&
-                    p.getTheCity().equals(dataOfTheProperty.get(2))){
-                ownerConnected.deleteProperty(p);
-                return true;
-            }
+        Property p = findProperty(ownerConnected, dataOfTheProperty);
+        if (p != null){
+            ownerConnected.deleteProperty(p);
+            return true;
         }
         return false;
     }
@@ -448,64 +446,89 @@ public class Processing {
         for (Owner o: allOwners) {
             if (o.getNickname().equals(answers.get(3))){
                 Property p = findProperty(o, answers);
-                p.changeDescription(answers.get(4));
+                if (p != null ){
+                    p.changeDescription(answers.get(answers.size()-1));
+                }
             }
         }
     }
 
     /**
      * Changes the type of the property
-     * @param ownerConnected the connected owner
-     * @param data data of the property given by the user
+     * @param p the concerned property
      * @param newType the new type of the property
      */
-    public void changeTypeOfTheProperty(Owner ownerConnected, ArrayList<String> data, TypeProperty newType) {
-        Property p = findProperty(ownerConnected, data);
+    public void changeTypeOfTheProperty(Property p, TypeProperty newType) {
         p.changeType(newType);
     }
 
     /**
      * Changes the name of the property
-     * @param ownerConnected the connected owner
-     * @param data data of the property given by the user
+     * @param p the concerned property
      * @param newName the new name of the property
      */
-    public void changeNameOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newName) {
-        Property p = findProperty(ownerConnected, data);
+    public void changeNameOfTheProperty(Property p, String newName) {
         p.changeName(newName);
     }
 
     /**
-     * Changes the description of the property
-     * @param ownerConnected the connected owner
-     * @param data data of the property given by the user
-     * @param newDescription the new description of the property
+     * Changes the maximum of occupiers of the property
+     * @param p the concerned property
+     * @param newMaxOccupiers the new max occupiers of the property
      */
-    public void changeDescriptionOfTheProperty(Owner ownerConnected, ArrayList<String> data, String newDescription) {
-        Property p = findProperty(ownerConnected, data);
-        p.changeDescription(newDescription);
+    public void changeTheNumberMaxOfOccupiers(Property p, int newMaxOccupiers) {
+        p.changeMaxOccupiers(newMaxOccupiers);
     }
 
     /**
      * Changes the maximum of occupiers of the property
      * @param ownerConnected the connected owner
-     * @param data data of the property given by the user
-     * @param newMaxOccupiers the new max occupiers of the property
+     * @param p the concerned property
+     * @param newNominalPrice the new max occupiers of the property
      */
-    public void changeTheNumberMaxOfOccupiers(Owner ownerConnected, ArrayList<String> data, int newMaxOccupiers) {
-        Property p = findProperty(ownerConnected, data);
-        p.changeMaxOccupiers(newMaxOccupiers);
+    public void changeNominalPrice(Owner ownerConnected, Property p, int newNominalPrice) {
+        ownerConnected.getProperties().get(p).changeThePrice(newNominalPrice);
     }
 
     public Property PropertyExist(String stringRead) {
         Property property = null;
             for ( Owner o : allOwners ){
                 for ( Property p : o.getProperties().keySet()){
-                    if (p.getNameProperty()==stringRead) {
+                    if (p.getNameProperty().equals(stringRead)) {
                         return p;
                     }
                 }
             }
         return property;
+    }
+
+    public Owner findOwner(Property property) {
+        Owner owner = null;
+        for (Owner o: allOwners) {
+            if (o.getProperties().containsKey(property)){
+                owner = o;
+            }
+        }
+        return owner;
+    }
+
+    public void createBid(Tenant tenantConnected, Property property, int month, int people, int nights, int bid) {
+        Bid theBid = new Bid(tenantConnected, property, month, people, nights, bid);
+        property.setBid(theBid);
+        tenantConnected.addABid(theBid);
+    }
+
+    public int winningBidSum(Tenant tenantConnected){
+        int sum = 0;
+        for (Bid b: tenantConnected.getMyBids()) {
+            for (Owner o: allOwners) {
+                for (Property p: o.getProperties().keySet()) {
+                    if (p.getCurrentBid().equals(b)){
+                        sum+= p.getCurrentBid().bidAmount;
+                    }
+                }
+            }
+        }
+        return sum;
     }
 }

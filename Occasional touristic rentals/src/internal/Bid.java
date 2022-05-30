@@ -11,12 +11,14 @@ import userdata.Tenant;
  * @author maud
  */
 public class Bid {
+    // attributes
+    int month;
+    int nbPerson;
+    int nbNight;
+    int bidAmount;
+    //class associations
     Tenant tenant;
     Property property;
-    Integer month;
-    Integer nbPerson;
-    Integer nbNight;
-    Integer bid;
 
     Bid (Tenant t, Property property, int month, int p, int n, int m){
         this.tenant = t;
@@ -24,6 +26,10 @@ public class Bid {
         this.month = month;
         nbPerson = p;
         nbNight = n;
-        bid = m;
+        bidAmount = m;
+    }
+
+    public int getBidAmount() {
+        return bidAmount;
     }
 }

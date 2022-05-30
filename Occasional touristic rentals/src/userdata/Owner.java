@@ -51,15 +51,8 @@ public class Owner extends User{
     
     /**
      * Prints the content of the owner's wallet
-     * @param ownerConnected the connected owner
      */
     public void seeMyWallet() {
         System.out.println(virtualWallet);
     }
-    
-    /**
-     * To get the content of the Owner user
-     * @return an integer corresponding to the money of the Tenant
-     */
-    public int getVirtualWallet(){return virtualWallet;}
 }

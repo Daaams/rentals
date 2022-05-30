@@ -20,7 +20,6 @@ import userdata.*;
 public class OccasionalTouristicRentals {
 
     private boolean waitingForString;
-    private String stringRead;
     private int numberRead;
     private Scanner scan;
     private boolean quit;
@@ -92,9 +91,8 @@ public class OccasionalTouristicRentals {
         if (!waitingForString) {
             firstPrompt();
         }
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             firstPromptAction();
@@ -171,12 +169,12 @@ public class OccasionalTouristicRentals {
      * @return the string entered
      */
     private String readString(){
-        stringRead = scan.nextLine();
-        while (stringReadInConsole(stringRead) == false){
-            System.err.println("Your is null or empty, please, enter something");
-            stringRead = scan.nextLine();
+        String str = scan.nextLine();
+        while (stringReadInConsole(str) == false){
+            System.err.println("Your entry is null or empty, please, enter something");
+            str = scan.nextLine();
         }
-        return stringRead;
+        return str;
     }
 
     /**
@@ -246,8 +244,11 @@ public class OccasionalTouristicRentals {
         System.out.println("5. See all properties on the application.");
         System.out.println("6. Consult data of a property.");
         System.out.println("7. See my wallet.");
-        System.out.println("8. May bid");
-        System.out.println("9. Log out.");
+        System.out.println("8. Bid on a property");
+        System.out.println("9. See my bids"); // à faire
+        System.out.println("10. See the highest bid among all properties"); // à faire
+        System.out.println("11. See the highest bid for a given month"); // à faire
+        System.out.println("12. Log out.");
         System.out.println("");
         askForEventTenants(tenantConnected);
     }
@@ -267,7 +268,8 @@ public class OccasionalTouristicRentals {
         System.out.println("5. Delete a property of my portfolio.");
         System.out.println("6. Change data of a property.");
         System.out.println("7. See my wallet.");
-        System.out.println("8. Log out.");
+        System.out.println("8. List bids on my properties");// à faire
+        System.out.println("9. Log out.");
         System.out.println("");
         askForEventOwners(ownerConnected);
     }
@@ -297,9 +299,8 @@ public class OccasionalTouristicRentals {
      * @param tenantConnected the tenant
      */
     private void askForEventTenants(Tenant tenantConnected) {
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askForEventTenants(tenantConnected);
@@ -328,9 +329,13 @@ public class OccasionalTouristicRentals {
                 tenantConnected.seeMyWallet();
                 break;
             case 8:
-                ARR_MayBid();
+                ARR_BidOnAProperty(tenantConnected);
                 break;
             case 9:
+                // à faire --> see my bids
+                System.out.println("nothing for the moment");
+                break;
+            case 10:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
@@ -347,10 +352,10 @@ public class OccasionalTouristicRentals {
     private int askForMoney() {
         System.out.println("How much money ?");
         System.out.println("Integer must be multiple of 5.");
-        stringRead = scan.nextLine();
+        String str = readString();
         try {
-            numberRead = Integer.parseInt(stringRead);
-            if (Integer.parseInt(stringRead) % 5 != 0) {
+            numberRead = Integer.parseInt(str);
+            if (Integer.parseInt(str) % 5 != 0) {
                 System.err.println("You must enter an integer multiple of 5");
                 askForMoney();
             }
@@ -369,12 +374,12 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_ConsultDataOfAProperty() {
         System.out.println("Do you want to see all properties before ? (yes / no)");
-        stringRead = scan.nextLine();
-        if (stringRead.equals("yes")){
+        String str = readString();
+        if (str.equals("yes")){
             process.seeAllProperties();
             System.out.println("");
             askForAproperty();
-        } else if (stringRead.equals("no")) {
+        } else if (str.equals("no")) {
             askForAproperty();
         } else {
             System.err.println("I did not understand your answer.");
@@ -395,9 +400,8 @@ public class OccasionalTouristicRentals {
      * @param ownerConnected the connected owner
      */
     private void askForEventOwners(Owner ownerConnected) {
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askForEventOwners(ownerConnected);
@@ -445,6 +449,10 @@ public class OccasionalTouristicRentals {
                 ownerConnected.seeMyWallet();
                 break;
             case 8:
+                // à faire --> see bids on my properties
+                System.out.println("nothing for the moment");
+                break;
+            case 9:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
@@ -459,11 +467,11 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_ChangeDataOfAProperty(Owner ownerConnected) {
         System.out.println("Do you want to see data of all your properties before ? (yes / no)");
-        stringRead = scan.nextLine();
-        if (stringRead.equals("yes")) {
+        String str = readString();
+        if (str.equals("yes")) {
             process.seeMyProperties(ownerConnected);
             changeDataOfAProperty(ownerConnected);
-        } else if (stringRead.equals("no")) {
+        } else if (str.equals("no")) {
             changeDataOfAProperty(ownerConnected);
         }else{
             System.err.println("I did not understand your answer");
@@ -499,20 +507,33 @@ public class OccasionalTouristicRentals {
             System.out.println("2. The name of the property.");
             System.out.println("3. The description of the property.");
             System.out.println("4. The number max of occupiers.");
+            System.out.println("5. The nominal price.");
             System.out.println("");
             int intAnswer = askForInt("What is your choice ?");
             switch (intAnswer) {
                 case 1:
-                    process.changeTypeOfTheProperty(ownerConnected, data, askTypeOfTheProperty());
+                    process.changeTypeOfTheProperty(p, askTypeOfTheProperty());
                     break;
                 case 2:
-                    process.changeNameOfTheProperty(ownerConnected, data, readString());
+                    System.out.println("What is the new name of the property ?");
+                    String newName = readString();
+                    process.changeNameOfTheProperty(p, newName);
                     break;
                 case 3:
-                    process.changeDescriptionOfTheProperty(ownerConnected, data, readString());
+                    ArrayList<String> dataAndDesc = new ArrayList<>();
+                    dataAndDesc.add(p.getNameProperty());
+                    dataAndDesc.add(p.getAddressOfTheProperty());
+                    dataAndDesc.add(p.getTheCity());
+                    dataAndDesc.add(ownerConnected.getNickname());
+                    System.out.println("What is the new description ?");
+                    dataAndDesc.add(readString());
+                    process.changeDescription(dataAndDesc);
                     break;
                 case 4:
-                    changeNumberoccupiers(ownerConnected, data, p);
+                    changeNumberoccupiers(p);
+                    break;
+                case 5:
+                    changeNominalPrice(ownerConnected, p);
                     break;
                 default:
                     System.err.println("Error: no such menu item.");
@@ -521,22 +542,39 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Method for changing the number max of occupiers
+     * Method for changing the nominal price
      * @param ownerConnected the connected owner
-     * @param data data concerning the property
      * @param p the current property
      */
-    private void changeNumberoccupiers(Owner ownerConnected, ArrayList<String> data, Property p) {
-        System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
-        stringRead = scan.nextLine();
-        if (stringRead.equals("yes")) {
-            System.out.println("The number max of occupiers is " + p.getMaxOccupiers());
-            process.changeTheNumberMaxOfOccupiers(ownerConnected, data, askForInt("What is the new max of occupiers ?"));
-        } else if (stringRead.equals("no")) {
-            process.changeTheNumberMaxOfOccupiers(ownerConnected, data, askForInt("What is the new max of occupiers ?"));
+    private void changeNominalPrice(Owner ownerConnected, Property p) {
+        System.out.println("Do you want to see the current nominal price before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")) {
+            System.out.println("The current nominal price is " + p.getMaxOccupiers());
+            process.changeNominalPrice(ownerConnected, p, askForInt("What is the new nominal price ?"));
+        } else if (str.equals("no")) {
+            process.changeNominalPrice(ownerConnected, p, askForInt("What is the new nominal price ?"));
         }else{
             System.err.println("I did not understand your answer");
-            changeNumberoccupiers(ownerConnected, data, p);
+            changeNominalPrice(ownerConnected, p);
+        }
+    }
+
+    /**
+     * Method for changing the number max of occupiers
+     * @param p the current property
+     */
+    private void changeNumberoccupiers(Property p) {
+        System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")) {
+            System.out.println("The number max of occupiers is " + p.getMaxOccupiers());
+            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
+        } else if (str.equals("no")) {
+            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
+        }else{
+            System.err.println("I did not understand your answer");
+            changeNumberoccupiers(p);
         }
     }
 
@@ -546,16 +584,16 @@ public class OccasionalTouristicRentals {
      * @return the integer enter by the user
      */
     private int askForInt(String question) {
+        int number = 0;
         System.out.println(question);
         System.out.println("");
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            number = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askForInt(question);
         }
-        return numberRead;
+        return number;
     }
 
     /**
@@ -572,9 +610,8 @@ public class OccasionalTouristicRentals {
         System.out.println("5. Homestead");
         System.out.println("");
         TypeProperty type = null;
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askTypeOfTheProperty();
@@ -620,9 +657,8 @@ public class OccasionalTouristicRentals {
      * @param adminConnected the connected administrator
      */
     private void askForEventAdmins(Admin adminConnected) {
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             askForEventAdmins(adminConnected);
@@ -660,12 +696,14 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_ChangeDescriptionOfProperty() {
         System.out.println("Do you want to see data of all properties before ? (yes / no)");
-        stringRead = scan.nextLine();
-        if (stringRead.equals("yes")) {
+        String str = readString();
+        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
+                "In which city is located the property ?", "What is the nickname of the owner ?", "What is the new description ?"};
+        if (str.equals("yes")) {
             process.seeAllProperties();
-            changeDescription();
-        } else if (stringRead.equals("no")) {
-            changeDescription();
+            changeDescription(takeData(questions));
+        } else if (str.equals("no")) {
+            changeDescription(takeData(questions));
         }else{
             System.err.println("I did not understand your answer");
             ARR_ChangeDescriptionOfProperty();
@@ -674,15 +712,9 @@ public class OccasionalTouristicRentals {
 
     /**
      * Changes the description of a property corresponding to data asked
+     * @param answers data of the property with the new description
      */
-    private void changeDescription() {
-        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
-                "In which city is located the property ?", "What is the nickname of the owner ?", "What is the new description ?"};
-        ArrayList<String> answers = new ArrayList<>();
-        for (int i = 0; i < questions.length; i ++) {
-            System.out.println(questions[i]);
-            answers.add(readString());
-        }
+    private void changeDescription(ArrayList<String> answers) {
         process.changeDescription(answers);
     }
 
@@ -695,11 +727,11 @@ public class OccasionalTouristicRentals {
             System.out.println("There is no properties in the application");
         }else{
             System.out.println("Do you want to see all properties before ? (yes / no)");
-            stringRead = scan.nextLine();
-            if (stringRead.equals("yes")) {
+            String str = readString();
+            if (str.equals("yes")) {
                 process.seeAllProperties();
                 deleteProperty();
-            } else if (stringRead.equals("no")) {
+            } else if (str.equals("no")) {
                 deleteProperty();
             }else{
                 System.err.println("I did not understand your answer");
@@ -733,11 +765,11 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_AskDataToChange(User userConnected) {
         System.out.println("Do you want to see your data before ? (yes / no)");
-        stringRead = scan.nextLine();
-        if (stringRead.equals("yes")) {
+        String str = readString();
+        if (str.equals("yes")) {
             process.seeData(userConnected);
             changeData(userConnected);
-        } else if (stringRead.equals("no")) {
+        } else if (str.equals("no")) {
             changeData(userConnected);
         }else{
             System.err.println("I did not understand your answer");
@@ -758,9 +790,8 @@ public class OccasionalTouristicRentals {
         System.out.println("3. My nickname.");
         System.out.println("4. My mail.");
         System.out.println("");
-        stringRead = scan.nextLine();
         try {
-            numberRead = Integer.parseInt(stringRead);
+            numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
             changeData(userConnected);
@@ -823,17 +854,71 @@ public class OccasionalTouristicRentals {
         quit = true;
     }
     
-    private void ARR_MayBid() {
+    private void ARR_BidOnAProperty(Tenant tenantConnected) {
+        System.out.println("Do you want to see all properties before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")){
+            process.seeAllProperties();
+            System.out.println("");
+            makeABid(tenantConnected);
+        } else if (str.equals("no")) {
+            makeABid(tenantConnected);
+        } else {
+            System.err.println("I did not understand your answer.");
+            ARR_BidOnAProperty(tenantConnected);
+        }
+    }
+
+    private void makeABid(Tenant tenantConnected){
         Property property = null;
         System.out.println("Enter the name of the property");
-        while (property==null) {
-            stringRead = scan.nextLine();
-            property = process.PropertyExist(stringRead);
-            if (property==null){
-                System.err.println("Error: no property have this name");
+        property = process.PropertyExist(readString());
+        int bid = 0;
+        int month = 0;
+        int people = 0;
+        int nights = 0;
+        if (property==null){
+            System.err.println("Error: no property has this name, try again.");
+        }else{
+            month = chooseMonth();
+        }
+        if (property.getCurrentBid() != null && tenantConnected.getVirtualWallet() >= property.getCurrentBid().getBidAmount() + 10 + process.winningBidSum(tenantConnected)){
+            while (!checksBid(property.getCurrentBid().getBidAmount() + 10, bid)){
+                System.out.println("The bid must be greater than 0 and greater than the amount of the current bid");
+                bid = askForInt("How much do you want to bid ? (" + property.getCurrentBid().getBidAmount() + 10 + "and more.");
             }
-        }   
-        
+            process.createBid(tenantConnected, property, month, people, nights, bid);
+        }else if (property.getCurrentBid() == null){
+            people = askForInt("How many People ? (between 0 and" + property.getMaxOccupiers() + ").");
+            if (people < 0 && people > property.getMaxOccupiers()){
+                people = askForInt("How many People ? (between 0 and" + property.getMaxOccupiers() + ").");
+            }
+            nights = askForInt("How many nights ? (between 1 and 10).");
+            if (nights < 1 || nights > 10){
+                System.err.println("Please for legal reasons the number of night is between 1 and 10.");
+                nights = askForInt("How many nights ?");
+            }
+            Owner o = process.findOwner(property);
+            System.out.println("No current bid. The amount is : " + (people*nights*o.getProperties().get(property).getThePrice())/10);
+            if (checksBid((people*nights*o.getProperties().get(property).getThePrice()/10), tenantConnected.getVirtualWallet())){
+                bid = askForInt("Enter this bid to confirm");
+                if (bid == (people*nights*o.getProperties().get(property).getThePrice()/10)){
+                    process.createBid(tenantConnected, property, month, people, nights, bid);
+                }else{
+                    System.err.println("This bid has not been created");
+                }
+            }
+        }else{
+            System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
+        }
+    }
+
+    private boolean checksBid(int amountOfTheBid, int theBid){
+        return theBid > 0 && theBid > amountOfTheBid;
+    }
+
+    private int chooseMonth(){
+        int month = 0;
         System.out.println("Choose the month desired");
         System.out.println("1. January");
         System.out.println("2. February");
@@ -847,43 +932,11 @@ public class OccasionalTouristicRentals {
         System.out.println("10. October");
         System.out.println("11. November");
         System.out.println("12. December");
-        stringRead = scan.nextLine();
-        try {
-            numberRead = Integer.parseInt(stringRead);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_MayBid();
+        month = askForInt("What is your choice ?");
+        if (month <= 0 && month > 12){
+            System.err.println("Choose a month between 1 and 12");
+            chooseMonth();
         }
-      
-        System.out.println("The number of persons");
-        stringRead = scan.nextLine();
-        try {
-            numberRead = Integer.parseInt(stringRead);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_MayBid();
-        }
-
-        System.out.println("The number of night");
-                stringRead = scan.nextLine();
-        try {
-            numberRead = Integer.parseInt(stringRead);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_MayBid();
-        }
-        if (numberRead<1 || numberRead>10){
-            System.err.println("Please for legal reasons the number of night is between 1 and 10.");
-        }
-        
-        System.out.println("The bid");
-        stringRead = scan.nextLine();
-        try {
-            numberRead = Integer.parseInt(stringRead);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_MayBid();
-        }
-        
+        return month;
     }
 }

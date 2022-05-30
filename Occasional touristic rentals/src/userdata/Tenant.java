@@ -4,11 +4,16 @@
  */
 package userdata;
 
+import internal.Bid;
+
+import java.util.HashSet;
+
 /**
  *
  * @author mgenetet
  */
 public class Tenant extends User{
+    HashSet<Bid> myBids;
     private int virtualWallet;
 
     /**
@@ -22,6 +27,7 @@ public class Tenant extends User{
     public Tenant(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email, TypeAccount.TENANT);
         virtualWallet = 0;
+        myBids = new HashSet<>();
     }
 
     /**
@@ -46,7 +52,10 @@ public class Tenant extends User{
     
     /**
      * To see the content of the tenant wallet
-     * @param userConnected the tenant
      */
     public void seeMyWallet() { System.out.println(virtualWallet); }
+
+    public void addABid(Bid bid){myBids.add(bid);}
+
+    public HashSet<Bid> getMyBids(){return new HashSet<>(myBids);}
 }

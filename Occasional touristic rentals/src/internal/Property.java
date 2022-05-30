@@ -11,12 +11,17 @@ import userdata.TypeProperty;
  * @author mgenetet
  */
 public class Property {
-    private TypeProperty type;
+    //class attributes
     private String name;
     private final String ADDRESS;
     private final String CITY;
     private String description;
     private int maxOccupiers;
+    private boolean isRented;
+
+    // associations
+    private TypeProperty type;
+    private Bid currentBid;
 
     /**
      * Constructor of the class Property
@@ -35,6 +40,8 @@ public class Property {
         CITY = city;
         description = desc;
         this.maxOccupiers = maxOccupiers;
+        isRented = false;
+        currentBid = null;
     }
 
     /**
@@ -76,6 +83,11 @@ public class Property {
      */
     public String getDescription(){return description;}
     /**
+     * To get the current bid on the property
+     * @return the bid
+     */
+    public Bid getCurrentBid(){return currentBid;}
+    /**
      * To change the description of the property
      * @param newDescription
      */
@@ -95,6 +107,10 @@ public class Property {
      * @param maxOccupiers the new type
      */
     public void changeMaxOccupiers(int maxOccupiers){this.maxOccupiers = maxOccupiers;}
+
+    public void rented(boolean status){isRented = status;}
+
+    public void setBid(Bid theBid){currentBid = theBid;}
 
     @Override
     public String toString(){
