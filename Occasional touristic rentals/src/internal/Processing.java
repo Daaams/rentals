@@ -466,4 +466,16 @@ public class Processing {
         Property p = findProperty(ownerConnected, data);
         p.changeMaxOccupiers(newMaxOccupiers);
     }
+
+    public Property PropertyExist(String stringRead) {
+        Property property = null;
+            for ( Owner o : allOwners ){
+                for ( Property p : o.getProperties().keySet()){
+                    if (p.getNameProperty()==stringRead) {
+                        return p;
+                    }
+                }
+            }
+        return property;
+    }
 }

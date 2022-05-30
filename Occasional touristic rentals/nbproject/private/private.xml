@@ -3,13 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/User.java</file>
-            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/Owner.java</file>
-            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/mainapp/OccasionalTouristicRentals.java</file>
-            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/Admin.java</file>
-            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/test/Tests.java</file>
             <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/internal/Processing.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/mainapp/OccasionalTouristicRentals.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/TypeAccount.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/Admin.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/Owner.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/TypeProperty.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/internal/Price.java</file>
             <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/Tenant.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/internal/Property.java</file>
+            <file>file:/home/maud/Téléchargements/rentals-main/Occasional%20touristic%20rentals/src/userdata/User.java</file>
         </group>
     </open-files>
 </project-private>

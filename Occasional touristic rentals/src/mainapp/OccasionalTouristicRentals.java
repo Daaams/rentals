@@ -246,7 +246,8 @@ public class OccasionalTouristicRentals {
         System.out.println("5. See all properties on the application.");
         System.out.println("6. Consult data of a property.");
         System.out.println("7. See my wallet.");
-        System.out.println("8. Log out.");
+        System.out.println("8. May bid");
+        System.out.println("9. Log out.");
         System.out.println("");
         askForEventTenants(tenantConnected);
     }
@@ -327,6 +328,9 @@ public class OccasionalTouristicRentals {
                 tenantConnected.seeMyWallet();
                 break;
             case 8:
+                ARR_MayBid();
+                break;
+            case 9:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
@@ -795,5 +799,69 @@ public class OccasionalTouristicRentals {
      */
     private void ARR_Quit() {
         quit = true;
+    }
+    
+    private void ARR_MayBid() {
+        Property property = null;
+        System.out.println("Enter the name of the property");
+        while (property==null) {
+            stringRead = scan.nextLine();
+            property = process.PropertyExist(stringRead);
+            if (property==null){
+                System.err.println("Error: no property have this name");
+            }
+        }   
+        
+        System.out.println("Choose the month desired");
+        System.out.println("1. January");
+        System.out.println("2. February");
+        System.out.println("3. March");
+        System.out.println("4. April");
+        System.out.println("5. May");
+        System.out.println("6. June");
+        System.out.println("7. July");
+        System.out.println("8. August");
+        System.out.println("9. September");
+        System.out.println("10. October");
+        System.out.println("11. November");
+        System.out.println("12. December");
+        stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_MayBid();
+        }
+      
+        System.out.println("The number of persons");
+        stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_MayBid();
+        }
+
+        System.out.println("The number of night");
+                stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_MayBid();
+        }
+        if (numberRead<1 || numberRead>10){
+            System.err.println("Please for legal reasons the number of night is between 1 and 10.");
+        }
+        
+        System.out.println("The bid");
+        stringRead = scan.nextLine();
+        try {
+            numberRead = Integer.parseInt(stringRead);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_MayBid();
+        }
+        
     }
 }
