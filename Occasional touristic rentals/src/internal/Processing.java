@@ -560,4 +560,41 @@ public class Processing {
     }
 
 
+    public void listAllBids() {
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
+            }
+        }
+    }
+
+    public void listAllBidsByMonth(int month) {
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.getCurrentBid().month == month) {
+                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
+                }
+            }
+        }
+    }
+
+    public void listAllBidsByProperty(Property property) {
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.equals(property)) {
+                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
+                }
+            }
+        }
+    }
+
+    public void listAllBidsByAmount(int numberRead) {
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.getCurrentBid().bidAmount == numberRead) {
+                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
+                }
+            }
+        }
+    }
 }

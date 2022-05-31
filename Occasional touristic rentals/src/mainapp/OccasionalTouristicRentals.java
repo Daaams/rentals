@@ -288,7 +288,11 @@ public class OccasionalTouristicRentals {
         System.out.println("4. Delete an account.");
         System.out.println("5. Delete a property.");
         System.out.println("6. Change the description of a property.");
-        System.out.println("7. Log out.");
+        System.out.println("7. See Bids on all properties.");
+        System.out.println("8. See Bids by month");
+        System.out.println("9. See Bids by property");
+        System.out.println("10. See Bids by amount");
+        System.out.println("11. Log out.");
         System.out.println("");
         askForEventAdmins(adminConnected);
     }
@@ -714,12 +718,55 @@ public class OccasionalTouristicRentals {
                 ARR_ChangeDescriptionOfProperty();
                 break;
             case 7:
+                ARR_ListAllBids();
+                break;
+            case 8:
+                ARR_ListAllBidsByMonth();
+                break;
+            case 9:
+                ARR_ListAllBidsByProperty();
+                break;
+            case 10:
+                ARR_ListAllBidsByAmount();
+            case 11:
                 System.err.println(adminConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private void ARR_ListAllBidsByAmount() {
+        System.out.println("Enter the amount of the bid you want to see");
+        try {
+            numberRead = Integer.parseInt(readString());
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_ListAllBidsByAmount();
+        }
+        process.listAllBidsByAmount(numberRead);
+    }
+
+    private void ARR_ListAllBidsByProperty() {
+        Property property = null;
+        System.out.println("Enter the name of the property");
+        property = process.PropertyExist(readString());
+        if (property == null) {
+            System.out.println("This property doesn't exist");
+            ARR_ListAllBidsByProperty();
+        } else {
+            process.listAllBidsByProperty(property);
+        }
+    }
+
+    private void ARR_ListAllBidsByMonth() {
+        int month = chooseMonth();
+        process.listAllBidsByMonth(month);
+    }
+
+    private void ARR_ListAllBids() {
+        process.listAllBids();
     }
 
     /**
