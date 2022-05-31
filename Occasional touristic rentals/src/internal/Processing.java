@@ -1,11 +1,10 @@
 
 package internal;
 
-import java.security.cert.TrustAnchor;
+import userdata.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import userdata.*;
 
 public class Processing {
 
@@ -530,5 +529,33 @@ public class Processing {
             }
         }
         return sum;
+    }
+
+    public Property seeTheHighestBid() {
+        int maxBid = 0;
+        Property property = null;
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.getCurrentBid().bidAmount > maxBid) {
+                    maxBid = p.getCurrentBid().bidAmount;
+                    property = p;
+                }
+            }
+        }
+        return property;
+    }
+
+    public Property seeTheHighestBidForAMonth(int month) {
+        int maxBid = 0;
+        Property property = null;
+        for (Owner o: allOwners) {
+            for (Property p: o.getProperties().keySet()) {
+                if (p.getCurrentBid().bidAmount > maxBid && p.getCurrentBid().month == month) {
+                    maxBid = p.getCurrentBid().bidAmount;
+                    property = p;
+                }
+            }
+        }
+        return property;
     }
 }

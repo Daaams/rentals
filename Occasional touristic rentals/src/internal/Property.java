@@ -116,4 +116,10 @@ public class Property {
     public String toString(){
         return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+" is a "+ type+".";
     }
+
+    public String getName() {
+        return name;
+    }
+
+
 }

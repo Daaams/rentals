@@ -4,14 +4,14 @@
  */
 package mainapp;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.SplittableRandom;
-
+import internal.Bid;
 import internal.Price;
 import internal.Processing;
 import internal.Property;
 import userdata.*;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -245,9 +245,9 @@ public class OccasionalTouristicRentals {
         System.out.println("6. Consult data of a property.");
         System.out.println("7. See my wallet.");
         System.out.println("8. Bid on a property");
-        System.out.println("9. See my bids"); // à faire
-        System.out.println("10. See the highest bid among all properties"); // à faire
-        System.out.println("11. See the highest bid for a given month"); // à faire
+        System.out.println("9. See my bids");
+        System.out.println("10. See the highest bid among all properties");
+        System.out.println("11. See the highest bid for a given month");
         System.out.println("12. Log out.");
         System.out.println("");
         askForEventTenants(tenantConnected);
@@ -332,15 +332,40 @@ public class OccasionalTouristicRentals {
                 ARR_BidOnAProperty(tenantConnected);
                 break;
             case 9:
-                // à faire --> see my bids
-                System.out.println("nothing for the moment");
+                ARR_SeeAllMyBid(tenantConnected);
                 break;
             case 10:
+                ARR_SeeTheHighestBid();
+                break;
+            case 11:
+                ARR_SeeTheHighestBidForAMonth();
+                break;
+            case 12:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
+        }
+    }
+
+    private void ARR_SeeTheHighestBidForAMonth() {
+        int month = chooseMonth();
+        Property highBidOfMonth = process.seeTheHighestBidForAMonth(month);
+        System.out.println("The highest bid for the month is " + highBidOfMonth.getName()
+                + " with " + highBidOfMonth.getCurrentBid().getBidAmount() + " euros");
+    }
+
+
+    private void ARR_SeeTheHighestBid() {
+        Property highBid = process.seeTheHighestBid();
+        System.out.println("The highest bid is " + highBid.getName() + " for " + highBid.getCurrentBid().getBidAmount()
+                + " euros");
+    }
+
+    private void ARR_SeeAllMyBid(Tenant tenantConnected) {
+        for (Bid b : tenantConnected.getMyBids()) {
+            System.out.println(b.toString());
         }
     }
 
@@ -530,7 +555,7 @@ public class OccasionalTouristicRentals {
                     process.changeDescription(dataAndDesc);
                     break;
                 case 4:
-                    changeNumberoccupiers(p);
+                    changeNumberOccupiers(p);
                     break;
                 case 5:
                     changeNominalPrice(ownerConnected, p);
@@ -564,7 +589,7 @@ public class OccasionalTouristicRentals {
      * Method for changing the number max of occupiers
      * @param p the current property
      */
-    private void changeNumberoccupiers(Property p) {
+    private void changeNumberOccupiers(Property p) {
         System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
         String str = readString();
         if (str.equals("yes")) {
@@ -574,7 +599,7 @@ public class OccasionalTouristicRentals {
             process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
         }else{
             System.err.println("I did not understand your answer");
-            changeNumberoccupiers(p);
+            changeNumberOccupiers(p);
         }
     }
 

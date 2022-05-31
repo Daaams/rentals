@@ -32,4 +32,11 @@ public class Bid {
     public int getBidAmount() {
         return bidAmount;
     }
+
+    @Override
+    public String toString(){
+        return "Bid: " + bidAmount + " for " + nbPerson + " person(s) for " + nbNight + " night(s) in "
+                + month + " for " + tenant.getName();
+    }
+
 }

@@ -6,12 +6,12 @@
 import internal.Price;
 import internal.Processing;
 import internal.Property;
+import org.testng.annotations.Test;
 import userdata.*;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 
 /**
