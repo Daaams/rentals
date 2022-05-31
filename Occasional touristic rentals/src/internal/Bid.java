@@ -19,6 +19,7 @@ public class Bid {
     //class associations
     Tenant tenant;
     Property property;
+    Boolean isClose = false;
 
     Bid (Tenant t, Property property, int month, int p, int n, int m){
         this.tenant = t;
@@ -39,4 +40,31 @@ public class Bid {
                 + month + " for " + tenant.getName();
     }
 
+    public void setClosed() {
+        isClose = true;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public String getPriceString() {
+        return bidAmount + "";
+    }
+
+    public boolean isClosed() {
+        return isClose;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public String getNumberOfPeopleString() {
+        return nbPerson + "";
+    }
 }

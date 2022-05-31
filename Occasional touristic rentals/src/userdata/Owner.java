@@ -7,6 +7,7 @@ package userdata;
 import internal.Price;
 import internal.Property;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -54,5 +55,13 @@ public class Owner extends User{
      */
     public void seeMyWallet() {
         System.out.println(virtualWallet);
+    }
+
+    public ArrayList<Property> getMyProperties() {
+        ArrayList<Property> myProperties = new ArrayList<>();
+        for (Property property : allProperties.keySet()) {
+            myProperties.add(property);
+        }
+        return myProperties;
     }
 }

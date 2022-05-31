@@ -4,10 +4,7 @@
  */
 package mainapp;
 
-import internal.Bid;
-import internal.Price;
-import internal.Processing;
-import internal.Property;
+import internal.*;
 import userdata.*;
 
 import java.util.ArrayList;
@@ -248,7 +245,9 @@ public class OccasionalTouristicRentals {
         System.out.println("9. See my bids");
         System.out.println("10. See the highest bid among all properties");
         System.out.println("11. See the highest bid for a given month");
-        System.out.println("12. Log out.");
+        System.out.println("12. See all my closed bids Win and Lose");
+        System.out.println("13. See all my reservations");
+        System.out.println("14. Log out.");
         System.out.println("");
         askForEventTenants(tenantConnected);
     }
@@ -269,7 +268,8 @@ public class OccasionalTouristicRentals {
         System.out.println("6. Change data of a property.");
         System.out.println("7. See my wallet.");
         System.out.println("8. List bids on my properties");
-        System.out.println("9. Log out.");
+        System.out.println("9. See all the reservations of my properties");
+        System.out.println("10. Log out.");
         System.out.println("");
         askForEventOwners(ownerConnected);
     }
@@ -292,7 +292,9 @@ public class OccasionalTouristicRentals {
         System.out.println("8. See Bids by month");
         System.out.println("9. See Bids by property");
         System.out.println("10. See Bids by amount");
-        System.out.println("11. Log out.");
+        System.out.println("11. Close bid.");
+        System.out.println("12. See all reservations.");
+        System.out.println("13. Log out.");
         System.out.println("");
         askForEventAdmins(adminConnected);
     }
@@ -345,12 +347,25 @@ public class OccasionalTouristicRentals {
                 ARR_SeeTheHighestBidForAMonth();
                 break;
             case 12:
+                ARR_SeeAllBidClosedWinAndLose(tenantConnected);
+                break;
+            case 13:
+                ARR_ListAllMyReservations(tenantConnected);
+            case 14:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private void ARR_ListAllMyReservations(Tenant tenantConnected) {
+        process.seeAllReservations(tenantConnected);
+    }
+
+    private void ARR_SeeAllBidClosedWinAndLose(Tenant tenantConnected) {
+        process.seeAllBidClosed(tenantConnected);
     }
 
     private void ARR_SeeTheHighestBidForAMonth() {
@@ -481,12 +496,18 @@ public class OccasionalTouristicRentals {
                 ARR_ListBids(ownerConnected);
                 break;
             case 9:
+                ARR_ListReservationOfMyProperties(ownerConnected);
+            case 10:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private void ARR_ListReservationOfMyProperties(Owner ownerConnected) {
+        process.listAllReservationsOfMyProperties(ownerConnected);
     }
 
     private void ARR_ListBids(Owner ownerConnected) {
@@ -728,13 +749,28 @@ public class OccasionalTouristicRentals {
                 break;
             case 10:
                 ARR_ListAllBidsByAmount();
+                break;
             case 11:
+                ARR_CloseBid();
+            case 12:
+                ARR_ListAllReservation();
+                break;
+            case 13:
                 System.err.println(adminConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private void ARR_ListAllReservation() {
+        process.listAllReservation();
+    }
+
+    private void ARR_CloseBid() {
+        int month = chooseMonth();
+        process.closeBid(month);
     }
 
     private void ARR_ListAllBidsByAmount() {

@@ -5,6 +5,7 @@
 package userdata;
 
 import internal.Bid;
+import internal.Reservation;
 
 import java.util.HashSet;
 
@@ -14,6 +15,7 @@ import java.util.HashSet;
  */
 public class Tenant extends User{
     HashSet<Bid> myBids;
+    HashSet<Reservation> myReservation;
     private int virtualWallet;
 
     /**
@@ -58,4 +60,12 @@ public class Tenant extends User{
     public void addABid(Bid bid){myBids.add(bid);}
 
     public HashSet<Bid> getMyBids(){return new HashSet<>(myBids);}
+
+    public void createNewReservation(Reservation reservation) {
+        myReservation.add(reservation);
+    }
+
+    public HashSet<Reservation> getMyReservations() {
+        return myReservation;
+    }
 }

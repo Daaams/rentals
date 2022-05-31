@@ -12,6 +12,8 @@ public class Processing {
     private ArrayList<Admin> allAdmins;
     private ArrayList<Owner> allOwners;
     private ArrayList<User> allUsers;
+    private ArrayList<Bid> allBids;
+    private ArrayList<Reservation> allReservations;
 
 
     /**
@@ -22,6 +24,8 @@ public class Processing {
         allOwners = new ArrayList<>();
         allTenants = new ArrayList<>();
         allUsers = new ArrayList<>();
+        allBids = new ArrayList<>();
+        allReservations = new ArrayList<>();
     }
 
     /**
@@ -515,6 +519,7 @@ public class Processing {
         Bid theBid = new Bid(tenantConnected, property, month, people, nights, bid);
         property.setBid(theBid);
         tenantConnected.addABid(theBid);
+        allBids.add(theBid);
     }
 
     public int winningBidSum(Tenant tenantConnected){
@@ -534,12 +539,10 @@ public class Processing {
     public Property seeTheHighestBid() {
         int maxBid = 0;
         Property property = null;
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.getCurrentBid().bidAmount > maxBid) {
-                    maxBid = p.getCurrentBid().bidAmount;
-                    property = p;
-                }
+        for ( Bid b : allBids ){
+            if (b.getBidAmount() > maxBid) {
+                maxBid = b.getBidAmount();
+                property = b.getProperty();
             }
         }
         return property;
@@ -548,12 +551,10 @@ public class Processing {
     public Property seeTheHighestBidForAMonth(int month) {
         int maxBid = 0;
         Property property = null;
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.getCurrentBid().bidAmount > maxBid && p.getCurrentBid().month == month) {
-                    maxBid = p.getCurrentBid().bidAmount;
-                    property = p;
-                }
+        for (Bid b: allBids) {
+            if (b.getBidAmount() > maxBid && b.getMonth() == month) {
+                maxBid = b.getBidAmount();
+                property = b.getProperty();
             }
         }
         return property;
@@ -561,40 +562,88 @@ public class Processing {
 
 
     public void listAllBids() {
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
-            }
+        for (Bid b: allBids) {
+            System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString());
         }
     }
 
     public void listAllBidsByMonth(int month) {
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.getCurrentBid().month == month) {
-                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
-                }
+        for (Bid b : allBids) {
+            if (b.month == month) {
+                System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString());
             }
         }
     }
 
     public void listAllBidsByProperty(Property property) {
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.equals(property)) {
-                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
-                }
+        for (Bid b : allBids) {
+            if (b.property.equals(property)) {
+                System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString());
             }
         }
     }
 
     public void listAllBidsByAmount(int numberRead) {
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.getCurrentBid().bidAmount == numberRead) {
-                    System.out.println("Property : " + p.getName() + " bid : " + p.getCurrentBid().toString());
+        for (Bid b : allBids) {
+            if (b.bidAmount == numberRead) {
+                System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString());
+            }
+        }
+    }
+
+    public void closeBid(int month) {
+        for (Bid b : allBids) {
+            if (b.month == month) {
+                b.setClosed();
+                if (b.getProperty().getCurrentBid().equals(b)) {
+                    b.getTenant().depositMoney(-b.getBidAmount());
+                    Reservation reservation = new Reservation(b.getTenant(),
+                            b.getProperty(), b.getMonth(), b);
+                    b.getTenant().createNewReservation(reservation);
+                    allReservations.add(reservation);
+                }
+                else {
+                    b.getTenant().depositMoney(-1);
                 }
             }
+        }
+    }
+
+    public void seeAllBidClosed(Tenant tenantConnected) {
+        for (Bid b : tenantConnected.getMyBids()) {
+            if (b.isClosed()) {
+                if (b.getProperty().getCurrentBid().equals(b.bidAmount)) {
+                    System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " WIN ");
+                }
+                else {
+                    System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " LOSE ");
+                }
+            }
+        }
+    }
+
+    public void seeAllReservations(Tenant tenantConnected) {
+        for (Reservation r : tenantConnected.getMyReservations()) {
+            r.recap();
+            System.out.println("");
+        }
+    }
+
+    public void listAllReservationsOfMyProperties(Owner ownerConnected) {
+        for (Property p : ownerConnected.getMyProperties()) {
+            for (Reservation r : allReservations) {
+                if (r.getProperty().equals(p)) {
+                    r.recap();
+                    System.out.println("");
+                }
+            }
+        }
+    }
+
+    public void listAllReservation() {
+        for (Reservation r : allReservations) {
+            r.recap();
+            System.out.println("");
         }
     }
 }

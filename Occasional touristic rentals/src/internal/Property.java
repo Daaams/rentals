@@ -23,6 +23,7 @@ public class Property {
     private TypeProperty type;
     private Bid currentBid;
 
+
     /**
      * Constructor of the class Property
      * @param type the type of this property
@@ -120,6 +121,4 @@ public class Property {
     public String getName() {
         return name;
     }
-
-
 }
