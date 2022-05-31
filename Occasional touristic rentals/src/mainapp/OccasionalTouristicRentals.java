@@ -268,7 +268,7 @@ public class OccasionalTouristicRentals {
         System.out.println("5. Delete a property of my portfolio.");
         System.out.println("6. Change data of a property.");
         System.out.println("7. See my wallet.");
-        System.out.println("8. List bids on my properties");// à faire
+        System.out.println("8. List bids on my properties");
         System.out.println("9. Log out.");
         System.out.println("");
         askForEventOwners(ownerConnected);
@@ -474,8 +474,7 @@ public class OccasionalTouristicRentals {
                 ownerConnected.seeMyWallet();
                 break;
             case 8:
-                // à faire --> see bids on my properties
-                System.out.println("nothing for the moment");
+                ARR_ListBids(ownerConnected);
                 break;
             case 9:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
@@ -483,6 +482,13 @@ public class OccasionalTouristicRentals {
                 break;
             default:
                 System.err.println("Error: no such menu item.");
+        }
+    }
+
+    private void ARR_ListBids(Owner ownerConnected) {
+        for (Property property : ownerConnected.getProperties().keySet()) {
+            System.out.println("Property:" + property.getName()
+                    + " bids:" + ownerConnected.getProperties().get(property));
         }
     }
 
