@@ -22,6 +22,8 @@ public class Property {
     // associations
     private TypeProperty type;
     private Bid currentBid;
+    private boolean inAvailableList;
+
 
 
     /**
@@ -43,6 +45,7 @@ public class Property {
         this.maxOccupiers = maxOccupiers;
         isRented = false;
         currentBid = null;
+        inAvailableList = true;
     }
 
     /**
@@ -121,4 +124,10 @@ public class Property {
     public String getName() {
         return name;
     }
+
+    public void setAvailable(boolean b) {
+        inAvailableList = b;
+    }
+
+
 }

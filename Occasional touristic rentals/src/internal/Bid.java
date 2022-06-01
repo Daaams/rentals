@@ -28,6 +28,7 @@ public class Bid {
         nbPerson = p;
         nbNight = n;
         bidAmount = m;
+
     }
 
     public int getBidAmount() {
@@ -66,5 +67,12 @@ public class Bid {
 
     public String getNumberOfPeopleString() {
         return nbPerson + "";
+    }
+
+    /*
+    (p*n*m)/10 , rounded up to the next multiple of ten, where n the number of nights, p the number of occupiers, and m the price per night.
+     */
+    public int getPrice() {
+        return (nbPerson * nbNight * bidAmount) / 10;
     }
 }

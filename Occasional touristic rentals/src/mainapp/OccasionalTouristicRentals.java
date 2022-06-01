@@ -269,7 +269,8 @@ public class OccasionalTouristicRentals {
         System.out.println("7. See my wallet.");
         System.out.println("8. List bids on my properties");
         System.out.println("9. See all the reservations of my properties");
-        System.out.println("10. Log out.");
+        System.out.println("10. Remove a property of the list of available properties");
+        System.out.println("11. Log out.");
         System.out.println("");
         askForEventOwners(ownerConnected);
     }
@@ -497,13 +498,37 @@ public class OccasionalTouristicRentals {
                 break;
             case 9:
                 ARR_ListReservationOfMyProperties(ownerConnected);
+                break;
             case 10:
+                ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+            case 11:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
                 break;
             default:
                 System.err.println("Error: no such menu item.");
         }
+    }
+
+    private void ARR_RemovePropertyFromListOfAvailable(Owner ownerConnected) {
+        int nbProperty = 1;
+        for (Property property : ownerConnected.getProperties().keySet()) {
+            System.out.println(nbProperty + " : " + property.getName());
+            nbProperty++;
+        }
+        String str = readString();
+
+        try {
+            numberRead = Integer.parseInt(readString());
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+        }
+        if (numberRead > 0 && numberRead <= ownerConnected.getProperties().size()) {
+            Property property = (Property) ownerConnected.getProperties().keySet().toArray()[numberRead - 1];
+            property.setAvailable(false);
+        }
+
     }
 
     private void ARR_ListReservationOfMyProperties(Owner ownerConnected) {

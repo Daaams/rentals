@@ -30,36 +30,40 @@ public class Processing {
 
     /**
      * To get the list of users
+     *
      * @return an ArrayList
      */
     public ArrayList<Tenant> getAllTenants() {
         return allTenants;
     }
+
     public ArrayList<Owner> getAllOwners() {
         return allOwners;
     }
+
     public ArrayList<Admin> getAllAdmins() {
         return allAdmins;
     }
 
     /**
      * Create a new account according to the type of the account
+     *
      * @param personalInforations informations given by the user
-     * @param type the type of account to create
+     * @param type                the type of account to create
      */
     public void createAccount(ArrayList<String> personalInforations, TypeAccount type) {
-        if (type == TypeAccount.ADMINISTRATOR){
-            Admin u = new Admin(personalInforations.get(0), personalInforations.get(1), 
+        if (type == TypeAccount.ADMINISTRATOR) {
+            Admin u = new Admin(personalInforations.get(0), personalInforations.get(1),
                     personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allAdmins.add(u);
             allUsers.add(u);
-        }else if (type == TypeAccount.OWNER){
-            Owner u = new Owner(personalInforations.get(0), personalInforations.get(1), 
+        } else if (type == TypeAccount.OWNER) {
+            Owner u = new Owner(personalInforations.get(0), personalInforations.get(1),
                     personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allOwners.add(u);
             allUsers.add(u);
-        }else{
-            Tenant u = new Tenant(personalInforations.get(0), personalInforations.get(1), 
+        } else {
+            Tenant u = new Tenant(personalInforations.get(0), personalInforations.get(1),
                     personalInforations.get(2), personalInforations.get(3), personalInforations.get(4));
             allTenants.add(u);
             allUsers.add(u);
@@ -68,16 +72,16 @@ public class Processing {
 
     /**
      * Connect a tenant to the application
+     *
      * @param personalData data given by the tenant
      * @return the connected tenant
      */
     public User connectUser(ArrayList<String> personalData, TypeAccount type) {
         int i = 0;
         User connected = null;
-        while (i < allUsers.size() && connected == null){
+        while (i < allUsers.size() && connected == null) {
             User u = allUsers.get(i);
-            if (u.getLogin().equals(personalData.get(0)))
-            {
+            if (u.getLogin().equals(personalData.get(0))) {
                 connected = u;
             }
             i++;
@@ -87,47 +91,48 @@ public class Processing {
 
     /**
      * Tests if an account with the same personnal informations has already been created
+     *
      * @param personalData data of the user
-     * @param type the type of account of the user
+     * @param type         the type of account of the user
      * @return a boolean
      */
     public boolean testValidityAccount(ArrayList<String> personalData, TypeAccount type) {
         boolean nonValid = false;
         int i = 0;
         ArrayList<User> listO = new ArrayList<>(allUsers);
-            while (i < listO.size() && !nonValid){
-                User u = listO.get(i);
-                nonValid = testLogin(u, personalData, type) && testMail(u, personalData, type);
-                i++;
-            }
+        while (i < listO.size() && !nonValid) {
+            User u = listO.get(i);
+            nonValid = testLogin(u, personalData, type) && testMail(u, personalData, type);
+            i++;
+        }
         return nonValid;
     }
 
     /**
-     *
      * Tests if the login given during the account creation already exists
-     * @param u the user to compare
+     *
+     * @param u            the user to compare
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testLogin(User u, ArrayList<String> personalData, TypeAccount type){
+    private boolean testLogin(User u, ArrayList<String> personalData, TypeAccount type) {
         boolean test = u.getLogin().equals(personalData.get(0)) && u.getType().equals(type);
-        if (test){
+        if (test) {
             System.out.println("This login already exists, choose another one");
         }
         return test;
     }
 
     /**
-     *
      * Tests if the mail address given during the account creation already exists
-     * @param u the user to compare
+     *
+     * @param u            the user to compare
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
-    private boolean testMail(User u, ArrayList<String> personalData, TypeAccount type){
+    private boolean testMail(User u, ArrayList<String> personalData, TypeAccount type) {
         boolean test = u.getNickname().equals(personalData.get(4)) && u.getType().equals(type);
-        if (test){
+        if (test) {
             System.err.println("This mail already exists, choose another one");
         }
         return test;
@@ -135,8 +140,9 @@ public class Processing {
 
     /**
      * To add money into the Tenant's wallet
+     *
      * @param tenantConnected the tenant
-     * @param money money to add
+     * @param money           money to add
      */
     public void addMoneyOnWallet(Tenant tenantConnected, int money) {
         tenantConnected.depositMoney(money);
@@ -144,25 +150,29 @@ public class Processing {
 
     /**
      * To withdraw money of tenant's wallet
+     *
      * @param tenantConnected the tenant
-     * @param money money to withdraw
+     * @param money           money to withdraw
      */
-    public void withdrawMoneyOfWallet(Tenant tenantConnected, int money) {tenantConnected.withdrawMoney(money);}
+    public void withdrawMoneyOfWallet(Tenant tenantConnected, int money) {
+        tenantConnected.withdrawMoney(money);
+    }
 
     /**
      * Shows the data of the property
+     *
      * @param property the wanted property
      */
     public void consultDataOfAProperty(String property) {
-        for (Owner o: allOwners) {
+        for (Owner o : allOwners) {
             HashMap<Property, Price> p = o.getProperties();
-            for (Property pro: p.keySet()) {
-                if(pro.getNameProperty().equals(property)){
+            for (Property pro : p.keySet()) {
+                if (pro.getNameProperty().equals(property)) {
                     System.out.println(pro.toString());
-                    System.out.println("The type of the property is : "+pro.getTypeProperty());
-                    System.out.println("The max quantity of occupiers of the property : "+ pro.getMaxOccupiers());
-                    System.out.println("The nominal price : "+ p.get(pro).getThePrice());
-                    System.out.println("The description : "+pro.getDescription());
+                    System.out.println("The type of the property is : " + pro.getTypeProperty());
+                    System.out.println("The max quantity of occupiers of the property : " + pro.getMaxOccupiers());
+                    System.out.println("The nominal price : " + p.get(pro).getThePrice());
+                    System.out.println("The description : " + pro.getDescription());
                     System.out.println("");
                 }
             }
@@ -171,19 +181,21 @@ public class Processing {
 
     /**
      * Shows data of the user
+     *
      * @param userConnected the connected user
      */
     public void seeData(User userConnected) {
-        System.out.println("Name : "+ userConnected.getName());
-        System.out.println("Surname : "+ userConnected.getSurname());
-        System.out.println("Nickname : "+ userConnected.getNickname());
-        System.out.println("Mail : "+ userConnected.getMail());
+        System.out.println("Name : " + userConnected.getName());
+        System.out.println("Surname : " + userConnected.getSurname());
+        System.out.println("Nickname : " + userConnected.getNickname());
+        System.out.println("Mail : " + userConnected.getMail());
     }
 
     /**
      * Changes the name of the user
+     *
      * @param userConnected the connected user
-     * @param stringRead the new name
+     * @param stringRead    the new name
      */
     public void changeName(User userConnected, String stringRead) {
         userConnected.changeName(stringRead);
@@ -191,8 +203,9 @@ public class Processing {
 
     /**
      * Changes the surname of the user
+     *
      * @param userConnected the connected user
-     * @param stringRead the new surname
+     * @param stringRead    the new surname
      */
     public void changeSurname(User userConnected, String stringRead) {
         userConnected.changeSurname(stringRead);
@@ -200,8 +213,9 @@ public class Processing {
 
     /**
      * Changes the nickname of the user
+     *
      * @param userConnected the connected user
-     * @param stringRead the new nickname
+     * @param stringRead    the new nickname
      */
     public void changeNickname(User userConnected, String stringRead) {
         userConnected.changeNickname(stringRead);
@@ -209,8 +223,9 @@ public class Processing {
 
     /**
      * Changes the email address of the user
+     *
      * @param userConnected the connected user
-     * @param stringRead the new email address
+     * @param stringRead    the new email address
      */
     public void changeMail(User userConnected, String stringRead) {
         userConnected.changeMail(stringRead);
@@ -220,22 +235,25 @@ public class Processing {
      * Shows all users of the application
      */
     public void seeAllUsers() {
-        for (User u: allUsers) {System.out.println(u.toString() + "\n");}
+        for (User u : allUsers) {
+            System.out.println(u.toString() + "\n");
+        }
     }
 
     /**
      * Deletes an account according to given data
-     * @param accountData an array containing data of the account to delete
-     * @param type the type of the account
+     *
+     * @param accountData   an array containing data of the account to delete
+     * @param type          the type of the account
      * @param userConnected the administrator connected
      * @return true if the account is well deleted
      */
     public boolean deleteAccount(String accountData, TypeAccount type, User userConnected) {
-        switch (type){
+        switch (type) {
             case TENANT:
-                if (allTenants.size() == 0){
+                if (allTenants.size() == 0) {
                     System.err.println("There are no tenants.");
-                }else{
+                } else {
                     allTenants.remove(searchAccountTenant(accountData));
                     allUsers.remove(searchAccountTenant(accountData));
                     System.out.println("Deleted");
@@ -243,9 +261,9 @@ public class Processing {
                 }
                 break;
             case OWNER:
-                if (allOwners.size() == 0){
+                if (allOwners.size() == 0) {
                     System.err.println("There are no owners");
-                }else{
+                } else {
                     allOwners.remove(searchAccountOwner(accountData));
                     allUsers.remove(searchAccountOwner(accountData));
                     System.out.println("Deleted");
@@ -253,10 +271,10 @@ public class Processing {
                 }
                 break;
             case ADMINISTRATOR:
-                if (searchAccountAdmin(accountData) == userConnected){
+                if (searchAccountAdmin(accountData) == userConnected) {
                     System.err.println("You can't delete your account, you are connected");
                     return false;
-                }else{
+                } else {
                     allAdmins.remove(searchAccountAdmin(accountData));
                     allUsers.remove(searchAccountAdmin(accountData));
                     System.out.println("Deleted");
@@ -268,6 +286,7 @@ public class Processing {
 
     /**
      * Searches the account of the tenant among tenants of the application
+     *
      * @param login the login if the user
      * @return the corresponding tenant or null
      */
@@ -275,19 +294,20 @@ public class Processing {
         boolean found = false;
         int i = 0;
         Tenant tenant = null;
-        while (i < allTenants.size() && !found){
+        while (i < allTenants.size() && !found) {
             Tenant t = allTenants.get(i);
             if (t.getLogin().equals(login)) {
                 tenant = t;
                 found = true;
             }
-            i ++;
+            i++;
         }
         return tenant;
     }
 
     /**
      * Searches the account of the owner among owners of the application
+     *
      * @param login the login if the user
      * @return the corresponding owner or null
      */
@@ -295,19 +315,20 @@ public class Processing {
         boolean found = false;
         int i = 0;
         Owner owner = null;
-        while (i < allOwners.size() && !found){
+        while (i < allOwners.size() && !found) {
             Owner o = allOwners.get(i);
             if (o.getLogin().equals(login)) {
                 owner = o;
                 found = true;
             }
-            i ++;
+            i++;
         }
         return owner;
     }
 
     /**
      * Searches the account of the administrator among administrators of the application
+     *
      * @param login the login if the user
      * @return the corresponding administrator or null
      */
@@ -315,24 +336,25 @@ public class Processing {
         boolean found = false;
         int i = 0;
         Admin admin = null;
-        while (i < allAdmins.size() && !found){
+        while (i < allAdmins.size() && !found) {
             Admin a = allAdmins.get(i);
-            if (a.getLogin().equals(login)){
+            if (a.getLogin().equals(login)) {
                 admin = a;
                 found = true;
             }
-            i ++;
+            i++;
         }
         return admin;
     }
 
     /**
      * Shows all the property of the connected owner
+     *
      * @param ownerConnected the connected owner
      */
     public void seeMyProperties(Owner ownerConnected) {
         System.out.println("Properties : ");
-        for (Property p: ownerConnected.getProperties().keySet()) {
+        for (Property p : ownerConnected.getProperties().keySet()) {
             System.out.println(p.toString());
             System.out.println(p.getDescription());
         }
@@ -340,18 +362,19 @@ public class Processing {
 
     /**
      * Creates and Adds a property in the portfolio of the owner
+     *
      * @param ownerConnected the owner connected
-     * @param propertyData data of the property
-     * @param type the type of the property
-     * @param maxOccupiers the number maximum of occupiers
-     * @param nominalPrice the nominal price
+     * @param propertyData   data of the property
+     * @param type           the type of the property
+     * @param maxOccupiers   the number maximum of occupiers
+     * @param nominalPrice   the nominal price
      */
     public void addPropertyToThePortfolio(Owner ownerConnected, ArrayList<String> propertyData, TypeProperty type,
                                           int maxOccupiers, int nominalPrice) {
-        if (!testSameAddress(propertyData)){
+        if (!testSameAddress(propertyData)) {
             ownerConnected.addProperty(new Property(type, propertyData.get(0), propertyData.get(1), propertyData.get(2),
                     propertyData.get(3), maxOccupiers), new Price(nominalPrice));
-        }else{
+        } else {
             System.err.println("A property with the same address already exists.");
             System.err.println("The property has not been added.");
         }
@@ -359,13 +382,14 @@ public class Processing {
 
     /**
      * Tests if one of the properties of the application correspond to data given by the user
+     *
      * @param propertyData data of the property given by the user
      * @return a boolean
      */
-    private boolean testSameAddress(ArrayList<String> propertyData){
-        for (Owner o: allOwners) {
-            for (Property p: o.getProperties().keySet()) {
-                if (p.getTheCity().equals(propertyData.get(2)) && p.getAddressOfTheProperty().equals(propertyData.get(1))){
+    private boolean testSameAddress(ArrayList<String> propertyData) {
+        for (Owner o : allOwners) {
+            for (Property p : o.getProperties().keySet()) {
+                if (p.getTheCity().equals(propertyData.get(2)) && p.getAddressOfTheProperty().equals(propertyData.get(1))) {
                     return true;
                 }
             }
@@ -375,23 +399,26 @@ public class Processing {
 
     /**
      * Calculates the sum of all properties
+     *
      * @return the sum of all properties
      */
-    public int propertiesSum(){
+    public int propertiesSum() {
         int sum = 0;
-        for (Owner o: allOwners) {
+        for (Owner o : allOwners) {
             sum += o.getProperties().size();
         }
         return sum;
     }
+
     /**
      * Deletes a property of the portfolio of the owner
-     * @param ownerConnected the connected owner
+     *
+     * @param ownerConnected    the connected owner
      * @param dataOfTheProperty data of the property to delete
      */
     public boolean deletePropertyOwner(Owner ownerConnected, ArrayList<String> dataOfTheProperty) {
         Property p = findProperty(ownerConnected, dataOfTheProperty);
-        if (p != null){
+        if (p != null) {
             ownerConnected.deleteProperty(p);
             return true;
         }
@@ -400,13 +427,14 @@ public class Processing {
 
     /**
      * Deletes a property according to given data
+     *
      * @param answers data corresponding to the property to delete
      * @return a boolean
      */
     public boolean deletePropertyAdmin(ArrayList<String> answers) {
-        for (Owner o: allOwners) {
+        for (Owner o : allOwners) {
             boolean deleted = deletePropertyOwner(o, answers);
-            if (deleted){
+            if (deleted) {
                 return true;
             }
         }
@@ -417,7 +445,7 @@ public class Processing {
      * Prints all properties of the application
      */
     public void seeAllProperties() {
-        for (Owner o: allOwners) {
+        for (Owner o : allOwners) {
             System.out.println("Owner : " + o.getNickname());
             seeMyProperties(o);
         }
@@ -425,16 +453,17 @@ public class Processing {
 
     /**
      * find a property corresponding to the data given by the user
+     *
      * @param ownerConnected the connected owner
-     * @param data data of the property
+     * @param data           data of the property
      * @return the corresponding property
      */
-    public Property findProperty(Owner ownerConnected, ArrayList data){
+    public Property findProperty(Owner ownerConnected, ArrayList data) {
         Property property = null;
         for (Property p : ownerConnected.getProperties().keySet()) {
-            if (p.getNameProperty().equals(data.get(0))&&
-                    p.getAddressOfTheProperty().equals(data.get(1))&&
-                    p.getTheCity().equals(data.get(2))){
+            if (p.getNameProperty().equals(data.get(0)) &&
+                    p.getAddressOfTheProperty().equals(data.get(1)) &&
+                    p.getTheCity().equals(data.get(2))) {
                 property = p;
             }
         }
@@ -443,14 +472,15 @@ public class Processing {
 
     /**
      * Changes the description of a property
+     *
      * @param answers data of the property given by the user
      */
     public void changeDescription(ArrayList<String> answers) {
-        for (Owner o: allOwners) {
-            if (o.getNickname().equals(answers.get(3))){
+        for (Owner o : allOwners) {
+            if (o.getNickname().equals(answers.get(3))) {
                 Property p = findProperty(o, answers);
-                if (p != null ){
-                    p.changeDescription(answers.get(answers.size()-1));
+                if (p != null) {
+                    p.changeDescription(answers.get(answers.size() - 1));
                 }
             }
         }
@@ -458,7 +488,8 @@ public class Processing {
 
     /**
      * Changes the type of the property
-     * @param p the concerned property
+     *
+     * @param p       the concerned property
      * @param newType the new type of the property
      */
     public void changeTypeOfTheProperty(Property p, TypeProperty newType) {
@@ -467,7 +498,8 @@ public class Processing {
 
     /**
      * Changes the name of the property
-     * @param p the concerned property
+     *
+     * @param p       the concerned property
      * @param newName the new name of the property
      */
     public void changeNameOfTheProperty(Property p, String newName) {
@@ -476,7 +508,8 @@ public class Processing {
 
     /**
      * Changes the maximum of occupiers of the property
-     * @param p the concerned property
+     *
+     * @param p               the concerned property
      * @param newMaxOccupiers the new max occupiers of the property
      */
     public void changeTheNumberMaxOfOccupiers(Property p, int newMaxOccupiers) {
@@ -485,8 +518,9 @@ public class Processing {
 
     /**
      * Changes the maximum of occupiers of the property
-     * @param ownerConnected the connected owner
-     * @param p the concerned property
+     *
+     * @param ownerConnected  the connected owner
+     * @param p               the concerned property
      * @param newNominalPrice the new max occupiers of the property
      */
     public void changeNominalPrice(Owner ownerConnected, Property p, int newNominalPrice) {
@@ -495,20 +529,20 @@ public class Processing {
 
     public Property PropertyExist(String stringRead) {
         Property property = null;
-            for ( Owner o : allOwners ){
-                for ( Property p : o.getProperties().keySet()){
-                    if (p.getNameProperty().equals(stringRead)) {
-                        return p;
-                    }
+        for (Owner o : allOwners) {
+            for (Property p : o.getProperties().keySet()) {
+                if (p.getNameProperty().equals(stringRead)) {
+                    return p;
                 }
             }
+        }
         return property;
     }
 
     public Owner findOwner(Property property) {
         Owner owner = null;
-        for (Owner o: allOwners) {
-            if (o.getProperties().containsKey(property)){
+        for (Owner o : allOwners) {
+            if (o.getProperties().containsKey(property)) {
                 owner = o;
             }
         }
@@ -522,13 +556,13 @@ public class Processing {
         allBids.add(theBid);
     }
 
-    public int winningBidSum(Tenant tenantConnected){
+    public int winningBidSum(Tenant tenantConnected) {
         int sum = 0;
-        for (Bid b: tenantConnected.getMyBids()) {
-            for (Owner o: allOwners) {
-                for (Property p: o.getProperties().keySet()) {
-                    if (p.getCurrentBid().equals(b)){
-                        sum+= p.getCurrentBid().bidAmount;
+        for (Bid b : tenantConnected.getMyBids()) {
+            for (Owner o : allOwners) {
+                for (Property p : o.getProperties().keySet()) {
+                    if (p.getCurrentBid().equals(b)) {
+                        sum += p.getCurrentBid().bidAmount;
                     }
                 }
             }
@@ -539,7 +573,7 @@ public class Processing {
     public Property seeTheHighestBid() {
         int maxBid = 0;
         Property property = null;
-        for ( Bid b : allBids ){
+        for (Bid b : allBids) {
             if (b.getBidAmount() > maxBid) {
                 maxBid = b.getBidAmount();
                 property = b.getProperty();
@@ -551,7 +585,7 @@ public class Processing {
     public Property seeTheHighestBidForAMonth(int month) {
         int maxBid = 0;
         Property property = null;
-        for (Bid b: allBids) {
+        for (Bid b : allBids) {
             if (b.getBidAmount() > maxBid && b.getMonth() == month) {
                 maxBid = b.getBidAmount();
                 property = b.getProperty();
@@ -562,7 +596,7 @@ public class Processing {
 
 
     public void listAllBids() {
-        for (Bid b: allBids) {
+        for (Bid b : allBids) {
             System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString());
         }
     }
@@ -601,49 +635,81 @@ public class Processing {
                             b.getProperty(), b.getMonth(), b);
                     b.getTenant().createNewReservation(reservation);
                     allReservations.add(reservation);
+                    for (Owner o : allOwners) {
+                        for (Property p : o.getProperties().keySet()) {
+                            if (p.equals(b.getProperty())) {
+                                if (b.getBidAmount() >= o.getProperties().get(p).getThePrice()) {
+                                    // add 100% of the nominal price + 75% of the rest of the bid
+                                    o.addMoney(o.getProperties().get(p).getThePrice()
+                                            + (int)((b.getBidAmount()-o.getProperties().get(p).getThePrice())*0.75));
+                                }
+                                else {
+                                    // add only 80% the nominal price
+                                    o.addMoney((int)(o.getProperties().get(p).getThePrice()*0.8));
+                                }
+                            }
+                        }
+                    }
+
                 }
                 else {
                     b.getTenant().depositMoney(-1);
                 }
             }
-        }
-    }
-
-    public void seeAllBidClosed(Tenant tenantConnected) {
-        for (Bid b : tenantConnected.getMyBids()) {
-            if (b.isClosed()) {
-                if (b.getProperty().getCurrentBid().equals(b.bidAmount)) {
-                    System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " WIN ");
-                }
-                else {
-                    System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " LOSE ");
+            for (Owner o : allOwners) {
+                for (Property p : o.getProperties().keySet()) {
+                    Boolean haveBid = false;
+                    for (Bid b2 : allBids) {
+                        if (b2.getProperty().equals(p)) {
+                            haveBid = true;
+                        }
+                    }
+                    if (!haveBid) {
+                        o.addMoney(-10);
+                    }
                 }
             }
         }
     }
 
-    public void seeAllReservations(Tenant tenantConnected) {
-        for (Reservation r : tenantConnected.getMyReservations()) {
-            r.recap();
-            System.out.println("");
+        public void seeAllBidClosed (Tenant tenantConnected){
+            for (Bid b : tenantConnected.getMyBids()) {
+                if (b.isClosed()) {
+                    if (b.getProperty().getCurrentBid().equals(b.bidAmount)) {
+                        System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " WIN ");
+                    } else {
+                        System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " LOSE ");
+                    }
+                }
+            }
         }
-    }
 
-    public void listAllReservationsOfMyProperties(Owner ownerConnected) {
-        for (Property p : ownerConnected.getMyProperties()) {
+        public void seeAllReservations(Tenant tenantConnected){
+            for (Reservation r : tenantConnected.getMyReservations()) {
+                r.recap();
+                System.out.println("");
+            }
+        }
+
+        public void listAllReservationsOfMyProperties(Owner ownerConnected){
+            for (Property p : ownerConnected.getMyProperties()) {
+                for (Reservation r : allReservations) {
+                    if (r.getProperty().equals(p)) {
+                        r.recap();
+                        System.out.println("Mail : " + r.getTenant().getMail());
+                        System.out.println("");
+                    }
+                }
+            }
+        }
+
+        public void listAllReservation() {
             for (Reservation r : allReservations) {
-                if (r.getProperty().equals(p)) {
-                    r.recap();
-                    System.out.println("");
-                }
+                r.recap();
+                System.out.println("");
             }
         }
+
     }
 
-    public void listAllReservation() {
-        for (Reservation r : allReservations) {
-            r.recap();
-            System.out.println("");
-        }
-    }
-}
+

@@ -64,4 +64,8 @@ public class Owner extends User{
         }
         return myProperties;
     }
+
+    public void addMoney(int bidAmount) {
+        virtualWallet += bidAmount;
+    }
 }
