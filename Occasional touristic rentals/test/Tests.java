@@ -3,9 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
 
-import internal.Price;
-import internal.Processing;
-import internal.Property;
+import internal.*;
 import org.junit.Test;
 import userdata.*;
 
@@ -157,7 +155,7 @@ public class Tests {
      * Tests if a property is well added to the owner's portfolio
      */
     @Test
-    public void addPropertyTest(){
+    public void ropertyTest(){
         ArrayList<Owner> owners = process.getAllOwners();
         owners.add(new Owner("login", "surname", "name", "nick","email"));
         owners.get(0).addProperty(new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10), new Price(200));
@@ -202,6 +200,9 @@ public class Tests {
         assertTrue(p.getDescription().equals("theNewDesc"));
     }
 
+    /**
+     * Tests if a property exists
+     */
     @Test
     public void propertyExistsTest(){
         ArrayList<Owner> owners = process.getAllOwners();
@@ -212,8 +213,11 @@ public class Tests {
         assertFalse(process.propertyExist("theProperty") == p);
     }
 
+    /**
+     * Tests if a bid has been well created
+     */
     @Test
-    public void createBid(){
+    public void createBidTest(){
         Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
         process.getAllTenants().add(t);
         t.depositMoney(200);
@@ -225,8 +229,11 @@ public class Tests {
         assertTrue(process.getAllbids().size() == 1);
     }
 
+    /**
+     * Tests if an owner is found thanks to a Property
+     */
     @Test
-    public void findOwner(){
+    public void findOwnerTest(){
         ArrayList<Owner> owners = process.getAllOwners();
         Owner o = new Owner("login", "surname", "name", "nick","email");
         owners.add(o);
@@ -235,7 +242,112 @@ public class Tests {
         Owner o2 = new Owner("login2", "surname2", "name2", "nick2","email2");
         owners.add(o2);
         Property p2 = new Property(TypeProperty.HOMESTEAD, "TheProperty2", "TheAddress2", "TheCity2", "TheDesc2", 10);
-        owners.get(0).addProperty(p2, new Price(2));
-        assertTrue(process.findOwner(p2) == o2);
+        owners.get(1).addProperty(p2, new Price(2));
+        assertTrue(process.findOwner(p2).equals(o2));
     }
+
+    /**
+     * Tests if a tenant is found thanks to the name of the owner
+     */
+    @Test
+    public void searchAccountTenantTest(){
+        ArrayList<String> account1 = new ArrayList<>();
+        account1.add("login");
+        account1.add("surname");
+        account1.add("name");
+        account1.add("nick");
+        account1.add("email");
+
+        ArrayList<String> account2 = new ArrayList<>();
+        account2.add("login2");
+        account2.add("surname2");
+        account2.add("name2");
+        account2.add("nick2");
+        account2.add("email2");
+
+        process.createAccount(account1, TypeAccount.TENANT);
+        process.createAccount(account2,TypeAccount.TENANT);
+
+        assertTrue( process.searchAccountTenant("login") == process.getAllTenants().get(0));
+    }
+
+    /**
+     * Tests if an owner is found thanks to the name of the owner
+     */
+    @Test
+    public void searchAccountOwnerTest(){
+        ArrayList<String> account1 = new ArrayList<>();
+        account1.add("login");
+        account1.add("surname");
+        account1.add("name");
+        account1.add("nick");
+        account1.add("email");
+
+        ArrayList<String> account2 = new ArrayList<>();
+        account2.add("login2");
+        account2.add("surname2");
+        account2.add("name2");
+        account2.add("nick2");
+        account2.add("email2");
+
+        process.createAccount(account1, TypeAccount.OWNER);
+        process.createAccount(account2,TypeAccount.OWNER);
+
+        assertTrue( process.searchAccountOwner("login2") == process.getAllOwners().get(1));
+        assertTrue( process.searchAccountOwner("login3") == null);
+    }
+
+    /**
+     * Tests if an admin is found thanks to the name of the owner
+     */
+    @Test
+    public void searchAccountAdminTest(){
+        ArrayList<String> account1 = new ArrayList<>();
+        account1.add("login");
+        account1.add("surname");
+        account1.add("name");
+        account1.add("nick");
+        account1.add("email");
+
+        ArrayList<String> account2 = new ArrayList<>();
+        account2.add("login2");
+        account2.add("surname2");
+        account2.add("name2");
+        account2.add("nick2");
+        account2.add("email2");
+
+        process.createAccount(account1, TypeAccount.ADMINISTRATOR);
+        process.createAccount(account2,TypeAccount.ADMINISTRATOR);
+
+        assertTrue( process.searchAccountAdmin("login") == process.getAllAdmins().get(0));
+    }
+
+    /**
+     * Tests if a property is available for the rent
+     */
+    @Test
+    public void setAvailablePropertyTest(){
+        ArrayList<Owner> owners = process.getAllOwners();
+        Owner o = new Owner("login", "surname", "name", "nick","email");
+        owners.add(o);
+        Property p = new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10);
+        owners.get(0).addProperty(p, new Price(2));
+        assertTrue(p.isAvailable());
+        p.setAvailable(false);
+        assertFalse(p.isAvailable());
+    }
+
+    /**
+     * Tests if a reservation is well created
+     */
+    @Test
+    public void createReservationTest(){
+        Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
+        Property p = new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10);
+        process.createBid(t, p, 12, 2, 2, 20);
+        assertTrue(process.getAllReservations().size() == 0);
+        process.getAllReservations().add(new Reservation(t, p, 1, process.getAllbids().get(0)));
+        assertTrue(process.getAllReservations().size() == 1);
+    }
+
 }
