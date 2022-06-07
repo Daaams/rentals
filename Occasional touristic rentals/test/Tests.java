@@ -6,7 +6,7 @@
 import internal.Price;
 import internal.Processing;
 import internal.Property;
-import org.testng.annotations.Test;
+import org.junit.Test;
 import userdata.*;
 
 import java.util.ArrayList;
