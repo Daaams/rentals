@@ -132,7 +132,7 @@ public class OccasionalTouristicRentals {
     private void ARR_Connection() {
         TypeAccount type = askType();
         String[] questions = {"What's your login ?"};
-        User userConnected = process.connectUser(takeData(questions),TypeAccount.TENANT);
+        User userConnected = process.connectUser(takeData(questions), type);
         
         if (userConnected != null) { someoneConnected = true; }
         else { displayErrorMessageConnection(); }
@@ -209,8 +209,8 @@ public class OccasionalTouristicRentals {
         System.out.println("0. Administrator.");
         System.out.println("1. Owner.");
         System.out.println("2. Tenant.");
-        askForInt("Which type of account ?");
-        switch (numberRead) {
+        int number = askForInt("Which type of account ?");
+        switch (number) {
             case 0:
                 type = TypeAccount.ADMINISTRATOR;
                 break;
@@ -352,6 +352,7 @@ public class OccasionalTouristicRentals {
                 break;
             case 13:
                 ARR_ListAllMyReservations(tenantConnected);
+                break;
             case 14:
                 System.err.println(tenantConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
@@ -362,7 +363,11 @@ public class OccasionalTouristicRentals {
     }
 
     private void ARR_ListAllMyReservations(Tenant tenantConnected) {
-        process.seeAllReservations(tenantConnected);
+        if (new ExistsAtLeastOneReservation().test(process.getAllReservations())){
+            process.seeAllReservations(tenantConnected);
+        }else{
+            System.err.println("No reservations yet");
+        }
     }
 
     private void ARR_SeeAllBidClosedWinAndLose(Tenant tenantConnected) {
@@ -462,24 +467,18 @@ public class OccasionalTouristicRentals {
                 process.seeMyProperties(ownerConnected);
                 break;
             case 4:
-                ArrayList<String> questions = new ArrayList<>();
-                questions.add("The name of the property :");
-                questions.add("The address of the property :");
-                questions.add("The city :");
-                questions.add("Description :");
-                process.addPropertyToThePortfolio(ownerConnected, ARR_AskDataForProperty(questions),
+                String[] questions = {"The name of the property :", "The address of the property :", "The city :",
+                        "Description :"};
+                process.addPropertyToThePortfolio(ownerConnected, takeData(questions),
                         askTypeOfTheProperty(), askForInt("What is the number max of occupiers ?"),
                         askForInt("What is the number nominal price ?"));
                 break;
             case 5:
-                ArrayList<String> questions2 = new ArrayList<>();
-                questions2.add("The name of the property :");
-                questions2.add("The address of the property :");
-                questions2.add("The city :");
+                String[] questions2 = {"The name of the property :", "The address of the property :", "The city :"};
                 if (ownerConnected.getProperties().size() == 0){
                     System.out.println("There is no properties in my portfolio.");
                 }else{
-                    boolean deleted = process.deletePropertyOwner(ownerConnected, ARR_AskDataForProperty(questions2));
+                    boolean deleted = process.deletePropertyOwner(ownerConnected, takeData(questions2));
                     if (deleted){
                         System.out.println("It has been deleted");
                     }else{
@@ -565,11 +564,9 @@ public class OccasionalTouristicRentals {
      * @param ownerConnected the connected owner
      */
     private void changeDataOfAProperty(Owner ownerConnected) {
+        String [] questions = {"The name of the property :", "The address of the property :", "The city :"};
         ArrayList<String> questions2 = new ArrayList<>();
-        questions2.add("The name of the property :");
-        questions2.add("The address of the property :");
-        questions2.add("The city :");
-        dataToChange(ownerConnected, ARR_AskDataForProperty(questions2));
+        dataToChange(ownerConnected, takeData(questions));
     }
 
     /**
@@ -720,20 +717,6 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Event for craation of a property
-     * @param questions questions to ask for collecting data
-     * @return an Arraylist containing data entered
-     */
-    private ArrayList<String> ARR_AskDataForProperty(ArrayList<String> questions) {
-        ArrayList<String> propertyData = new ArrayList<>();
-        for (int i = 0; i < questions.size(); i ++){
-            System.out.println(questions.get(i));
-            propertyData.add(readString());
-        }
-        return propertyData;
-    }
-
-    /**
      * Triggers the event selected by the user connected as administrator
      * @param adminConnected the connected administrator
      */
@@ -834,18 +817,22 @@ public class OccasionalTouristicRentals {
      * Event for changing the description of a property
      */
     private void ARR_ChangeDescriptionOfProperty() {
-        System.out.println("Do you want to see data of all properties before ? (yes / no)");
-        String str = readString();
-        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
-                "In which city is located the property ?", "What is the nickname of the owner ?", "What is the new description ?"};
-        if (str.equals("yes")) {
-            process.seeAllProperties();
-            changeDescription(takeData(questions));
-        } else if (str.equals("no")) {
-            changeDescription(takeData(questions));
+        if (process.propertiesSum() == 0){
+            System.err.println("There is no properties in the application");
         }else{
-            System.err.println("I did not understand your answer");
-            ARR_ChangeDescriptionOfProperty();
+            System.out.println("Do you want to see data of all properties before ? (yes / no)");
+            String str = readString();
+            String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
+                    "In which city is located the property ?", "What is the nickname of the owner ?", "What is the new description ?"};
+            if (str.equals("yes")) {
+                process.seeAllProperties();
+                changeDescription(takeData(questions));
+            }else if (str.equals("no")){
+                changeDescription(takeData(questions));
+            }else{
+                System.err.println("I did not understand your answer");
+                ARR_ChangeDescriptionOfProperty();
+            }
         }
     }
 
@@ -863,7 +850,7 @@ public class OccasionalTouristicRentals {
     private void ARR_DeleteProperty() {
         int sumProperties = process.propertiesSum();
         if (sumProperties == 0){
-            System.out.println("There is no properties in the application");
+            System.err.println("There is no properties in the application");
         }else{
             System.out.println("Do you want to see all properties before ? (yes / no)");
             String str = readString();
@@ -885,12 +872,12 @@ public class OccasionalTouristicRentals {
     private void deleteProperty() {
         String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
         "In which city is located the property ?"};
-        ArrayList<String> answers = new ArrayList<>();
+        /*ArrayList<String> answers = new ArrayList<>();
         for (int i = 0; i < questions.length; i ++){
             System.out.println(questions[i]);
             answers.add(readString());
-        }
-        boolean deleted = process.deletePropertyAdmin(answers);
+        }*/
+        boolean deleted = process.deletePropertyAdmin(takeData(questions));
         if (deleted){
             System.out.println("It has been deleted");
         }else{
@@ -976,14 +963,12 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Asks data about a person
-     * @return an array containing the data
+     * Asks the login about a person
+     * @return a String containing the login
      */
     private String askForAccount() {
-        String question = "The login of the person :";
-        System.out.println(question);
-        String account = readString();
-        return account;
+        System.out.println("The login of the person :");
+        return readString();
     }
 
     /**
@@ -1028,16 +1013,17 @@ public class OccasionalTouristicRentals {
             }
             process.createBid(tenantConnected, property, month, people, nights, bid);
         }else if (property.getCurrentBid() == null){
-            people = askForInt("How many People ? (between 0 and" + property.getMaxOccupiers() + ").");
-            if (people < 0 && people > property.getMaxOccupiers()){
-                people = askForInt("How many People ? (between 0 and" + property.getMaxOccupiers() + ").");
+            people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
+            while (people < 1 || people > property.getMaxOccupiers()){
+                people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
             }
             nights = askForInt("How many nights ? (between 1 and 10).");
-            if (nights < 1 || nights > 10){
+            while (nights < 1 || nights > 10){
                 System.err.println("Please for legal reasons the number of night is between 1 and 10.");
                 nights = askForInt("How many nights ?");
             }
             Owner o = process.findOwner(property);
+            System.out.println(o.getName());
             System.out.println("No current bid. The amount is : " + (people*nights*o.getProperties().get(property).getThePrice())/10);
             if (checksBid((people*nights*o.getProperties().get(property).getThePrice()/10), tenantConnected.getVirtualWallet())){
                 bid = askForInt("Enter this bid to confirm");
@@ -1046,6 +1032,9 @@ public class OccasionalTouristicRentals {
                 }else{
                     System.err.println("This bid has not been created");
                 }
+            }else{
+                System.err.println("This is the amount of your wallet : " + tenantConnected.getVirtualWallet());
+                System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
             }
         }else{
             System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
@@ -1072,9 +1061,10 @@ public class OccasionalTouristicRentals {
         System.out.println("11. November");
         System.out.println("12. December");
         month = askForInt("What is your choice ?");
+
         if (month <= 0 && month > 12){
-            System.err.println("Choose a month between 1 and 12");
-            chooseMonth();
+        System.err.println("Choose a month between 1 and 12");
+        chooseMonth();
         }
         return month;
     }

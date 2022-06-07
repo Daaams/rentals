@@ -45,6 +45,8 @@ public class Processing {
         return allAdmins;
     }
 
+    public ArrayList<Reservation> getAllReservations() {return allReservations;}
+
     /**
      * Create a new account according to the type of the account
      *
@@ -72,15 +74,23 @@ public class Processing {
 
     /**
      * Connect a tenant to the application
-     *
      * @param personalData data given by the tenant
+     * @param type the type of account
      * @return the connected tenant
      */
     public User connectUser(ArrayList<String> personalData, TypeAccount type) {
         int i = 0;
         User connected = null;
-        while (i < allUsers.size() && connected == null) {
-            User u = allUsers.get(i);
+        ArrayList<User> usersList;
+        if (type == TypeAccount.ADMINISTRATOR){
+            usersList = new ArrayList<>(allAdmins);
+        }else if (type == TypeAccount.TENANT){
+            usersList = new ArrayList<>(allTenants);
+        }else{
+            usersList = new ArrayList<>(allOwners);
+        }
+        while (i < usersList.size() && connected == null) {
+            User u = usersList.get(i);
             if (u.getLogin().equals(personalData.get(0))) {
                 connected = u;
             }
@@ -93,15 +103,22 @@ public class Processing {
      * Tests if an account with the same personnal informations has already been created
      *
      * @param personalData data of the user
-     * @param type         the type of account of the user
+     * @param type the type of account of the user
      * @return a boolean
      */
     public boolean testValidityAccount(ArrayList<String> personalData, TypeAccount type) {
         boolean nonValid = false;
         int i = 0;
-        ArrayList<User> listO = new ArrayList<>(allUsers);
-        while (i < listO.size() && !nonValid) {
-            User u = listO.get(i);
+        ArrayList<User> usersList;
+        if (type == TypeAccount.ADMINISTRATOR){
+            usersList = new ArrayList<>(allAdmins);
+        }else if (type == TypeAccount.TENANT){
+            usersList = new ArrayList<>(allTenants);
+        }else{
+            usersList = new ArrayList<>(allOwners);
+        }
+        while (i < usersList.size() && !nonValid) {
+            User u = usersList.get(i);
             nonValid = testLogin(u, personalData, type) && testMail(u, personalData, type);
             i++;
         }
@@ -111,7 +128,7 @@ public class Processing {
     /**
      * Tests if the login given during the account creation already exists
      *
-     * @param u            the user to compare
+     * @param u the user to compare
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
@@ -126,7 +143,7 @@ public class Processing {
     /**
      * Tests if the mail address given during the account creation already exists
      *
-     * @param u            the user to compare
+     * @param u the user to compare
      * @param personalData data given by the user wanted to create an account
      * @return a boolean
      */
@@ -709,7 +726,6 @@ public class Processing {
                 System.out.println("");
             }
         }
-
     }
 
 

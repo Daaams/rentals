@@ -29,7 +29,7 @@ public class Tenant extends User{
     public Tenant(String login, String surname, String name, String nick, String email){
         super(login, surname, name, nick, email, TypeAccount.TENANT);
         virtualWallet = 0;
-        myBids = new HashSet<Bid>();
+        myBids = new HashSet<>();
     }
 
     /**
