@@ -318,7 +318,11 @@ public class OccasionalTouristicRentals {
                 System.out.println("It has been added");
                 break;
             case 2:
-                process.withdrawMoneyOfWallet(tenantConnected, askForMoney());
+                if (tenantConnected.getVirtualWallet() == 0){
+                    System.err.println("You have no more money");
+                }else{
+                    process.withdrawMoneyOfWallet(tenantConnected, askForMoney());
+                }
                 break;
             case 3:
                 process.seeData(tenantConnected);
@@ -376,21 +380,21 @@ public class OccasionalTouristicRentals {
 
     private void ARR_SeeTheHighestBidForAMonth() {
         int month = chooseMonth();
-        Property highBidOfMonth = process.seeTheHighestBidForAMonth(month);
-        System.out.println("The highest bid for the month is " + highBidOfMonth.getName()
-                + " with " + highBidOfMonth.getCurrentBid().getBidAmount() + " euros");
+        process.seeTheHighestBidForAMonth(month);
     }
 
 
     private void ARR_SeeTheHighestBid() {
-        Property highBid = process.seeTheHighestBid();
-        System.out.println("The highest bid is " + highBid.getName() + " for " + highBid.getCurrentBid().getBidAmount()
-                + " euros");
+        process.seeTheHighestBid();
     }
 
     private void ARR_SeeAllMyBid(Tenant tenantConnected) {
-        for (Bid b : tenantConnected.getMyBids()) {
-            System.out.println(b.toString());
+        if (tenantConnected.getMyBids().size() == 0){
+            System.err.println("No bids");
+        }else{
+            for (Bid b : tenantConnected.getMyBids()) {
+                System.out.println(b.toString());
+            }
         }
     }
 

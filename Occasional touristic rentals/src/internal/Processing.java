@@ -592,28 +592,38 @@ public class Processing {
         return sum;
     }
 
-    public Property seeTheHighestBid() {
+    public void seeTheHighestBid() {
         int maxBid = 0;
-        Property property = null;
-        for (Bid b : allBids) {
-            if (b.getBidAmount() > maxBid) {
-                maxBid = b.getBidAmount();
-                property = b.getProperty();
+        if (allBids.size() == 0){
+            System.err.println("No bids yet");
+        }else{
+            Property property = null;
+            for (Bid b : allBids) {
+                if (b.getBidAmount() > maxBid) {
+                    maxBid = b.getBidAmount();
+                    property = b.getProperty();
+                }
             }
+            System.out.println("The highest bid is " + property.getName() + " for " + property.getCurrentBid().getBidAmount()
+                    + " euros");
         }
-        return property;
     }
 
-    public Property seeTheHighestBidForAMonth(int month) {
+    public void seeTheHighestBidForAMonth(int month) {
         int maxBid = 0;
-        Property property = null;
-        for (Bid b : allBids) {
-            if (b.getBidAmount() > maxBid && b.getMonth() == month) {
-                maxBid = b.getBidAmount();
-                property = b.getProperty();
+        if (allBids.size() == 0){
+            System.err.println("No bids yet");
+        }else{
+            Property property = null;
+            for (Bid b : allBids) {
+                if (b.getBidAmount() > maxBid && b.getMonth() == month) {
+                    maxBid = b.getBidAmount();
+                    property = b.getProperty();
+                }
             }
+            System.out.println("The highest bid for the month is " + property.getName()
+                    + " with " + property.getCurrentBid().getBidAmount() + " euros");
         }
-        return property;
     }
 
 
@@ -695,12 +705,16 @@ public class Processing {
     }
 
         public void seeAllBidClosed (Tenant tenantConnected){
-            for (Bid b : tenantConnected.getMyBids()) {
-                if (b.isClosed()) {
-                    if (b.getProperty().getCurrentBid().equals(b.bidAmount)) {
-                        System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " WIN ");
-                    } else {
-                        System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " LOSE ");
+            if (tenantConnected.getMyBids().size() == 0){
+                System.err.println("You have not any bids");
+            }else{
+                for (Bid b : tenantConnected.getMyBids()) {
+                    if (b.isClosed()) {
+                        if (b.getProperty().getCurrentBid().equals(b.bidAmount)) {
+                            System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " WIN ");
+                        } else {
+                            System.out.println("Property : " + b.property.getName() + " bid : " + b.getPriceString() + " LOSE ");
+                        }
                     }
                 }
             }
