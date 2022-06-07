@@ -116,11 +116,6 @@ public class Property {
 
     public void setBid(Bid theBid){currentBid = theBid;}
 
-    @Override
-    public String toString(){
-        return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+" is a "+ type+".";
-    }
-
     public String getName() {
         return name;
     }
@@ -129,5 +124,11 @@ public class Property {
         inAvailableList = b;
     }
 
+    public boolean isAvailable(){return inAvailableList;}
+
+    @Override
+    public String toString(){
+        return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+" is a "+ type+".";
+    }
 
 }

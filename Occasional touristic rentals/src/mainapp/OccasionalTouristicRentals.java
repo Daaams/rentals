@@ -8,6 +8,7 @@ import internal.*;
 import userdata.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -504,6 +505,7 @@ public class OccasionalTouristicRentals {
                 break;
             case 10:
                 ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+                break;
             case 11:
                 System.err.println(ownerConnected.getNickname() + ", you have been disconnected");
                 someoneConnected = false;
@@ -514,24 +516,23 @@ public class OccasionalTouristicRentals {
     }
 
     private void ARR_RemovePropertyFromListOfAvailable(Owner ownerConnected) {
-        int nbProperty = 1;
+        ArrayList<Property> availableProperties = new ArrayList<>();
         for (Property property : ownerConnected.getProperties().keySet()) {
-            System.out.println(nbProperty + " : " + property.getName());
-            nbProperty++;
+            if (property.isAvailable()){
+                availableProperties.add(property);
+                System.out.println(availableProperties.size() + " : " + property.getName());
+            }
         }
-        String str = readString();
-
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+        if (availableProperties.size() == 0){
+            System.err.println("No properties in the available list");
+        }else{
+            int numP = askForInt("Choose a property between 1 and " + availableProperties.size());
+            if (numP > 0 && numP <= ownerConnected.getProperties().size()) {
+                availableProperties.get(numP-1).setAvailable(false);
+            }else{
+                ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+            }
         }
-        if (numberRead > 0 && numberRead <= ownerConnected.getProperties().size()) {
-            Property property = (Property) ownerConnected.getProperties().keySet().toArray()[numberRead - 1];
-            property.setAvailable(false);
-        }
-
     }
 
     private void ARR_ListReservationOfMyProperties(Owner ownerConnected) {

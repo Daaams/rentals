@@ -728,12 +728,17 @@ public class Processing {
         }
 
         public void listAllReservationsOfMyProperties(Owner ownerConnected){
-            for (Property p : ownerConnected.getMyProperties()) {
-                for (Reservation r : allReservations) {
-                    if (r.getProperty().equals(p)) {
-                        r.recap();
-                        System.out.println("Mail : " + r.getTenant().getMail());
-                        System.out.println("");
+            // à revoir avec les reservations
+            if (allReservations.size() == 0){
+                System.err.println("No reservation yet");
+            }else{
+                for (Property p : ownerConnected.getMyProperties()) {
+                    for (Reservation r : allReservations) {
+                        if (r.getProperty().equals(p)) {
+                            r.recap();
+                            System.out.println("Mail : " + r.getTenant().getMail());
+                            System.out.println("");
+                        }
                     }
                 }
             }
