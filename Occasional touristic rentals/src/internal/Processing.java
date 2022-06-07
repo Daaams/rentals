@@ -61,6 +61,13 @@ public class Processing {
     public ArrayList<Reservation> getAllReservations() {return allReservations;}
 
     /**
+     * To get the list of all bids
+     * @return an ArrayList
+     */
+    public ArrayList<Bid> getAllbids() {return allBids;}
+
+
+    /**
      * Create a new account according to the type of the account
      *
      * @param personalData data given by the user
@@ -604,7 +611,7 @@ public class Processing {
      * @param propertyName the name of the property
      * @return a Property object
      */
-    public Property PropertyExist(String propertyName) {
+    public Property propertyExist(String propertyName) {
         Property property = null;
         for (Owner o : allOwners) {
             for (Property p : o.getProperties().keySet()) {
