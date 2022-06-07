@@ -18,7 +18,6 @@ import java.util.Scanner;
 public class OccasionalTouristicRentals {
 
     private boolean waitingForString;
-    private int numberRead;
     private Scanner scan;
     private boolean quit;
     private Processing process;
@@ -193,13 +192,8 @@ public class OccasionalTouristicRentals {
         System.out.println("5. Homestead");
         System.out.println("");
         TypeProperty type = null;
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askTypeOfTheProperty();
-        }
-        switch (numberRead) {
+        int typePro = askForInt("Your choice ?");
+        switch (typePro) {
             case 1:
                 type = TypeProperty.HOUSE;
                 break;
@@ -271,7 +265,6 @@ public class OccasionalTouristicRentals {
         System.out.println("1. Create an account");
         System.out.println("2. Connection");
         System.out.println("");
-        System.out.println("What do you want to do?");
     }
 
     /**
@@ -281,7 +274,7 @@ public class OccasionalTouristicRentals {
         if (!waitingForString) {
             firstPrompt();
         }
-        int number = askForInt("Your choice ?");
+        int number = askForInt("What do you want to do?");
         switch (number) {
             case 0:
                 ARR_Quit();
@@ -682,13 +675,8 @@ public class OccasionalTouristicRentals {
      * @param ownerConnected the connected owner
      */
     private void askForEventOwners(Owner ownerConnected) {
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askForEventOwners(ownerConnected);
-        }
-        switch (numberRead) {
+        int event = askForInt("Your choice ?");
+        switch (event) {
             case 1:
                 process.seeData(ownerConnected);
                 break;
@@ -937,13 +925,8 @@ public class OccasionalTouristicRentals {
      * @param adminConnected the connected administrator
      */
     private void askForEventAdmins(Admin adminConnected) {
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askForEventAdmins(adminConnected);
-        }
-        switch (numberRead) {
+        int choice = askForInt("Your choice ?");
+        switch (choice) {
             case 1:
                 process.seeData(adminConnected);
                 break;
@@ -1109,14 +1092,8 @@ public class OccasionalTouristicRentals {
      * Event for listing bids depending on an amount
      */
     private void ARR_ListAllBidsByAmount() {
-        System.out.println("Enter the amount of the bid you want to see");
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_ListAllBidsByAmount();
-        }
-        process.listAllBidsByAmount(numberRead);
+        int amount = askForInt("Enter the amount of the bid you want to see");
+        process.listAllBidsByAmount(amount);
     }
 
     /**
