@@ -5,6 +5,7 @@ import userdata.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Processing {
 
@@ -373,9 +374,11 @@ public class Processing {
         System.out.println("Properties : ");
         ArrayList<Property> myProperties = ownerConnected.getMyProperties();
         myProperties.sort(new PropertiesComparator());
-        for (Property p : myProperties) {
+        Iterator<Property> it = new IteratorProperties(myProperties);
+        while (it.hasNext()){
+            Property p = it.next();
             System.out.println(p.toString());
-            System.out.println(p.getDescription());
+            System.out.println("Description : " + p.getDescription());
         }
     }
 
