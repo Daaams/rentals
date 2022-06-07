@@ -1,6 +1,7 @@
 package userdata;
 
 /**
+ * Enumeration of all the type of account
  *
  * @author dlevrault
  */

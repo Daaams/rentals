@@ -31,51 +31,94 @@ public class Bid {
 
     }
 
+    /**
+     * return the bid
+     * @return int bid
+     */
     public int getBidAmount() {
         return bidAmount;
     }
 
+    /**
+     * methode toString
+     * @return string
+     */
     @Override
     public String toString(){
         return "Bid: " + bidAmount + " for " + nbPerson + " person(s) for " + nbNight + " night(s) in "
                 + relatedMonth(month) + " for " + tenant.getName();
     }
 
+    /**
+     * Close the bid
+     */
     public void setClosed() {
         isClose = true;
     }
 
+    /**
+     * Return the month
+     * @return int month
+     */
     public int getMonth() {
         return month;
     }
 
+    /**
+     * Return the property
+     * @return Property property
+     */
     public Property getProperty() {
         return property;
     }
 
+    /**
+     * Return the price of the bid in string
+     * @return String
+     */
     public String getPriceString() {
         return bidAmount + "";
     }
 
+    /**
+     * Return true if the bid is closed else false
+     * @return boolean
+     */
     public boolean isClosed() {
         return isClose;
     }
 
+    /**
+     * Return the tenant of the bid
+     * @return Tenant tenant
+     */
     public Tenant getTenant() {
         return tenant;
     }
 
+    /**
+     * Return the number of people in String
+     * @return String
+     */
     public String getNumberOfPeopleString() {
         return nbPerson + "";
     }
 
-    /*
-    (p*n*m)/10 , rounded up to the next multiple of ten, where n the number of nights, p the number of occupiers, and m the price per night.
+    /**
+    * Return  (p*n*m)/10 , rounded up to the next multiple of ten,
+    * where n the number of nights, p the number of occupiers, and m the price per night.
+     *
+     * @return int
      */
     public int getPrice() {
         return (nbPerson * nbNight * bidAmount) / 10;
     }
 
+    /**
+     * Return the String associate to the number of the month
+     * @param month month
+     * @return String month
+     */
     private String relatedMonth(int month){
         this.month = month;
         String monthStr = "";

@@ -57,6 +57,10 @@ public class Owner extends User{
         System.out.println(virtualWallet);
     }
 
+    /**
+     * Return all the properties of the owner
+     * @return Property
+     */
     public ArrayList<Property> getMyProperties() {
         ArrayList<Property> myProperties = new ArrayList<>();
         for (Property property : allProperties.keySet()) {
@@ -65,6 +69,10 @@ public class Owner extends User{
         return myProperties;
     }
 
+    /**
+     * Add money to the wallet
+     * @param bidAmount int
+     */
     public void addMoney(int bidAmount) {
         virtualWallet += bidAmount;
     }

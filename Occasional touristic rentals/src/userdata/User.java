@@ -4,8 +4,6 @@
  */
 package userdata;
 
-import java.nio.channels.Pipe;
-
 /**
  *
  * @author mgenetet
@@ -103,7 +101,11 @@ public class User {
      * @param newMail the new email address
      */
     public void changeMail(String newMail){ mail = newMail;}
-    
+
+    /**
+     * Methode toString of User
+     * @return String
+     */
     @Override
     public String toString(){
         return name + " " + surname + " : "+ type + ", registered as : " + nickname;

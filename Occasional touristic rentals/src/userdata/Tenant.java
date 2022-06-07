@@ -57,14 +57,30 @@ public class Tenant extends User{
      */
     public void seeMyWallet() { System.out.println(virtualWallet); }
 
+    /**
+     * Add a bid to the list myBids
+     * @param bid Bid
+     */
     public void addABid(Bid bid){myBids.add(bid);}
 
+    /**
+     * Return all the bids of the tenant
+     * @return HashSet<Bid>
+     */
     public HashSet<Bid> getMyBids(){return new HashSet<>(myBids);}
 
+    /**
+     * Add a new reservation to all the reservation of the tenant
+     * @param reservation
+     */
     public void createNewReservation(Reservation reservation) {
         myReservation.add(reservation);
     }
 
+    /**
+     * Return all the reservation of the tenant
+     * @return HashSet<Reservation>
+     */
     public HashSet<Reservation> getMyReservations() {
         return myReservation;
     }

@@ -112,20 +112,38 @@ public class Property {
      */
     public void changeMaxOccupiers(int maxOccupiers){this.maxOccupiers = maxOccupiers;}
 
-    public void rented(boolean status){isRented = status;}
-
+    /**
+     * Put the new bid
+     * @param theBid Bid
+     */
     public void setBid(Bid theBid){currentBid = theBid;}
 
+    /**
+     * Return the name
+     * @return String name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Put True if this available else false
+     * @param b
+     */
     public void setAvailable(boolean b) {
         inAvailableList = b;
     }
 
+    /**
+     * Return if the property is available
+     * @return boolean
+     */
     public boolean isAvailable(){return inAvailableList;}
 
+    /**
+     * Methode toString of Property
+     * @return String
+     */
     @Override
     public String toString(){
         return "Property : "+name+" located in "+CITY+" at the address "+ADDRESS+" is a "+ type+".";

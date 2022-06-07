@@ -9,6 +9,13 @@ public class Reservation {
 
     private Bid bid;
 
+    /**
+     * Constructor
+     * @param tenant Tenant
+     * @param property Property
+     * @param month int
+     * @param bid Bid
+     */
     public Reservation(Tenant tenant, Property property, int month, Bid bid) {
         this.tenant = tenant;
         this.property = property;
@@ -16,26 +23,25 @@ public class Reservation {
         this.bid = bid;
     }
 
+    /**
+     * Return the tenant
+     * @return Tenant
+     */
     public Tenant getTenant() {
         return tenant;
     }
 
+    /**
+     * Return the property
+     * @return Property
+     */
     public Property getProperty() {
         return property;
     }
 
-    public int getMonth() {
-        return month;
-    }
-
-    public Bid getBid() {
-        return bid;
-    }
-
-    public void setBid(Bid bid) {
-        this.bid = bid;
-    }
-
+    /**
+     * Do the recap of the reservation
+     */
     public void recap() {
         String months[] =  { "January", "February", "March", "April", "May", "June", "July",
                 "August", "September", "October", "November", "December"};

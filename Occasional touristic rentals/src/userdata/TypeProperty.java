@@ -5,6 +5,7 @@
 package userdata;
 
 /**
+ * Enumeration of all the type of the property
  *
  * @author mgenetet
  */
