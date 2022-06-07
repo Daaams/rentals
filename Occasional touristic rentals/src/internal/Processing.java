@@ -366,7 +366,7 @@ public class Processing {
     }
 
     /**
-     * Shows all the property of the connected owner
+     * Shows all the property available of the connected owner
      *
      * @param ownerConnected the connected owner
      */
@@ -432,6 +432,18 @@ public class Processing {
         return sum;
     }
 
+    public int propertiesAvailableSum(){
+        int sum = 0;
+        for (Owner o : allOwners) {
+            for (Property p : o.getProperties().keySet()){
+                if (p.isAvailable()){
+                    sum += 1;
+                }
+            }
+        }
+        return sum;
+    }
+
     /**
      * Deletes a property of the portfolio of the owner
      *
@@ -464,12 +476,31 @@ public class Processing {
     }
 
     /**
-     * Prints all properties of the application
+     * Prints all properties available of the application
      */
-    public void seeAllProperties() {
-        for (Owner o : allOwners) {
+    public void seeAllPropertiesAvailable() {
+        if (propertiesAvailableSum() == 0){
+            System.err.println("No properties Available");
+        }else{
+            for (Owner o : allOwners) {
+                System.out.println("Owner : " + o.getNickname());
+                for (Property p: o.getProperties().keySet()) {
+                    if (p.isAvailable()){
+                        System.out.println(p.toString());
+                        System.out.println("Description : " + p.getDescription());
+                    }
+                }
+            }
+        }
+    }
+
+    public void seeAllProperties(){
+        for (Owner o: allOwners) {
             System.out.println("Owner : " + o.getNickname());
-            seeMyProperties(o);
+            for (Property p: o.getProperties().keySet()) {
+                System.out.println(p.toString());
+                System.out.println("Description : " + p.getDescription());
+            }
         }
     }
 

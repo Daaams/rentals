@@ -239,7 +239,7 @@ public class OccasionalTouristicRentals {
         System.out.println("2. withdraw money of my virtual account.");
         System.out.println("3. See my data.");
         System.out.println("4. Change my data.");
-        System.out.println("5. See all properties on the application.");
+        System.out.println("5. See all properties available on the application.");
         System.out.println("6. Consult data of a property.");
         System.out.println("7. See my wallet.");
         System.out.println("8. Bid on a property");
@@ -332,7 +332,7 @@ public class OccasionalTouristicRentals {
                 ARR_AskDataToChange(tenantConnected);
                 break;
             case 5:
-                process.seeAllProperties();
+                process.seeAllPropertiesAvailable();
                 break;
             case 6:
                 ARR_ConsultDataOfAProperty();
@@ -428,17 +428,21 @@ public class OccasionalTouristicRentals {
      * Event for consulting data of a property
      */
     private void ARR_ConsultDataOfAProperty() {
-        System.out.println("Do you want to see all properties before ? (yes / no)");
-        String str = readString();
-        if (str.equals("yes")){
-            process.seeAllProperties();
-            System.out.println("");
-            askForAproperty();
-        } else if (str.equals("no")) {
-            askForAproperty();
-        } else {
-            System.err.println("I did not understand your answer.");
-            ARR_ConsultDataOfAProperty();
+        if (process.propertiesAvailableSum() != 0){
+            System.out.println("Do you want to see all properties before ? (yes / no)");
+            String str = readString();
+            if (str.equals("yes")){
+                process.seeAllPropertiesAvailable();
+                System.out.println("");
+                askForAproperty();
+            } else if (str.equals("no")) {
+                askForAproperty();
+            } else {
+                System.err.println("I did not understand your answer.");
+                ARR_ConsultDataOfAProperty();
+            }
+        }else{
+            System.err.println("No properties are available");
         }
     }
 
@@ -991,7 +995,7 @@ public class OccasionalTouristicRentals {
         System.out.println("Do you want to see all properties before ? (yes / no)");
         String str = readString();
         if (str.equals("yes")){
-            process.seeAllProperties();
+            process.seeAllPropertiesAvailable();
             System.out.println("");
             makeABid(tenantConnected);
         } else if (str.equals("no")) {
