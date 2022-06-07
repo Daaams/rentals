@@ -36,6 +36,16 @@ public class OccasionalTouristicRentals {
     }
 
     /**
+     * Constructor of the application
+     */
+    public OccasionalTouristicRentals() {
+        scan = new Scanner(System.in);
+        process = new Processing();
+        someoneConnected = false;
+    }
+
+    //region Utils
+    /**
      * 3 utilisateurs de l'application pour ne pas les créer à chaque fois
      */
     private void remplissage() {
@@ -53,13 +63,195 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Constructor of the application
+     * Reads a string entered by one user in the console
+     * @return the string entered
      */
-    public OccasionalTouristicRentals() {
-        scan = new Scanner(System.in);
-        process = new Processing();
-        someoneConnected = false;
+    private String readString(){
+        String str = scan.nextLine();
+        while (stringReadInConsole(str) == false){
+            System.err.println("Your entry is null or empty, please, enter something");
+            str = scan.nextLine();
+        }
+        return str;
     }
+
+    /**
+     * Tests if the answer given by the user is not null or empty
+     *
+     * @param s the answer of the user
+     * @return a boolean
+     */
+    private boolean stringReadInConsole(String s) {
+        return (!s.equals("") && !s.equals(null));
+    }
+
+    /**
+     * Asks the user for an integer
+     * @param question the question to ask depending on the context
+     * @return the integer enter by the user
+     */
+    private int askForInt(String question) {
+        int number = 0;
+        System.out.println(question);
+        System.out.println("");
+        try {
+            number = Integer.parseInt(readString());
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            askForInt(question);
+        }
+        return number;
+    }
+
+    /**
+     * Ask some questions to the user and take his personal data
+     *
+     * @param questions an array containing questions to ask
+     * @return the data answered by the user
+     */
+    private ArrayList<String> takeData(String[] questions) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (String question : questions) {
+            System.out.println(question);
+            arrayList.add(readString());
+        }
+        return arrayList;
+    }
+
+    /**
+     * Asks the connected user which data he wants to change
+     * @param userConnected the connected user
+     */
+    private void changeData(User userConnected) {
+        System.out.println("");
+        System.out.println("Which data do you want to change ?");
+        System.out.println("");
+        System.out.println("1. My name.");
+        System.out.println("2. My surname.");
+        System.out.println("3. My nickname.");
+        System.out.println("4. My mail.");
+        System.out.println("");
+        int number = askForInt("Your choice ?");
+
+        switch (number){
+            case 1:
+                System.out.println("What is your name ?");
+                process.changeName(userConnected, readString());
+                System.out.println("It has been changed.");
+                break;
+            case 2:
+                System.out.println("What is your surname ?");
+                process.changeSurname(userConnected, readString());
+                System.out.println("It has been changed.");
+                break;
+            case 3:
+                System.out.println("What is your nickname ?");
+                process.changeNickname(userConnected, readString());
+                System.out.println("It has been changed.");
+                break;
+            case 4:
+                System.out.println("What is your email address ?");
+                process.changeMail(userConnected, readString());
+                System.out.println("It has been changed.");
+                break;
+            default:
+                System.err.println("Choose a number between 1 and 4.");
+                changeData(userConnected);
+                break;
+        }
+    }
+
+    /**
+     * Asks the connected user if he wants to see his data before changing them
+     * @param userConnected the connected user
+     */
+    private void ARR_AskDataToChange(User userConnected) {
+        System.out.println("Do you want to see your data before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")) {
+            process.seeData(userConnected);
+            changeData(userConnected);
+        } else if (str.equals("no")) {
+            changeData(userConnected);
+        }else{
+            System.err.println("I did not understand your answer");
+            ARR_AskDataToChange(userConnected);
+        }
+    }
+
+    /**
+     * Asks the user to choose the type of property
+     * @return the type of property chosen
+     */
+    private TypeProperty askTypeOfTheProperty() {
+        System.out.println("What is your property ?");
+        System.out.println("");
+        System.out.println("1. House");
+        System.out.println("2. Estate");
+        System.out.println("3. Apartment");
+        System.out.println("4. Room");
+        System.out.println("5. Homestead");
+        System.out.println("");
+        TypeProperty type = null;
+        try {
+            numberRead = Integer.parseInt(readString());
+        } catch (NumberFormatException nfe) {
+            System.err.println("Error: please enter an integer.");
+            askTypeOfTheProperty();
+        }
+        switch (numberRead) {
+            case 1:
+                type = TypeProperty.HOUSE;
+                break;
+            case 2:
+                type = TypeProperty.ESTATE;
+                break;
+            case 3:
+                type = TypeProperty.APARTMENT;
+                break;
+            case 4:
+                type = TypeProperty.ROOM;
+                break;
+            case 5:
+                type = TypeProperty.HOMESTEAD;
+                break;
+            default:
+                System.err.println("Error: no such menu item.");
+        }
+        return type;
+    }
+
+    /**
+     * Allows a user to choose a month
+     * @return an integer corresponding to the month chosen
+     */
+    private int chooseMonth(){
+        int month = 0;
+        System.out.println("Choose the month desired");
+        System.out.println("1. January");
+        System.out.println("2. February");
+        System.out.println("3. March");
+        System.out.println("4. April");
+        System.out.println("5. May");
+        System.out.println("6. June");
+        System.out.println("7. July");
+        System.out.println("8. August");
+        System.out.println("9. September");
+        System.out.println("10. October");
+        System.out.println("11. November");
+        System.out.println("12. December");
+        month = askForInt("What is your choice ?");
+
+        if (month <= 0 && month > 12){
+            System.err.println("Choose a month between 1 and 12");
+            chooseMonth();
+        }
+        return month;
+    }
+
+    //endregion
+
+    // region Start
 
     /**
      * Call the prompt while the user do not quit
@@ -89,13 +281,8 @@ public class OccasionalTouristicRentals {
         if (!waitingForString) {
             firstPrompt();
         }
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            firstPromptAction();
-        }
-        switch (numberRead) {
+        int number = askForInt("Your choice ?");
+        switch (number) {
             case 0:
                 ARR_Quit();
                 break;
@@ -134,10 +321,10 @@ public class OccasionalTouristicRentals {
         TypeAccount type = askType();
         String[] questions = {"What's your login ?"};
         User userConnected = process.connectUser(takeData(questions), type);
-        
+
         if (userConnected != null) { someoneConnected = true; }
         else { displayErrorMessageConnection(); }
-        
+
         while (someoneConnected) {
             switch (type){
                 case TENANT :
@@ -146,7 +333,7 @@ public class OccasionalTouristicRentals {
                 case OWNER :
                     ARR_EventsOwner(userConnected);
                     break;
-                case ADMINISTRATOR : 
+                case ADMINISTRATOR :
                     ARR_EventsAdministrator(userConnected);
                     break;
             }
@@ -163,42 +350,14 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Reads a string entered by one user in the console
-     * @return the string entered
+     * Quit event
      */
-    private String readString(){
-        String str = scan.nextLine();
-        while (stringReadInConsole(str) == false){
-            System.err.println("Your entry is null or empty, please, enter something");
-            str = scan.nextLine();
-        }
-        return str;
+    private void ARR_Quit() {
+        quit = true;
     }
 
-    /**
-     * Ask some questions to the user and take his personal data
-     *
-     * @param questions an array containing questions to ask
-     * @return the data answered by the user
-     */
-    private ArrayList<String> takeData(String[] questions) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (String question : questions) {
-            System.out.println(question);
-            arrayList.add(readString());
-        }
-        return arrayList;
-    }
+    // endregion
 
-    /**
-     * Tests if the answer given by the user is not null or empty
-     *
-     * @param s the answer of the user
-     * @return a boolean
-     */
-    private boolean stringReadInConsole(String s) {
-        return (!s.equals("") && !s.equals(null));
-    }
 
     /**
      * Asks the user for his status for the connection or the account creation
@@ -227,6 +386,7 @@ public class OccasionalTouristicRentals {
         return type;
     }
 
+    //region Tenant
     /**
      * displays the actions that a tenant can do
      */
@@ -254,66 +414,13 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * displays the actions that an owner can do
-     */
-    private void ARR_EventsOwner(User userConnected) {
-        Owner ownerConnected = process.searchAccountOwner(userConnected.getLogin());
-        System.out.println("");
-        System.out.println("What do you want to do ?");
-        System.out.println("");
-        System.out.println("1. See my data");
-        System.out.println("2. Change my data");
-        System.out.println("3. See all my properties.");
-        System.out.println("4. Add a property to my portfolio.");
-        System.out.println("5. Delete a property of my portfolio.");
-        System.out.println("6. Change data of a property.");
-        System.out.println("7. See my wallet.");
-        System.out.println("8. List bids on my properties");
-        System.out.println("9. See all the reservations of my properties");
-        System.out.println("10. Remove a property of the list of available properties");
-        System.out.println("11. Log out.");
-        System.out.println("");
-        askForEventOwners(ownerConnected);
-    }
-
-    /**
-     * displays the actions that an administrator can do
-     */
-    private void ARR_EventsAdministrator(User userConnected) {
-        Admin adminConnected = process.searchAccountAdmin(userConnected.getLogin());
-        System.out.println("");
-        System.out.println("What do you want to do ?");
-        System.out.println("");
-        System.out.println("1. See my data");
-        System.out.println("2. Change my data");
-        System.out.println("3. View all users of the application.");
-        System.out.println("4. Delete an account.");
-        System.out.println("5. Delete a property.");
-        System.out.println("6. Change the description of a property.");
-        System.out.println("7. See Bids on all properties.");
-        System.out.println("8. See Bids by month");
-        System.out.println("9. See Bids by property");
-        System.out.println("10. See Bids by amount");
-        System.out.println("11. Close bid.");
-        System.out.println("12. See all reservations.");
-        System.out.println("13. Log out.");
-        System.out.println("");
-        askForEventAdmins(adminConnected);
-    }
-
-    /**
      * Triggers the event selected by the user connected as tenant
      *
      * @param tenantConnected the tenant
      */
     private void askForEventTenants(Tenant tenantConnected) {
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askForEventTenants(tenantConnected);
-        }
-        switch (numberRead) {
+        int number = askForInt("Your choice ?");
+        switch (number) {
             case 1:
                 process.addMoneyOnWallet(tenantConnected, askForMoney());
                 System.out.println("It has been added");
@@ -367,61 +474,21 @@ public class OccasionalTouristicRentals {
         }
     }
 
-    private void ARR_ListAllMyReservations(Tenant tenantConnected) {
-        if (new ExistsAtLeastOneReservation().test(process.getAllReservations())){
-            process.seeAllReservations(tenantConnected);
-        }else{
-            System.err.println("No reservations yet");
-        }
-    }
-
-    private void ARR_SeeAllBidClosedWinAndLose(Tenant tenantConnected) {
-        process.seeAllBidClosed(tenantConnected);
-    }
-
-    private void ARR_SeeTheHighestBidForAMonth() {
-        int month = chooseMonth();
-        process.seeTheHighestBidForAMonth(month);
-    }
-
-
-    private void ARR_SeeTheHighestBid() {
-        process.seeTheHighestBid();
-    }
-
-    private void ARR_SeeAllMyBid(Tenant tenantConnected) {
-        if (tenantConnected.getMyBids().size() == 0){
-            System.err.println("No bids");
-        }else{
-            for (Bid b : tenantConnected.getMyBids()) {
-                System.out.println(b.toString());
-            }
-        }
-    }
-
     /**
      * Asks the tenant for the quantity of money to add into his wallet
      *
      * @return the integer enter by the user
      */
     private int askForMoney() {
-        System.out.println("How much money ?");
-        System.out.println("Integer must be multiple of 5.");
-        String str = readString();
-        try {
-            numberRead = Integer.parseInt(str);
-            if (Integer.parseInt(str) % 5 != 0) {
-                System.err.println("You must enter an integer multiple of 5");
-                askForMoney();
-            }
-            if (numberRead == 0){
-                System.err.println("You must enter an integer multiple of 5 greater than 0");
-            }
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
+        int money = askForInt("How much money ? The integer must be multiple of 5.");
+        if (money % 5 != 0){
+            System.err.println("You must enter an integer multiple of 5");
+            askForMoney();
+        }else if (money <= 0){
+            System.err.println("You must enter an integer multiple of 5 greater than 0");
             askForMoney();
         }
-        return numberRead;
+        return money;
     }
 
     /**
@@ -452,6 +519,162 @@ public class OccasionalTouristicRentals {
     private void askForAproperty(){
         System.out.println("Which property do you want to consult ?");
         process.consultDataOfAProperty(readString());
+    }
+
+    /**
+     * Event for making a bid on an available property
+     * @param tenantConnected the connected tenant
+     */
+    private void ARR_BidOnAProperty(Tenant tenantConnected) {
+        System.out.println("Do you want to see all properties before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")){
+            process.seeAllPropertiesAvailable();
+            System.out.println("");
+            makeABid(tenantConnected);
+        } else if (str.equals("no")) {
+            makeABid(tenantConnected);
+        } else {
+            System.err.println("I did not understand your answer.");
+            ARR_BidOnAProperty(tenantConnected);
+        }
+    }
+
+    /**
+     * retrieves data and creates it if values are correct
+     * @param tenantConnected the connected tenant
+     */
+    private void makeABid(Tenant tenantConnected){
+        Property property = null;
+        System.out.println("Enter the name of the property");
+        property = process.PropertyExist(readString());
+        int bid = 0;
+        int month = 0;
+        int people = 0;
+        int nights = 0;
+        if (property==null){
+            System.err.println("Error: no property has this name, try again.");
+        }else{
+            month = chooseMonth();
+        }
+        if (property.getCurrentBid() != null && tenantConnected.getVirtualWallet() >= property.getCurrentBid().getBidAmount() + 10 + process.winningBidSum(tenantConnected)){
+            while (!checksBid(property.getCurrentBid().getBidAmount() + 10, bid)){
+                System.out.println("The bid must be greater than 0 and greater than the amount of the current bid");
+                bid = askForInt("How much do you want to bid ? (" + property.getCurrentBid().getBidAmount() + 10 + "and more.");
+            }
+            process.createBid(tenantConnected, property, month, people, nights, bid);
+        }else if (property.getCurrentBid() == null){
+            people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
+            while (people < 1 || people > property.getMaxOccupiers()){
+                people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
+            }
+            nights = askForInt("How many nights ? (between 1 and 10).");
+            while (nights < 1 || nights > 10){
+                System.err.println("Please for legal reasons the number of night is between 1 and 10.");
+                nights = askForInt("How many nights ?");
+            }
+            Owner o = process.findOwner(property);
+            System.out.println(o.getName());
+            System.out.println("No current bid. The amount is : " + (people*nights*o.getProperties().get(property).getThePrice())/10);
+            if (checksBid((people*nights*o.getProperties().get(property).getThePrice()/10), tenantConnected.getVirtualWallet())){
+                bid = askForInt("Enter this bid to confirm");
+                if (bid == (people*nights*o.getProperties().get(property).getThePrice()/10)){
+                    process.createBid(tenantConnected, property, month, people, nights, bid);
+                }else{
+                    System.err.println("This bid has not been created");
+                }
+            }else{
+                System.err.println("This is the amount of your wallet : " + tenantConnected.getVirtualWallet());
+                System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
+            }
+        }else{
+            System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
+        }
+    }
+
+    /**
+     * checks if a bid is correct
+     * @param amountOfTheBid the amount given by the user
+     * @param theBid the amount of the bid
+     * @return a boolean
+     */
+    private boolean checksBid(int amountOfTheBid, int theBid){
+        return theBid > 0 && theBid > amountOfTheBid;
+    }
+
+    /**
+     * Event for seeing all bids of a tenant
+     * @param tenantConnected the connected tenant
+     */
+    private void ARR_SeeAllMyBid(Tenant tenantConnected) {
+        if (tenantConnected.getMyBids().size() == 0){
+            System.err.println("No bids");
+        }else{
+            for (Bid b : tenantConnected.getMyBids()) {
+                System.out.println(b.toString());
+            }
+        }
+    }
+
+    /**
+     * Event for seeing the highest bid
+     */
+    private void ARR_SeeTheHighestBid() {
+        process.seeTheHighestBid();
+    }
+
+    /**
+     * Event for seeing the highest bid depending on a chosen month
+     */
+    private void ARR_SeeTheHighestBidForAMonth() {
+        int month = chooseMonth();
+        process.seeTheHighestBidForAMonth(month);
+    }
+
+    /**
+     * Event for seeing whether a bid is won or lost
+     * @param tenantConnected
+     */
+    private void ARR_SeeAllBidClosedWinAndLose(Tenant tenantConnected) {
+        process.seeAllBidClosed(tenantConnected);
+    }
+
+    /**
+     * Event for listing all reservations
+     * @param tenantConnected the connected tenant
+     */
+    private void ARR_ListAllMyReservations(Tenant tenantConnected) {
+        if (new ExistsAtLeastOneReservation().test(process.getAllReservations())){
+            process.seeAllReservations(tenantConnected);
+        }else{
+            System.err.println("No reservations yet");
+        }
+    }
+    //endregion
+
+    // region owner
+
+    /**
+     * displays the actions that an owner can do
+     */
+    private void ARR_EventsOwner(User userConnected) {
+        Owner ownerConnected = process.searchAccountOwner(userConnected.getLogin());
+        System.out.println("");
+        System.out.println("What do you want to do ?");
+        System.out.println("");
+        System.out.println("1. See my data");
+        System.out.println("2. Change my data");
+        System.out.println("3. See all my properties.");
+        System.out.println("4. Add a property to my portfolio.");
+        System.out.println("5. Delete a property of my portfolio.");
+        System.out.println("6. Change data of a property.");
+        System.out.println("7. See my wallet.");
+        System.out.println("8. List bids on my properties");
+        System.out.println("9. See all the reservations of my properties");
+        System.out.println("10. Remove a property of the list of available properties");
+        System.out.println("11. Log out.");
+        System.out.println("");
+        askForEventOwners(ownerConnected);
     }
 
     /**
@@ -516,41 +739,6 @@ public class OccasionalTouristicRentals {
                 break;
             default:
                 System.err.println("Error: no such menu item.");
-        }
-    }
-
-    private void ARR_RemovePropertyFromListOfAvailable(Owner ownerConnected) {
-        ArrayList<Property> availableProperties = new ArrayList<>();
-        for (Property property : ownerConnected.getProperties().keySet()) {
-            if (property.isAvailable()){
-                availableProperties.add(property);
-                System.out.println(availableProperties.size() + " : " + property.getName());
-            }
-        }
-        if (availableProperties.size() == 0){
-            System.err.println("No properties in the available list");
-        }else{
-            int numP = askForInt("Choose a property between 1 and " + availableProperties.size());
-            if (numP > 0 && numP <= ownerConnected.getProperties().size()) {
-                availableProperties.get(numP-1).setAvailable(false);
-            }else{
-                ARR_RemovePropertyFromListOfAvailable(ownerConnected);
-            }
-        }
-    }
-
-    private void ARR_ListReservationOfMyProperties(Owner ownerConnected) {
-        process.listAllReservationsOfMyProperties(ownerConnected);
-    }
-
-    private void ARR_ListBids(Owner ownerConnected) {
-        for (Property property : ownerConnected.getProperties().keySet()) {
-            System.out.println("Property:" + property.getName());
-            if (property.getCurrentBid() != null){
-                System.out.println(property.getCurrentBid().toString());
-            }else{
-                System.out.println("No bid");
-            }
         }
     }
 
@@ -633,6 +821,24 @@ public class OccasionalTouristicRentals {
     }
 
     /**
+     * Method for changing the number max of occupiers
+     * @param p the current property
+     */
+    private void changeNumberOccupiers(Property p) {
+        System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
+        String str = readString();
+        if (str.equals("yes")) {
+            System.out.println("The number max of occupiers is " + p.getMaxOccupiers());
+            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
+        } else if (str.equals("no")) {
+            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
+        }else{
+            System.err.println("I did not understand your answer");
+            changeNumberOccupiers(p);
+        }
+    }
+
+    /**
      * Method for changing the nominal price
      * @param ownerConnected the connected owner
      * @param p the current property
@@ -652,81 +858,78 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Method for changing the number max of occupiers
-     * @param p the current property
+     * event for listing all bids
+     * @param ownerConnected the owner connected
      */
-    private void changeNumberOccupiers(Property p) {
-        System.out.println("Do you want to see the number max of occupiers before ? (yes / no)");
-        String str = readString();
-        if (str.equals("yes")) {
-            System.out.println("The number max of occupiers is " + p.getMaxOccupiers());
-            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
-        } else if (str.equals("no")) {
-            process.changeTheNumberMaxOfOccupiers(p, askForInt("What is the new max of occupiers ?"));
+    private void ARR_ListBids(Owner ownerConnected) {
+        for (Property property : ownerConnected.getProperties().keySet()) {
+            System.out.println("Property:" + property.getName());
+            if (property.getCurrentBid() != null){
+                System.out.println(property.getCurrentBid().toString());
+            }else{
+                System.out.println("No bid");
+            }
+        }
+    }
+
+    /**
+     * Lists all reservations of the owner's properties
+     * @param ownerConnected the connected owner
+     */
+    private void ARR_ListReservationOfMyProperties(Owner ownerConnected) {
+        process.listAllReservationsOfMyProperties(ownerConnected);
+    }
+
+    /**
+     * Event for making a property disable for the location
+     * @param ownerConnected the connected owner
+     */
+    private void ARR_RemovePropertyFromListOfAvailable(Owner ownerConnected) {
+        ArrayList<Property> availableProperties = new ArrayList<>();
+        for (Property property : ownerConnected.getProperties().keySet()) {
+            if (property.isAvailable()){
+                availableProperties.add(property);
+                System.out.println(availableProperties.size() + " : " + property.getName());
+            }
+        }
+        if (availableProperties.size() == 0){
+            System.err.println("No properties in the available list");
         }else{
-            System.err.println("I did not understand your answer");
-            changeNumberOccupiers(p);
+            int numP = askForInt("Choose a property between 1 and " + availableProperties.size());
+            if (numP > 0 && numP <= ownerConnected.getProperties().size()) {
+                availableProperties.get(numP-1).setAvailable(false);
+            }else{
+                ARR_RemovePropertyFromListOfAvailable(ownerConnected);
+            }
         }
     }
 
-    /**
-     * Asks the user for an integer
-     * @param question the question to ask depending on the context
-     * @return the integer enter by the user
-     */
-    private int askForInt(String question) {
-        int number = 0;
-        System.out.println(question);
-        System.out.println("");
-        try {
-            number = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askForInt(question);
-        }
-        return number;
-    }
+    // endRegion
 
+    // region admin
     /**
-     * Asks the user to choose the type of property
-     * @return the type of property chosen
+     * displays the actions that an administrator can do
      */
-    private TypeProperty askTypeOfTheProperty() {
-        System.out.println("What is your property ?");
+    private void ARR_EventsAdministrator(User userConnected) {
+        Admin adminConnected = process.searchAccountAdmin(userConnected.getLogin());
         System.out.println("");
-        System.out.println("1. House");
-        System.out.println("2. Estate");
-        System.out.println("3. Apartment");
-        System.out.println("4. Room");
-        System.out.println("5. Homestead");
+        System.out.println("What do you want to do ?");
         System.out.println("");
-        TypeProperty type = null;
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            askTypeOfTheProperty();
-        }
-        switch (numberRead) {
-            case 1:
-                type = TypeProperty.HOUSE;
-                break;
-            case 2:
-                type = TypeProperty.ESTATE;
-                break;
-            case 3:
-                type = TypeProperty.APARTMENT;
-                break;
-            case 4:
-                type = TypeProperty.ROOM;
-                break;
-            case 5:
-                type = TypeProperty.HOMESTEAD;
-                break;
-            default:
-                System.err.println("Error: no such menu item.");
-        }
-        return type;
+        System.out.println("1. See my data");
+        System.out.println("2. Change my data");
+        System.out.println("3. View all users of the application.");
+        System.out.println("4. Delete an account.");
+        System.out.println("5. Delete a property.");
+        System.out.println("6. Change the description of a property.");
+        System.out.println("7. See Bids on all properties.");
+        System.out.println("8. See Bids by month");
+        System.out.println("9. See Bids by property");
+        System.out.println("10. See Bids by amount");
+        System.out.println("11. Close bid.");
+        System.out.println("12. See all reservations.");
+        System.out.println("13. Log out.");
+        System.out.println("");
+        askForEventAdmins(adminConnected);
     }
 
     /**
@@ -785,45 +988,60 @@ public class OccasionalTouristicRentals {
         }
     }
 
-    private void ARR_ListAllReservation() {
-        process.listAllReservation();
+    /**
+     * Asks the login about a person
+     * @return a String containing the login
+     */
+    private String askForAccount() {
+        System.out.println("The login of the person :");
+        return readString();
+    }
+    /**
+     * Event fot deleting an account
+     * @param userConnected the connected user
+     */
+    private void ARR_DeleteAccount(User userConnected) {
+        boolean deleted = process.deleteAccount(askForAccount(), askType(), userConnected);
+        if (!deleted){
+            System.err.println("You enter wrong data.");
+            ARR_DeleteAccount(userConnected);
+        };
     }
 
-    private void ARR_CloseBid() {
-        int month = chooseMonth();
-        process.closeBid(month);
-    }
-
-    private void ARR_ListAllBidsByAmount() {
-        System.out.println("Enter the amount of the bid you want to see");
-        try {
-            numberRead = Integer.parseInt(readString());
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: please enter an integer.");
-            ARR_ListAllBidsByAmount();
+    /**
+     * Event for deleting a property
+     */
+    private void ARR_DeleteProperty() {
+        int sumProperties = process.propertiesSum();
+        if (sumProperties == 0){
+            System.err.println("There is no properties in the application");
+        }else{
+            System.out.println("Do you want to see all properties before ? (yes / no)");
+            String str = readString();
+            if (str.equals("yes")) {
+                process.seeAllProperties();
+                deleteProperty();
+            } else if (str.equals("no")) {
+                deleteProperty();
+            }else{
+                System.err.println("I did not understand your answer");
+                ARR_DeleteProperty();
+            }
         }
-        process.listAllBidsByAmount(numberRead);
     }
 
-    private void ARR_ListAllBidsByProperty() {
-        Property property = null;
-        System.out.println("Enter the name of the property");
-        property = process.PropertyExist(readString());
-        if (property == null) {
-            System.out.println("This property doesn't exist");
-            ARR_ListAllBidsByProperty();
-        } else {
-            process.listAllBidsByProperty(property);
+    /**
+     * Deletes a property corresponding to data entered by the user
+     */
+    private void deleteProperty() {
+        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
+                "In which city is located the property ?"};
+        boolean deleted = process.deletePropertyAdmin(takeData(questions));
+        if (deleted){
+            System.out.println("It has been deleted");
+        }else{
+            System.out.println("It has not been deleted");
         }
-    }
-
-    private void ARR_ListAllBidsByMonth() {
-        int month = chooseMonth();
-        process.listAllBidsByMonth(month);
-    }
-
-    private void ARR_ListAllBids() {
-        process.listAllBids();
     }
 
     /**
@@ -858,227 +1076,62 @@ public class OccasionalTouristicRentals {
     }
 
     /**
-     * Event for deleting a property
+     * Event for listing all bids
      */
-    private void ARR_DeleteProperty() {
-        int sumProperties = process.propertiesSum();
-        if (sumProperties == 0){
-            System.err.println("There is no properties in the application");
-        }else{
-            System.out.println("Do you want to see all properties before ? (yes / no)");
-            String str = readString();
-            if (str.equals("yes")) {
-                process.seeAllProperties();
-                deleteProperty();
-            } else if (str.equals("no")) {
-                deleteProperty();
-            }else{
-                System.err.println("I did not understand your answer");
-                ARR_DeleteProperty();
-            }
+    private void ARR_ListAllBids() {
+        process.listAllBids();
+    }
+
+    /**
+     * Event for listing bids depending on a property
+     */
+    private void ARR_ListAllBidsByProperty() {
+        Property property = null;
+        System.out.println("Enter the name of the property");
+        property = process.PropertyExist(readString());
+        if (property == null) {
+            System.out.println("This property doesn't exist");
+            ARR_ListAllBidsByProperty();
+        } else {
+            process.listAllBidsByProperty(property);
         }
     }
 
     /**
-     * Deletes a property corresponding to data entered by the user
+     * Event for listing bids depending on a month
      */
-    private void deleteProperty() {
-        String [] questions = {"What is the name of the property ?", "What is the address of the property ?",
-        "In which city is located the property ?"};
-        /*ArrayList<String> answers = new ArrayList<>();
-        for (int i = 0; i < questions.length; i ++){
-            System.out.println(questions[i]);
-            answers.add(readString());
-        }*/
-        boolean deleted = process.deletePropertyAdmin(takeData(questions));
-        if (deleted){
-            System.out.println("It has been deleted");
-        }else{
-            System.out.println("It has not been deleted");
-        }
+    private void ARR_ListAllBidsByMonth() {
+        int month = chooseMonth();
+        process.listAllBidsByMonth(month);
     }
 
     /**
-     * Asks the connected user if he wants to see his data before changing them
-     * @param userConnected the connected user
+     * Event for listing bids depending on an amount
      */
-    private void ARR_AskDataToChange(User userConnected) {
-        System.out.println("Do you want to see your data before ? (yes / no)");
-        String str = readString();
-        if (str.equals("yes")) {
-            process.seeData(userConnected);
-            changeData(userConnected);
-        } else if (str.equals("no")) {
-            changeData(userConnected);
-        }else{
-            System.err.println("I did not understand your answer");
-            ARR_AskDataToChange(userConnected);
-        }
-    }
-
-    /**
-     * Asks the connected user which data he wants to change
-     * @param userConnected the connected user
-     */
-    private void changeData(User userConnected) {
-        System.out.println("");
-        System.out.println("Which data do you want to change ?");
-        System.out.println("");
-        System.out.println("1. My name.");
-        System.out.println("2. My surname.");
-        System.out.println("3. My nickname.");
-        System.out.println("4. My mail.");
-        System.out.println("");
+    private void ARR_ListAllBidsByAmount() {
+        System.out.println("Enter the amount of the bid you want to see");
         try {
             numberRead = Integer.parseInt(readString());
         } catch (NumberFormatException nfe) {
             System.err.println("Error: please enter an integer.");
-            changeData(userConnected);
+            ARR_ListAllBidsByAmount();
         }
-        switch (numberRead){
-            case 1:
-                System.out.println("What is your name ?");
-                process.changeName(userConnected, readString());
-                System.out.println("It has been changed.");
-                break;
-            case 2:
-                System.out.println("What is your surname ?");
-                process.changeSurname(userConnected, readString());
-                System.out.println("It has been changed.");
-                break;
-            case 3:
-                System.out.println("What is your nickname ?");
-                process.changeNickname(userConnected, readString());
-                System.out.println("It has been changed.");
-                break;
-            case 4:
-                System.out.println("What is your email address ?");
-                process.changeMail(userConnected, readString());
-                System.out.println("It has been changed.");
-                break;
-            default:
-                System.err.println("Choose a number between 1 and 4.");
-                changeData(userConnected);
-                break;
-        }
+        process.listAllBidsByAmount(numberRead);
     }
 
     /**
-     * Event fot deleting an account
-     * @param userConnected the connected user
+     * Event for closing bids depending on a month
      */
-    private void ARR_DeleteAccount(User userConnected) {
-        boolean deleted = process.deleteAccount(askForAccount(), askType(), userConnected);
-        if (!deleted){
-            System.err.println("You enter wrong data.");
-            ARR_DeleteAccount(userConnected);
-        };
+    private void ARR_CloseBid() {
+        int month = chooseMonth();
+        process.closeBid(month);
     }
 
     /**
-     * Asks the login about a person
-     * @return a String containing the login
+     * Event for listing all reservations
      */
-    private String askForAccount() {
-        System.out.println("The login of the person :");
-        return readString();
+    private void ARR_ListAllReservation() {
+        process.listAllReservation();
     }
-
-    /**
-     * Quit event
-     */
-    private void ARR_Quit() {
-        quit = true;
-    }
-    
-    private void ARR_BidOnAProperty(Tenant tenantConnected) {
-        System.out.println("Do you want to see all properties before ? (yes / no)");
-        String str = readString();
-        if (str.equals("yes")){
-            process.seeAllPropertiesAvailable();
-            System.out.println("");
-            makeABid(tenantConnected);
-        } else if (str.equals("no")) {
-            makeABid(tenantConnected);
-        } else {
-            System.err.println("I did not understand your answer.");
-            ARR_BidOnAProperty(tenantConnected);
-        }
-    }
-
-    private void makeABid(Tenant tenantConnected){
-        Property property = null;
-        System.out.println("Enter the name of the property");
-        property = process.PropertyExist(readString());
-        int bid = 0;
-        int month = 0;
-        int people = 0;
-        int nights = 0;
-        if (property==null){
-            System.err.println("Error: no property has this name, try again.");
-        }else{
-            month = chooseMonth();
-        }
-        if (property.getCurrentBid() != null && tenantConnected.getVirtualWallet() >= property.getCurrentBid().getBidAmount() + 10 + process.winningBidSum(tenantConnected)){
-            while (!checksBid(property.getCurrentBid().getBidAmount() + 10, bid)){
-                System.out.println("The bid must be greater than 0 and greater than the amount of the current bid");
-                bid = askForInt("How much do you want to bid ? (" + property.getCurrentBid().getBidAmount() + 10 + "and more.");
-            }
-            process.createBid(tenantConnected, property, month, people, nights, bid);
-        }else if (property.getCurrentBid() == null){
-            people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
-            while (people < 1 || people > property.getMaxOccupiers()){
-                people = askForInt("How many People ? (between 1 and " + property.getMaxOccupiers() + ").");
-            }
-            nights = askForInt("How many nights ? (between 1 and 10).");
-            while (nights < 1 || nights > 10){
-                System.err.println("Please for legal reasons the number of night is between 1 and 10.");
-                nights = askForInt("How many nights ?");
-            }
-            Owner o = process.findOwner(property);
-            System.out.println(o.getName());
-            System.out.println("No current bid. The amount is : " + (people*nights*o.getProperties().get(property).getThePrice())/10);
-            if (checksBid((people*nights*o.getProperties().get(property).getThePrice()/10), tenantConnected.getVirtualWallet())){
-                bid = askForInt("Enter this bid to confirm");
-                if (bid == (people*nights*o.getProperties().get(property).getThePrice()/10)){
-                    process.createBid(tenantConnected, property, month, people, nights, bid);
-                }else{
-                    System.err.println("This bid has not been created");
-                }
-            }else{
-                System.err.println("This is the amount of your wallet : " + tenantConnected.getVirtualWallet());
-                System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
-            }
-        }else{
-            System.err.println("You have not enough money. Please, put some money into your virtual wallet.");
-        }
-    }
-
-    private boolean checksBid(int amountOfTheBid, int theBid){
-        return theBid > 0 && theBid > amountOfTheBid;
-    }
-
-    private int chooseMonth(){
-        int month = 0;
-        System.out.println("Choose the month desired");
-        System.out.println("1. January");
-        System.out.println("2. February");
-        System.out.println("3. March");
-        System.out.println("4. April");
-        System.out.println("5. May");
-        System.out.println("6. June");
-        System.out.println("7. July");
-        System.out.println("8. August");
-        System.out.println("9. September");
-        System.out.println("10. October");
-        System.out.println("11. November");
-        System.out.println("12. December");
-        month = askForInt("What is your choice ?");
-
-        if (month <= 0 && month > 12){
-        System.err.println("Choose a month between 1 and 12");
-        chooseMonth();
-        }
-        return month;
-    }
+    // endregion
 }
