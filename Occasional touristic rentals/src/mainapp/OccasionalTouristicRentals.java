@@ -540,8 +540,12 @@ public class OccasionalTouristicRentals {
 
     private void ARR_ListBids(Owner ownerConnected) {
         for (Property property : ownerConnected.getProperties().keySet()) {
-            System.out.println("Property:" + property.getName()
-                    + " bids:" + ownerConnected.getProperties().get(property));
+            System.out.println("Property:" + property.getName());
+            if (property.getCurrentBid() != null){
+                System.out.println(property.getCurrentBid().toString());
+            }else{
+                System.out.println("No bid");
+            }
         }
     }
 
