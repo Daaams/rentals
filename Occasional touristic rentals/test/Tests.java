@@ -201,4 +201,41 @@ public class Tests {
         process.changeDescription(data);
         assertTrue(p.getDescription().equals("theNewDesc"));
     }
+
+    @Test
+    public void propertyExistsTest(){
+        ArrayList<Owner> owners = process.getAllOwners();
+        owners.add(new Owner("login", "surname", "name", "nick","email"));
+        Property p = new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10);
+        owners.get(0).addProperty(p, new Price(200));
+        assertTrue(process.propertyExist("TheProperty") == p);
+        assertFalse(process.propertyExist("theProperty") == p);
+    }
+
+    @Test
+    public void createBid(){
+        Tenant t = (new Tenant("login", "surname", "name", "nick","email"));
+        process.getAllTenants().add(t);
+        t.depositMoney(200);
+        ArrayList<Owner> owners = process.getAllOwners();
+        owners.add(new Owner("login", "surname", "name", "nick","email"));
+        Property p = new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10);
+        owners.get(0).addProperty(p, new Price(2));
+        process.createBid(t, p, 12, 2, 2, 20);
+        assertTrue(process.getAllbids().size() == 1);
+    }
+
+    @Test
+    public void findOwner(){
+        ArrayList<Owner> owners = process.getAllOwners();
+        Owner o = new Owner("login", "surname", "name", "nick","email");
+        owners.add(o);
+        Property p = new Property(TypeProperty.HOMESTEAD, "TheProperty", "TheAddress", "TheCity", "TheDesc", 10);
+        owners.get(0).addProperty(p, new Price(2));
+        Owner o2 = new Owner("login2", "surname2", "name2", "nick2","email2");
+        owners.add(o2);
+        Property p2 = new Property(TypeProperty.HOMESTEAD, "TheProperty2", "TheAddress2", "TheCity2", "TheDesc2", 10);
+        owners.get(0).addProperty(p2, new Price(2));
+        assertTrue(process.findOwner(p2) == o2);
+    }
 }

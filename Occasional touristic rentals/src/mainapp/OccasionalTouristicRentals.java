@@ -540,7 +540,7 @@ public class OccasionalTouristicRentals {
     private void makeABid(Tenant tenantConnected){
         Property property = null;
         System.out.println("Enter the name of the property");
-        property = process.PropertyExist(readString());
+        property = process.propertyExist(readString());
         int bid = 0;
         int month = 0;
         int people = 0;
@@ -1071,7 +1071,7 @@ public class OccasionalTouristicRentals {
     private void ARR_ListAllBidsByProperty() {
         Property property = null;
         System.out.println("Enter the name of the property");
-        property = process.PropertyExist(readString());
+        property = process.propertyExist(readString());
         if (property == null) {
             System.out.println("This property doesn't exist");
             ARR_ListAllBidsByProperty();
