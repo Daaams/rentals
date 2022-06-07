@@ -371,7 +371,9 @@ public class Processing {
      */
     public void seeMyProperties(Owner ownerConnected) {
         System.out.println("Properties : ");
-        for (Property p : ownerConnected.getProperties().keySet()) {
+        ArrayList<Property> myProperties = ownerConnected.getMyProperties();
+        myProperties.sort(new PropertiesComparator());
+        for (Property p : myProperties) {
             System.out.println(p.toString());
             System.out.println(p.getDescription());
         }
